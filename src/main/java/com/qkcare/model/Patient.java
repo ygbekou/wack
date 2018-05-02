@@ -39,6 +39,14 @@ public class Patient extends BaseEntity {
 		this.id = id;
 	}
 
+	public String getMatricule() {
+		return matricule;
+	}
+
+	public void setMatricule(String matricule) {
+		this.matricule = matricule;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -102,6 +110,11 @@ public class Patient extends BaseEntity {
 	}
 	public String getSex() {
 		return this.user.getSex();
+	}
+	
+	
+	public String getName() {
+		return this.user.getFirstName() + " " + this.user.getLastName();
 	}
 	
 }

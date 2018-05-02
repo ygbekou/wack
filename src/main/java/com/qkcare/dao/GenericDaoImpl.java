@@ -78,6 +78,8 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 				query.setParameter(parameter.getValue1(), new Long(parameter.getValue2()));
 			} else if ("Integer".equals(parameter.getValue3())) {
 				query.setParameter(parameter.getValue1(), new Integer(parameter.getValue2()));
+			} else if ("String".equals(parameter.getValue3())) {
+				query.setParameter(parameter.getValue1(), new String(parameter.getValue2()));
 			}
 		}
 		
