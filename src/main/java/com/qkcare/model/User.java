@@ -1,5 +1,7 @@
 package com.qkcare.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "USERS")
@@ -32,6 +33,8 @@ public class User extends BaseEntity {
 	private String picture;
 	private String email;
 	private String sex;
+	@Column(name="BIRTH_DATE")
+	private Date birthDate;
 	private String phone;
 	private String address;
 	private String city;
@@ -103,6 +106,12 @@ public class User extends BaseEntity {
 	}
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+	public Date getBirthDate() {
+		return birthDate;
+	}
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
 	public String getPhone() {
 		return phone;

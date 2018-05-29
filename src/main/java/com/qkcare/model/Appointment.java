@@ -98,6 +98,14 @@ public class Appointment extends BaseEntity {
 	}
 
 
+	public String getDoctorName() {
+		return this.doctor != null ? this.doctor.getName() : "";
+	}
+	
+	public String getDepartmentName() {
+		return this.department != null ? this.department.getName() : "";
+	}
+	
 	private String toValue(String value) {
 		return StringUtils.isEmpty(value) ? "" : value;
 	}

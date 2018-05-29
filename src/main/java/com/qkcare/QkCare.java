@@ -28,14 +28,6 @@ public class QkCare {
 		return multipartResolver;
 	}
 
-//	@Bean
-//	public FilterRegistrationBean multipartFilterRegistrationBean() {
-//		final MultipartFilter multipartFilter = new MultipartFilter();
-//		final FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean(multipartFilter);
-//		filterRegistrationBean.addInitParameter("multipartResolverBeanName", "multipartResolver");
-//		return filterRegistrationBean;
-//	}
-
 	@Bean
 	public MultipartConfigElement multipartConfigElement() {
 		return new MultipartConfigElement("");
