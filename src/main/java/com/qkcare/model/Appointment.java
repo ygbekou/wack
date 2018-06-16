@@ -12,6 +12,8 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.qkcare.util.DateUtil;
+
 
 @Entity
 @Table(name = "APPOINTMENT")
@@ -104,6 +106,10 @@ public class Appointment extends BaseEntity {
 	
 	public String getDepartmentName() {
 		return this.department != null ? this.department.getName() : "";
+	}
+	
+	public String getDescription() {
+		return DateUtil.formatDate(this.getAppointmentDate(), "dd/MM/yyyy") + " - " + this.getBeginTime() + " - " + this.getDoctorName();
 	}
 	
 	private String toValue(String value) {

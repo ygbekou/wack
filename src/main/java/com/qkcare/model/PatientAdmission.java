@@ -28,10 +28,15 @@ public class PatientAdmission extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "INSURANCE_ID")
 	private Insurance insurance;
+	@Column(name = "POLICY_NUMBER")
 	private String policyNumber;
+	@Column(name = "CONTACT_NAME")
 	private String contatName;
+	@Column(name = "CONTACT_RELATION")
 	private String contactRelation;
+	@Column(name = "CONTACT_PHONE")
 	private String contactPhone;
+	@Column(name = "CONTACT_ADDRESS")
 	private String contactAddress;
 	private int status;
 	
