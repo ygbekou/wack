@@ -58,9 +58,9 @@ public class AppointmentDaoImpl implements AppointmentDao {
 				ScheduleEvent event = new ScheduleEvent();
 				event.setId(new Long(obj[0].toString()));
 				event.setTitle((String) obj[1] + " " + (String) obj[2] + " " + (String) obj[3]);
-				event.setStart(obj[4].toString().split(" ")[0] + "T" + obj[5].toString() + ":00");
-				event.setEnd(obj[4].toString().split(" ")[0] + "T" + obj[6].toString() + ":00");
-
+				event.setStart(obj[4].toString().split(" ")[0] + "T" + obj[5].toString());
+				event.setEnd(obj[4].toString().split(" ")[0] + "T" + obj[6].toString());
+				event.setClassName("availability");
 				events.add(event);
 			}
 			

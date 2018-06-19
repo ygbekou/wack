@@ -6,6 +6,7 @@ public class ScheduleEvent {
 	private String title;
 	private String start;
 	private String end;
+	private String className;
 	
 	
 	public Long getId() {
@@ -33,5 +34,11 @@ public class ScheduleEvent {
 	}
 	public void setEnd(String end) {
 		this.end = end;
+	}
+	public String getClassName() {
+		return className;
+	}
+	public void setClassName(String className) {
+		this.className = className;
 	}
 }
