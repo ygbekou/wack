@@ -1,8 +1,11 @@
 package com.qkcare.model;
 
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass; 
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient; 
 
 @MappedSuperclass
 public abstract class BaseEntity {
@@ -16,6 +19,9 @@ public abstract class BaseEntity {
 
 	@Column(name = "MOD_BY")
 	private Long modifiedBy;
+	
+	@Transient
+	private List<String> errors;
 
 	public abstract Long getId() ;
 
@@ -39,10 +45,18 @@ public abstract class BaseEntity {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(Long modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
+	
+	public List<String> getErrors() {
+		return errors;
+	}
+
+	public void setErrors(List<String> errors) {
+		this.errors = errors;
+	}
 
 	@Override
 	public String toString() {

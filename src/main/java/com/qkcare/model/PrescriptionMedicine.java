@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -16,13 +16,19 @@ public class PrescriptionMedicine extends BaseEntity {
 	@Column(name = "PRESCRIPTION_MEDICINE_ID")
 	@GeneratedValue
 	private Long id;
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "PRESCRIPTION_ID")
 	private Prescription prescription;
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "MEDICINE_ID")
 	private Medicine medicine;
-	private String instructions;
+	private String dosage;
+	private Integer quantity;
+	private String frequency;
+	@Column(name = "NUMBER_OF_DAYS")
+	private Integer numberOfDays;
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -41,10 +47,29 @@ public class PrescriptionMedicine extends BaseEntity {
 	public void setMedicine(Medicine medicine) {
 		this.medicine = medicine;
 	}
-	public String getInstructions() {
-		return instructions;
+	public String getDosage() {
+		return dosage;
 	}
-	public void setInstructions(String instructions) {
-		this.instructions = instructions;
+	public void setDosage(String dosage) {
+		this.dosage = dosage;
 	}
+	public Integer getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+	public String getFrequency() {
+		return frequency;
+	}
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
+	}
+	public Integer getNumberOfDays() {
+		return numberOfDays;
+	}
+	public void setNumberOfDays(Integer numberOfDays) {
+		this.numberOfDays = numberOfDays;
+	}
+	
 }

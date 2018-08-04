@@ -1,5 +1,6 @@
 package com.qkcare.model;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -7,11 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "PRESCRIPTION")
@@ -21,20 +21,14 @@ public class Prescription extends BaseEntity {
 	@Column(name = "PRESCRIPTION_ID")
 	@GeneratedValue
 	private Long id;
-	@OneToOne
-	@JoinColumn(name = "PATIENT_ID")
-	private Patient patient;
-	@OneToOne
-	@JoinColumn(name = "APPOINTMENT_ID")
-	private Appointment appointment;
-	private Double weight;
-	@Column(name = "BLOOD_PRESSURE")
-	private String bloodPressure;
-	private String reference;
+	@ManyToOne
+	@JoinColumn(name = "ADMISSION_ID")
+	private Admission admission;
+	@Column(name = "PRESCRIPTION_DATETIME")
+	private Timestamp prescriptionDatetime;
 	@Column(name = "PRESCRIPTION_TYPE")
 	private Integer prescriptionType;
-	@Column(name = "CHIEF_COMPLAIN")
-	private String chiefComplain;
+	private String notes;
 	private int status;
 	
 	@Transient
@@ -49,35 +43,17 @@ public class Prescription extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Patient getPatient() {
-		return patient;
+	public Admission getAdmission() {
+		return admission;
 	}
-	public void setPatient(Patient patient) {
-		this.patient = patient;
+	public void setAdmission(Admission admission) {
+		this.admission = admission;
 	}
-	public Appointment getAppointment() {
-		return appointment;
+	public Timestamp getPrescriptionDatetime() {
+		return prescriptionDatetime;
 	}
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
-	}
-	public Double getWeight() {
-		return weight;
-	}
-	public void setWeight(Double weight) {
-		this.weight = weight;
-	}
-	public String getBloodPressure() {
-		return bloodPressure;
-	}
-	public void setBloodPressure(String bloodPressure) {
-		this.bloodPressure = bloodPressure;
-	}
-	public String getReference() {
-		return reference;
-	}
-	public void setReference(String reference) {
-		this.reference = reference;
+	public void setPrescriptionDatetime(Timestamp prescriptionDatetime) {
+		this.prescriptionDatetime = prescriptionDatetime;
 	}
 	public Integer getPrescriptionType() {
 		return prescriptionType;
@@ -85,11 +61,11 @@ public class Prescription extends BaseEntity {
 	public void setPrescriptionType(Integer prescriptionType) {
 		this.prescriptionType = prescriptionType;
 	}
-	public String getChiefComplain() {
-		return chiefComplain;
+	public String getNotes() {
+		return notes;
 	}
-	public void setChiefComplain(String chiefComplain) {
-		this.chiefComplain = chiefComplain;
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 	public int getStatus() {
 		return status;

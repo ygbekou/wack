@@ -1,5 +1,7 @@
 package com.qkcare.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,13 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
-@Table(name = "PATIENT_ADMISSION")
-public class PatientAdmission extends BaseEntity {
-	
+@Table(name = "ADMISSION")
+public class Admission extends BaseEntity {
+
 	@Id
-	@Column(name = "PATIENT_ADMISSION_ID")
+	@Column(name = "ADMISSION_ID")
 	@GeneratedValue
 	private Long id;
 	@ManyToOne
@@ -22,14 +25,8 @@ public class PatientAdmission extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "PACKAGE_ID")
 	private com.qkcare.model.Package pckage;
-	@ManyToOne
-	@JoinColumn(name = "DOCTOR_ID")
-	private Employee doctor;
-	@ManyToOne
-	@JoinColumn(name = "INSURANCE_ID")
-	private Insurance insurance;
-	@Column(name = "POLICY_NUMBER")
-	private String policyNumber;
+	@Column(name = "ADMISSION_DATETIME")
+	private Timestamp admissionDatetime;
 	@Column(name = "CONTACT_NAME")
 	private String contatName;
 	@Column(name = "CONTACT_RELATION")
@@ -40,7 +37,13 @@ public class PatientAdmission extends BaseEntity {
 	private String contactAddress;
 	private int status;
 	
+	// Transient object
+	@Transient
+	BedAssignment bedAssignment;
+	@Transient
+	DoctorAssignment doctorAssignment;
 	
+
 	public Long getId() {
 		return id;
 	}
@@ -59,23 +62,11 @@ public class PatientAdmission extends BaseEntity {
 	public void setPckage(com.qkcare.model.Package pckage) {
 		this.pckage = pckage;
 	}
-	public Employee getDoctor() {
-		return doctor;
+	public Timestamp getAdmissionDatetime() {
+		return admissionDatetime;
 	}
-	public void setDoctor(Employee doctor) {
-		this.doctor = doctor;
-	}
-	public Insurance getInsurance() {
-		return insurance;
-	}
-	public void setInsurance(Insurance insurance) {
-		this.insurance = insurance;
-	}
-	public String getPolicyNumber() {
-		return policyNumber;
-	}
-	public void setPolicyNumber(String policyNumber) {
-		this.policyNumber = policyNumber;
+	public void setAdmissionDatetime(Timestamp admissionDatetime) {
+		this.admissionDatetime = admissionDatetime;
 	}
 	public String getContatName() {
 		return contatName;
@@ -106,5 +97,31 @@ public class PatientAdmission extends BaseEntity {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public BedAssignment getBedAssignment() {
+		return bedAssignment;
+	}
+	public void setBedAssignment(BedAssignment bedAssignment) {
+		this.bedAssignment = bedAssignment;
+	}
+	public DoctorAssignment getDoctorAssignment() {
+		return doctorAssignment;
+	}
+	public void setDoctorAssignment(DoctorAssignment doctorAssignment) {
+		this.doctorAssignment = doctorAssignment;
+	}
+	
+	
+	// Transient attributes
+	public String getPatientId() {
+		return this.getPatient().getMatricule();
+	}
+	
+	public String getPatientName() {
+		return this.getPatient().getName();
+	}
+	
+	public String getAdmissionNumber() {
+		return this.getId() == null ? "" : this.getId().toString();
 	}
 }

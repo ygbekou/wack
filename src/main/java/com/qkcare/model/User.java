@@ -35,7 +35,10 @@ public class User extends BaseEntity {
 	private String sex;
 	@Column(name="BIRTH_DATE")
 	private Date birthDate;
-	private String phone;
+	@Column(name="HOME_PHONE")
+	private String homePhone;
+	@Column(name="MOBILE_PHONE")
+	private String mobilePhone;
 	private String address;
 	private String city;
 	@ManyToOne
@@ -113,12 +116,23 @@ public class User extends BaseEntity {
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
-	public String getPhone() {
-		return phone;
+	
+	public String getHomePhone() {
+		return homePhone;
 	}
-	public void setPhone(String phone) {
-		this.phone = phone;
+
+	public void setHomePhone(String homePhone) {
+		this.homePhone = homePhone;
 	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
+
 	public String getAddress() {
 		return address;
 	}

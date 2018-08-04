@@ -7,12 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PAYER_TYPE")
-public class PayerType extends BaseEntity {
+@Table(name = "MARITAL_STATUS")
+public class MaritalStatus extends BaseEntity {
 	
 	@Id
 	@GeneratedValue
-	@Column(name = "PAYER_TYPE_ID")
+	@Column(name = "MARITAL_STATUS_ID")
 	private Long id;	
 	private String name;
 	private String description;
@@ -36,7 +36,6 @@ public class PayerType extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
 	
 	public Long getId() {
 		return id;

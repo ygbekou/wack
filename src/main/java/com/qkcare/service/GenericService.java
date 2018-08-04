@@ -16,5 +16,5 @@ public interface GenericService {
 	public void delete(Class cl, List<Long> ids);
 	public BaseEntity find(Class cl, Long key);
 	public List<BaseEntity> getAll(Class cl);
-	public List<BaseEntity> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
+	public List<BaseEntity> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy);
 }

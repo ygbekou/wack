@@ -63,7 +63,7 @@ public class GenericEntityController {
 			}
 			
 			String queryStr =  "SELECT e FROM " + entity + " e WHERE 1 = 1";
-			List<BaseEntity> entities = genericService.getByCriteria(queryStr, paramTupleList);
+			List<BaseEntity> entities = genericService.getByCriteria(queryStr, paramTupleList, null);
 			System.out.println(entities);
 			return entities;
 		}		

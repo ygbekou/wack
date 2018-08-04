@@ -22,7 +22,7 @@ public class Bill extends BaseEntity {
 	private Long id;
 	@OneToOne
 	@JoinColumn(name = "PATIENT_ADMISSION_ID")
-	private PatientAdmission patientAdmission;
+	private Admission admission;
 	@OneToOne
 	@JoinColumn(name = "APPOINTMENT_ID")
 	private Appointment appointment;
@@ -49,11 +49,11 @@ public class Bill extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public PatientAdmission getPatientAdmission() {
-		return patientAdmission;
+	public Admission getAdmission() {
+		return admission;
 	}
-	public void setPatientAdmission(PatientAdmission patientAdmission) {
-		this.patientAdmission = patientAdmission;
+	public void setAdmission(Admission admission) {
+		this.admission = admission;
 	}
 	public Double getSubTotal() {
 		return subTotal;

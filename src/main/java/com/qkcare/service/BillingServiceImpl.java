@@ -58,7 +58,7 @@ public class BillingServiceImpl  implements BillingService {
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
 		paramTupleList.add(Quartet.with("e.bill.id = ", "billId", key + "", "Long"));
 		String queryStr =  "SELECT e FROM BillService e WHERE 1 = 1";
-		List<BaseEntity> services = genericService.getByCriteria(queryStr, paramTupleList);
+		List<BaseEntity> services = genericService.getByCriteria(queryStr, paramTupleList, null);
 		List<BillService> billServices = new ArrayList<BillService>();
 		
 		for (BaseEntity entity : services) {
@@ -72,7 +72,7 @@ public class BillingServiceImpl  implements BillingService {
 		paramTupleList.clear();
 		paramTupleList.add(Quartet.with("e.bill.id = ", "billId", key + "", "Long"));
 		queryStr =  "SELECT e FROM BillPayment e WHERE 1 = 1";
-		List<BaseEntity> payments = genericService.getByCriteria(queryStr, paramTupleList);
+		List<BaseEntity> payments = genericService.getByCriteria(queryStr, paramTupleList, null);
 		List<BillPayment> billPayments = new ArrayList<BillPayment>();
 		
 		for (BaseEntity entity : payments) {

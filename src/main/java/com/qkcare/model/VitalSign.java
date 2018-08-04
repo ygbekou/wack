@@ -19,10 +19,10 @@ public class VitalSign extends BaseEntity {
 	@GeneratedValue
 	private Long id;
 	@OneToOne
-	@JoinColumn(name = "APPOINTMENT_ID")
-	private Appointment appointment;
+	@JoinColumn(name = "VISIT_ID")
+	private Visit visit;
 	@Column(name = "VITAL_SIGN_DATETIME")
-	private Timestamp vitalSignDatatime;
+	private Timestamp vitalSignDatetime;
 	private Double temperature;
 	private String pulse;
 	private String respiration;
@@ -42,17 +42,17 @@ public class VitalSign extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Appointment getAppointment() {
-		return appointment;
+	public Visit getVisit() {
+		return visit;
 	}
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
+	public void setVisit(Visit visit) {
+		this.visit = visit;
 	}
-	public Timestamp getVitalSignDatatime() {
-		return vitalSignDatatime;
+	public Timestamp getVitalSignDatetime() {
+		return vitalSignDatetime;
 	}
-	public void setVitalSignDatatime(Timestamp vitalSignDatatime) {
-		this.vitalSignDatatime = vitalSignDatatime;
+	public void setVitalSignDatetime(Timestamp vitalSignDatetime) {
+		this.vitalSignDatetime = vitalSignDatetime;
 	}
 	public Double getTemperature() {
 		return temperature;
@@ -108,4 +108,14 @@ public class VitalSign extends BaseEntity {
 	public void setBmi(Double bmi) {
 		this.bmi = bmi;
 	}
+	
+	// Transient attributes
+	public String getPatientId() {
+		return this.getVisit().getPatient().getMatricule();
+	}
+	
+	public String getPatientName() {
+		return this.getVisit().getPatient().getName();
+	}
+
 }

@@ -18,12 +18,6 @@ public class DoctorOrderType extends BaseEntity {
 	private String description;
 	private int status;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
 	public String getName() {
 		return name;
 	}
@@ -41,6 +35,14 @@ public class DoctorOrderType extends BaseEntity {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

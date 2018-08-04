@@ -7,12 +7,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PAYER_TYPE")
-public class PayerType extends BaseEntity {
+@Table(name = "WARD")
+public class Ward extends BaseEntity {
 	
 	@Id
 	@GeneratedValue
-	@Column(name = "PAYER_TYPE_ID")
+	@Column(name = "WARD_ID")
 	private Long id;	
 	private String name;
 	private String description;

@@ -31,11 +31,14 @@ public class UserServiceImpl  implements UserService {
 			
 			Field userField = entity.getClass().getDeclaredField("user");
 			userField.setAccessible(true);
-			Field matriculeField = entity.getClass().getDeclaredField("matricule");
-			matriculeField.setAccessible(true);
-			
-			
-			
+			Field matriculeField = null;
+			try {
+				matriculeField = entity.getClass().getDeclaredField("matricule");
+				if (matriculeField != null)
+					matriculeField.setAccessible(true);
+			} catch(NoSuchFieldException nsfe) {
+				
+			}
 	        user = (User) userField.get(entity);
 	        user = (User) genericService.save(user);
 	        

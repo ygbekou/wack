@@ -80,7 +80,7 @@ public class AppointmentServiceImpl  implements AppointmentService {
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
 		paramTupleList.add(Quartet.with("e.doctor.id = ", "doctorId", doctorId + "", "Long"));
 		String queryStr =  "SELECT e FROM Schedule e WHERE 1 = 1";
-		List<Schedule> schedules = (List)this.genericService.getByCriteria(queryStr, paramTupleList);
+		List<Schedule> schedules = (List)this.genericService.getByCriteria(queryStr, paramTupleList, null);
 		
 		for (Schedule schedule : schedules) {
 			for (String dateStr : getDates(startDate, endDate, schedule.getWeekday().getName())) {

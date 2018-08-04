@@ -12,5 +12,5 @@ public interface GenericDao<E,K> {
 	public void delete(Class cl, List<Long> ids);
 	public E find(Class cl, Long key);
 	public List<E> getAll(Class cl);
-	public List<E> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
+	public List<E> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy);
 }

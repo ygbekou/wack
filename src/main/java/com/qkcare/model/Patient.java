@@ -35,6 +35,9 @@ public class Patient extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "PAYER_TYPE_ID")
 	private PayerType payerType;
+	@ManyToOne
+	@JoinColumn(name = "MARITAL_STATUS_ID")
+	private MaritalStatus maritalStatus;
 	private String employer;
 	@Column(name = "AUTHORIZATION_LETTER_NUMBER")
 	private String authorizationLetterNumber;
@@ -55,6 +58,9 @@ public class Patient extends BaseEntity {
 	private String contact;
 	@Column(name="CONTACT_PHONE")
 	private String contactPhone;
+	private String referral;
+	@Column(name="REFERRAL_PHONE")
+	private String referralPhone;
 	@Column(name="MEDICAL_HISTORY")
 	private String medicalHistory;
 	@Column(name="BLOOD_GROUP")
@@ -153,6 +159,18 @@ public class Patient extends BaseEntity {
 	public void setBloodGroup(BloodGroup bloodGroup) {
 		this.bloodGroup = bloodGroup;
 	}
+	public String getReferral() {
+		return referral;
+	}
+	public void setReferral(String referral) {
+		this.referral = referral;
+	}
+	public String getReferralPhone() {
+		return referralPhone;
+	}
+	public void setReferralPhone(String referralPhone) {
+		this.referralPhone = referralPhone;
+	}
 	public String getContact() {
 		return contact;
 	}
@@ -177,12 +195,20 @@ public class Patient extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
+	public MaritalStatus getMaritalStatus() {
+		return maritalStatus;
+	}
+
+	public void setMaritalStatus(MaritalStatus maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
 	
 	// Transient fields for UI
-	
+
+	public String getMaritalStatusName() {
+		return this.maritalStatus != null ? this.maritalStatus.getName() : "";
+	}
 	public String getReligionName() {
-		
 		return this.religion != null ? this.religion.getName() : "";
 	}
 	public String getOccupationName() {
@@ -190,6 +216,9 @@ public class Patient extends BaseEntity {
 	}
 	public String getNationalityName() {
 		return this.religion != null ? this.nationality.getName() : "";
+	}
+	public String getPayerTypeName() {
+		return this.payerType != null ? this.payerType.getName() : "";
 	}
 	public String getFirstName() {
 		return this.user.getFirstName();
@@ -203,8 +232,8 @@ public class Patient extends BaseEntity {
 	public String getEmail() {
 		return this.user.getEmail();
 	}
-	public String getPhone() {
-		return this.user.getPhone();
+	public String getHomePhone() {
+		return this.user.getHomePhone();
 	}
 	public String getAddress() {
 		return this.user.getAddress();

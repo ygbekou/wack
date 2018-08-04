@@ -62,13 +62,17 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 	    return ListOfEmailDomains;
 	}
 
-	public List<E> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters) {
+	public List<E> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy) {
 		
 		StringBuilder queryBuilder = new StringBuilder(queryStr);
 		
 		// Build the query
 		for (Quartet<String, String, String, String> parameter : parameters) {
 			queryBuilder.append(" AND " + parameter.getValue0() + " :" + parameter.getValue1());
+		}
+		
+		if (orderBy != null) {
+			queryBuilder.append(orderBy);
 		}
 		
 		Query query = entityManager.createQuery(queryBuilder.toString());

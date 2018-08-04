@@ -69,8 +69,8 @@ public class GenericServiceImpl implements GenericService {
 		return this.genericDao.getAll(cl);
 	}
 	
-	public List<BaseEntity> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters) {
-		return this.genericDao.getByCriteria(queryStr, parameters);
+	public List<BaseEntity> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy) {
+		return this.genericDao.getByCriteria(queryStr, parameters, orderBy);
 	}
 
 }
