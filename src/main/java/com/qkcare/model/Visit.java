@@ -1,6 +1,8 @@
 package com.qkcare.model;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +32,14 @@ public class Visit extends BaseEntity {
 	@Transient
 	private VitalSign vitalSign;
 	
+	@Transient
+	private Set<Long> allergies;
 	
+	public Visit() {}
+	
+	public Visit(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;
@@ -65,6 +74,12 @@ public class Visit extends BaseEntity {
 	}
 	public void setVitalSign(VitalSign vitalSign) {
 		this.vitalSign = vitalSign;
+	}
+	public Set<Long> getAllergies() {
+		return allergies;
+	}
+	public void setAllergies(Set<Long> allergies) {
+		this.allergies = allergies;
 	}
 	
 	

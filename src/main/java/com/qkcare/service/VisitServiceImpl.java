@@ -3,12 +3,15 @@ package com.qkcare.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.hql.internal.ast.util.NodeTraverser.VisitationStrategy;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,9 @@ import com.qkcare.model.Category;
 import com.qkcare.model.Prescription;
 import com.qkcare.model.PrescriptionDiagnosis;
 import com.qkcare.model.PrescriptionMedicine;
+import com.qkcare.model.Vaccine;
 import com.qkcare.model.Visit;
+import com.qkcare.model.VisitAllergy;
 import com.qkcare.model.VitalSign;
 
 @Service(value="visitService")
@@ -32,13 +37,49 @@ public class VisitServiceImpl  implements VisitService {
 	@Transactional
 	public BaseEntity save(Visit visit) {
 		
-		Visit pa = (Visit)this.genericService.save(visit);
+		Visit v = (Visit)this.genericService.save(visit);
 		
 		VitalSign vitalSign = visit.getVitalSign();
 		vitalSign.setVisit(visit);
 		this.genericService.save(vitalSign);
+		vitalSign.setVisit(null);
+		visit.setVitalSign(vitalSign);
 		
-		return pa;
+		// save allergies 
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		paramTupleList.add(Quartet.with("VISIT_ID = ", "visitId", v.getId() + "", "Long"));
+		List<Object[]> list = this.genericService.getNativeByCriteria("SELECT ALLERGY_ID FROM VISIT_ALLERGY WHERE 1 = 1 ", paramTupleList, null);
+		Set<Long> existingAllergyIds = new HashSet<Long>();
+		
+		for (Object object : list) {
+			existingAllergyIds.add(new Long(object.toString()));
+		}
+		
+		// Find differences in both list
+		List<Long> removedIds = existingAllergyIds.stream().filter(aObject -> {
+		     return !visit.getAllergies().contains(aObject);
+		 }).collect(Collectors.toList());
+		
+		List<Long> addedIds = visit.getAllergies().stream().filter(aObject -> {
+		     return !existingAllergyIds.contains(aObject);
+		 }).collect(Collectors.toList());
+
+		// delete allergies 
+		if (removedIds.size() > 0) {
+			paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+			paramTupleList.add(Quartet.with("e.allergy.id IN ", "allergyId", 
+					removedIds.toString().substring(1, removedIds.toString().length() - 1) + "", "List"));
+			int deleteds = this.genericService.deleteByCriteria("DELETE FROM VisitAllergy e WHERE 1 = 1 ", paramTupleList);
+		}
+		
+		// Insert newly added ones
+		for (Long addedId : addedIds) {
+			VisitAllergy va = new VisitAllergy(visit.getId(), addedId);
+			this.genericService.save(va);
+		}
+		
+		
+		return v;
 	}
 	
 	
@@ -129,4 +170,5 @@ public class VisitServiceImpl  implements VisitService {
 		}
 		return resultMap.keySet();
 	}
+	
 }

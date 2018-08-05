@@ -9,23 +9,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ALLERGY")
-public class Allergy extends BaseEntity {
+@Table(name = "VACCINE")
+public class Vaccine extends BaseEntity {
 	
 	@Id
-	@Column(name = "ALLERGY_ID")
+	@Column(name = "VACCINE_ID")
 	@GeneratedValue
 	private Long id;
-	@ManyToOne
-	@JoinColumn(name = "CATEGORY_ID")
-	private Category category;
 	private String name;
 	private String description;
 	private int status;
 	
-	public Allergy() {}
+	public Vaccine() {}
 
-	public Allergy(Long id) {
+	public Vaccine(Long id) {
 		this.id = id;
 	}
 
@@ -34,12 +31,6 @@ public class Allergy extends BaseEntity {
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public Category getCategory() {
-		return category;
-	}
-	public void setCategory(Category category) {
-		this.category = category;
 	}
 	public String getName() {
 		return name;
@@ -63,9 +54,6 @@ public class Allergy extends BaseEntity {
 	
 	// TRansient fields for UI
 	
-	public String getCategoryName() {
-		return this.category.getName();
-	}
 	public String getStatusDesc() {
 		return status == 0 ? "Active" : "Inactive";
 	}

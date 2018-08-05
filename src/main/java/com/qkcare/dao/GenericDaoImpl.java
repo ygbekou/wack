@@ -1,9 +1,12 @@
 package com.qkcare.dao;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -64,6 +67,30 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 
 	public List<E> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy) {
 		
+		Query query = this.buildQuery(queryStr, parameters, orderBy, false);
+		
+	    List<E> ListOfEmailDomains = query.getResultList();
+	    return ListOfEmailDomains;
+	}
+	
+	
+	public List<Object[]> getNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy) {
+		
+		Query query = this.buildQuery(queryStr, parameters, orderBy, true);
+		
+	    List<Object[]> list = query.getResultList();
+	    return list;
+	}
+	
+	public Integer deleteByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters) {
+		
+		Query query = this.buildQuery(queryStr, parameters, null, false);
+		
+	    Integer nbDel = query.executeUpdate();
+	    return nbDel;
+	}
+
+	private Query buildQuery(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy, boolean nativeQuery) {
 		StringBuilder queryBuilder = new StringBuilder(queryStr);
 		
 		// Build the query
@@ -75,7 +102,13 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 			queryBuilder.append(orderBy);
 		}
 		
-		Query query = entityManager.createQuery(queryBuilder.toString());
+		Query query = null;
+		
+		if (!nativeQuery)
+			query = entityManager.createQuery(queryBuilder.toString());
+		else 
+			query = entityManager.createNativeQuery(queryBuilder.toString());
+		
 		// Set the parameters on the query
 		for (Quartet<String, String, String, String> parameter : parameters) {
 			if ("Long".equals(parameter.getValue3())) {
@@ -84,11 +117,14 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 				query.setParameter(parameter.getValue1(), new Integer(parameter.getValue2()));
 			} else if ("String".equals(parameter.getValue3())) {
 				query.setParameter(parameter.getValue1(), new String(parameter.getValue2()));
+			} else if ("List".equals(parameter.getValue3())) {
+				query.setParameter(parameter.getValue1(), Arrays.asList(parameter.getValue2().split("\\s*,\\s*"))
+						.stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList()));
 			}
 		}
 		
-	    List<E> ListOfEmailDomains = query.getResultList();
-	    return ListOfEmailDomains;
+		return query;
+		
 	}
 
 }

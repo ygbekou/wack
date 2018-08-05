@@ -111,11 +111,11 @@ public class VitalSign extends BaseEntity {
 	
 	// Transient attributes
 	public String getPatientId() {
-		return this.getVisit().getPatient().getMatricule();
+		return (this.getVisit() != null && this.getVisit().getPatient() != null) ? this.getVisit().getPatient().getMatricule() : null;
 	}
 	
 	public String getPatientName() {
-		return this.getVisit().getPatient().getName();
+		return (this.getVisit() != null && this.getVisit().getPatient() != null) ? this.getVisit().getPatient().getName() : null;
 	}
 
 }

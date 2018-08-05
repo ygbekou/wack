@@ -22,4 +22,5 @@ public interface VisitService {
 	public BaseEntity findPrescription(Class cl, Long key);
 	
 	public Set<GenericVO> getCategoryAllergies();
+	
 }

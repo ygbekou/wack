@@ -13,4 +13,6 @@ public interface GenericDao<E,K> {
 	public E find(Class cl, Long key);
 	public List<E> getAll(Class cl);
 	public List<E> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy);
+	public List<Object[]> getNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy);
+	public Integer deleteByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
 }

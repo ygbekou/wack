@@ -108,5 +108,4 @@ public class VisitController {
 			return results;
 		}
 		
-		
 }

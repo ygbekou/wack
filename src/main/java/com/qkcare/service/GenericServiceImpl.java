@@ -73,4 +73,11 @@ public class GenericServiceImpl implements GenericService {
 		return this.genericDao.getByCriteria(queryStr, parameters, orderBy);
 	}
 
+	public List<Object[]> getNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy) {
+		return this.genericDao.getNativeByCriteria(queryStr, parameters, orderBy);
+	}
+	
+	public Integer deleteByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters) {
+		return this.genericDao.deleteByCriteria(queryStr, parameters);
+	}
 }
