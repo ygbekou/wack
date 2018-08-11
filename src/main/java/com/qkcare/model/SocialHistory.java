@@ -9,37 +9,28 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "SYMPTOM")
-public class Symptom extends BaseEntity {
+@Table(name = "SOCIALHISTORY")
+public class SocialHistory extends BaseEntity {
 	
 	@Id
-	@Column(name = "SYMPTOM_ID")
+	@Column(name = "SOCIALHISTORY_ID")
 	@GeneratedValue
 	private Long id;
-	@ManyToOne
-	@JoinColumn(name = "CATEGORY_ID")
-	private Category category;
 	private String name;
 	private String description;
 	private int status;
 	
-	public Symptom() {}
+	public SocialHistory() {}
 
-	public Symptom(Long id) {
+	public SocialHistory(Long id) {
 		this.id = id;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public Category getCategory() {
-		return category;
-	}
-	public void setCategory(Category category) {
-		this.category = category;
 	}
 	public String getName() {
 		return name;
@@ -61,12 +52,8 @@ public class Symptom extends BaseEntity {
 	}
 	
 	
-	// TRansient fields for UI
+	// Transient fields for UI
 	
-	public String getCategoryName() {
-		return this.category.getName();
-	}
-	// Transient
 	public String getStatusDesc() {
 		return status == 0 ? "Active" : "Inactive";
 	}

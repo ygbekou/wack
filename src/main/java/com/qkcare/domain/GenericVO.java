@@ -1,8 +1,9 @@
 package com.qkcare.domain;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GenericVO {
+public class GenericVO implements Serializable {
 	
 	private Long id;
 	private String name;

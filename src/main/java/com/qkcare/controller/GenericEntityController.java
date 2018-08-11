@@ -21,7 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.qkcare.domain.GenericDto;
 import com.qkcare.model.BaseEntity;
+import com.qkcare.model.DoctorOrder;
 import com.qkcare.model.User;
+import com.qkcare.model.Visit;
+import com.qkcare.model.VisitVaccine;
+import com.qkcare.model.VitalSign;
 import com.qkcare.service.GenericService;
 import com.qkcare.util.Constants;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -129,7 +133,6 @@ public class GenericEntityController {
 					
 			return obj;
 		}
-
 		
 		@RequestMapping(value="/delete",method = RequestMethod.POST)
 		public String delete(@PathVariable("entity") String entity, @RequestBody List<Long> ids) throws JsonParseException, 

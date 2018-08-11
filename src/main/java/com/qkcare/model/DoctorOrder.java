@@ -18,9 +18,12 @@ public class DoctorOrder extends BaseEntity {
 	@Column(name = "DOCTOR_ORDER_ID")
 	@GeneratedValue
 	private Long id;
-	@ManyToOne
-	@JoinColumn(name = "APPOINTMENT_ID")
-	private Appointment appointment;
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "ADMISSION_ID", nullable = true)
+	private Admission admission;
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "VISIT_ID", nullable = true)
+	private Visit visit;
 	@ManyToOne
 	@JoinColumn(name = "DOCTOR_ORDER_TYPE_ID")
 	private DoctorOrderType doctorOrderType;
@@ -46,11 +49,17 @@ public class DoctorOrder extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Appointment getAppointment() {
-		return appointment;
+	public Admission getAdmission() {
+		return admission;
 	}
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
+	public void setAdmission(Admission admission) {
+		this.admission = admission;
+	}
+	public Visit getVisit() {
+		return visit;
+	}
+	public void setVisit(Visit visit) {
+		this.visit = visit;
 	}
 	public DoctorOrderType getDoctorOrderType() {
 		return doctorOrderType;
@@ -102,14 +111,6 @@ public class DoctorOrder extends BaseEntity {
 	}
 	
 	// Transient attributes
-	public String getPatientId() {
-		return this.getAppointment().getPatient().getMatricule();
-	}
-	
-	public String getPatientName() {
-		return this.getAppointment().getPatient().getName();
-	}
-	
 	public String getDoctorOrderTypeName() {
 		return this.getDoctorOrderType().getName();
 	}

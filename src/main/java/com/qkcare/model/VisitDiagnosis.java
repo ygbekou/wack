@@ -9,16 +9,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ADMISSION_DIAGNOSIS")
-public class AdmissionDiagnosis extends BaseEntity {
+@Table(name = "VISIT_DIAGNOSIS")
+public class VisitDiagnosis extends BaseEntity {
 	
 	@Id
-	@Column(name = "ADMISSION_DIAGNOSIS_ID")
+	@Column(name = "VISIT_DIAGNOSIS_ID")
 	@GeneratedValue
 	private Long id;
 	@ManyToOne
-	@JoinColumn(name = "ADMISSION_ID")
-	private Admission admission;
+	@JoinColumn(name = "VISIT_ID")
+	private Visit visit;
 	@ManyToOne
 	@JoinColumn(name = "DIAGNOSIS_ID")
 	private Diagnosis diagnosis;
@@ -31,11 +31,11 @@ public class AdmissionDiagnosis extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Admission getAdmission() {
-		return admission;
+	public Visit getVisit() {
+		return visit;
 	}
-	public void setAdmission(Admission admission) {
-		this.admission = admission;
+	public void setVisit(Visit visit) {
+		this.visit = visit;
 	}
 	public Diagnosis getDiagnosis() {
 		return diagnosis;

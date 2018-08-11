@@ -23,4 +23,8 @@ public interface VisitService {
 	
 	public Set<GenericVO> getCategoryAllergies();
 	
+	public List<GenericVO> getMedicalHistories();
+	
+	public List<GenericVO> getSocialHistories();
+	
 }

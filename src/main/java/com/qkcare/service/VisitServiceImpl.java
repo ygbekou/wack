@@ -20,12 +20,18 @@ import com.qkcare.domain.GenericVO;
 import com.qkcare.model.Allergy;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.Category;
+import com.qkcare.model.MedicalHistory;
 import com.qkcare.model.Prescription;
 import com.qkcare.model.PrescriptionDiagnosis;
 import com.qkcare.model.PrescriptionMedicine;
+import com.qkcare.model.SocialHistory;
 import com.qkcare.model.Vaccine;
 import com.qkcare.model.Visit;
 import com.qkcare.model.VisitAllergy;
+import com.qkcare.model.VisitMedicalHistory;
+import com.qkcare.model.VisitSocialHistory;
+import com.qkcare.model.VisitSymptom;
+import com.qkcare.model.VisitVaccine;
 import com.qkcare.model.VitalSign;
 
 @Service(value="visitService")
@@ -36,19 +42,59 @@ public class VisitServiceImpl  implements VisitService {
 	
 	@Transactional
 	public BaseEntity save(Visit visit) {
-		
+		visit.setVisitNumber("aaa");
 		Visit v = (Visit)this.genericService.save(visit);
 		
 		VitalSign vitalSign = visit.getVitalSign();
 		vitalSign.setVisit(visit);
 		this.genericService.save(vitalSign);
-		vitalSign.setVisit(null);
-		visit.setVitalSign(vitalSign);
 		
 		// save allergies 
+		List<Long> addedAllergyIds = deriveAddedChilds(visit.getId(), visit.getSelectedAllergies(), "Allergy");
+		// Insert newly added ones
+		for (Long addedId : addedAllergyIds) {
+			VisitAllergy va = new VisitAllergy(visit.getId(), addedId);
+			this.genericService.save(va);
+		}
+		
+		// save allergies 
+		List<Long> addedSymptomIds = deriveAddedChilds(visit.getId(), visit.getSelectedSymptoms(), "Symptom");
+		// Insert newly added ones
+		for (Long addedId : addedSymptomIds) {
+			VisitSymptom vs = new VisitSymptom(visit.getId(), addedId);
+			this.genericService.save(vs);
+		}
+				
+		// save medical histories 
+		List<Long> addedMedicalHistoryIds = deriveAddedChilds(visit.getId(), visit.getSelectedMedicalHistories(), "MedicalHistory");
+		// Insert newly added ones
+		for (Long addedId : addedMedicalHistoryIds) {
+			VisitMedicalHistory vm = new VisitMedicalHistory(visit.getId(), addedId);
+			this.genericService.save(vm);
+		}
+		
+		// save social histories 
+		List<Long> addedSocialHistoryIds = deriveAddedChilds(visit.getId(), visit.getSelectedSocialHistories(), "SocialHistory");
+		// Insert newly added ones
+		for (Long addedId : addedSocialHistoryIds) {
+			VisitSocialHistory vs = new VisitSocialHistory(visit.getId(), addedId);
+			this.genericService.save(vs);
+		}
+		
+		// Save Vaccines
+		for (VisitVaccine vv : visit.getGivenVaccines()) {
+			vv.setVisit(visit);
+			this.genericService.save(vv);
+		}
+		
+		return v;
+	}
+
+
+	private List<Long> deriveAddedChilds(Long visitId, Set<Long> selectedIds, String childEntity) {
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-		paramTupleList.add(Quartet.with("VISIT_ID = ", "visitId", v.getId() + "", "Long"));
-		List<Object[]> list = this.genericService.getNativeByCriteria("SELECT ALLERGY_ID FROM VISIT_ALLERGY WHERE 1 = 1 ", paramTupleList, null);
+		paramTupleList.add(Quartet.with("VISIT_ID = ", "visitId", visitId + "", "Long"));
+		List<Object[]> list = this.genericService.getNativeByCriteria("SELECT " + childEntity + "_ID FROM VISIT_" + childEntity + " WHERE 1 = 1 ", paramTupleList, null);
 		Set<Long> existingAllergyIds = new HashSet<Long>();
 		
 		for (Object object : list) {
@@ -57,38 +103,32 @@ public class VisitServiceImpl  implements VisitService {
 		
 		// Find differences in both list
 		List<Long> removedIds = existingAllergyIds.stream().filter(aObject -> {
-		     return !visit.getAllergies().contains(aObject);
+		     return !selectedIds.contains(aObject);
 		 }).collect(Collectors.toList());
 		
-		List<Long> addedIds = visit.getAllergies().stream().filter(aObject -> {
+		List<Long> addedIds = selectedIds.stream().filter(aObject -> {
 		     return !existingAllergyIds.contains(aObject);
 		 }).collect(Collectors.toList());
 
 		// delete allergies 
 		if (removedIds.size() > 0) {
 			paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-			paramTupleList.add(Quartet.with("e.allergy.id IN ", "allergyId", 
+			paramTupleList.add(Quartet.with("e." + childEntity.toLowerCase() + ".id IN ", childEntity.toLowerCase() + "Id", 
 					removedIds.toString().substring(1, removedIds.toString().length() - 1) + "", "List"));
-			int deleteds = this.genericService.deleteByCriteria("DELETE FROM VisitAllergy e WHERE 1 = 1 ", paramTupleList);
+			int deleteds = this.genericService.deleteByCriteria("DELETE FROM Visit" + childEntity + " e WHERE 1 = 1 ", paramTupleList);
 		}
 		
-		// Insert newly added ones
-		for (Long addedId : addedIds) {
-			VisitAllergy va = new VisitAllergy(visit.getId(), addedId);
-			this.genericService.save(va);
-		}
-		
-		
-		return v;
+		return addedIds;
 	}
 	
 	
 	public BaseEntity findVisit(Class cl, Long key) {
 		Visit visit = (Visit) this.genericService.find(cl, key);
 		
+		// Get Vital Sign
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
 		paramTupleList.add(Quartet.with("e.visit.id = ", "visitId", key + "", "Long"));
-		String queryStr =  "SELECT e FROM Visit e WHERE 1 = 1 ";
+		String queryStr =  "SELECT e FROM VitalSign e WHERE 1 = 1 ";
 		List<BaseEntity> vitalSigns = genericService.getByCriteria(queryStr, paramTupleList, " ");
 		
 		for (BaseEntity entity : vitalSigns) {
@@ -98,6 +138,62 @@ public class VisitServiceImpl  implements VisitService {
 			break;
 		}
 		
+		// Get vaccines
+		queryStr =  "SELECT e FROM VisitVaccine e WHERE 1 = 1 ";
+		List<BaseEntity> vaccines = genericService.getByCriteria(queryStr, paramTupleList, " ");
+		List<VisitVaccine> givenVaccines = new ArrayList<VisitVaccine>();
+		
+		for (BaseEntity entity : vaccines) {
+			VisitVaccine givenVaccine = (VisitVaccine)entity;
+			givenVaccine.setVisit(null);
+			givenVaccines.add(givenVaccine);
+		}
+		visit.setGivenVaccines(givenVaccines);
+		
+		// Get allergies
+		queryStr =  "SELECT e FROM VisitAllergy e WHERE 1 = 1 ";
+		List<BaseEntity> vas = genericService.getByCriteria(queryStr, paramTupleList, " ");
+		Set<Long> allergyIds = new HashSet<Long>();
+		
+		for (BaseEntity entity : vas) {
+			VisitAllergy visitAllergy = (VisitAllergy)entity;
+			allergyIds.add(visitAllergy.getAllergy().getId());
+		}
+		visit.setSelectedAllergies(allergyIds);
+		
+		// Get symptom
+		queryStr =  "SELECT e FROM VisitSymptom e WHERE 1 = 1 ";
+		List<BaseEntity> vss = genericService.getByCriteria(queryStr, paramTupleList, " ");
+		Set<Long> symptomIds = new HashSet<Long>();
+		
+		for (BaseEntity entity : vss) {
+			VisitSymptom visitSymptom = (VisitSymptom)entity;
+			symptomIds.add(visitSymptom.getSymptom().getId());
+		}
+		visit.setSelectedSymptoms(symptomIds);
+		
+		// Get medical histories
+		queryStr =  "SELECT e FROM VisitMedicalHistory e WHERE 1 = 1 ";
+		List<BaseEntity> visitMedicalHistories = genericService.getByCriteria(queryStr, paramTupleList, " ");
+		Set<Long> medicalHistoryIds = new HashSet<Long>();
+		
+		for (BaseEntity entity : visitMedicalHistories) {
+			VisitMedicalHistory visitMedicalHistory = (VisitMedicalHistory)entity;
+			medicalHistoryIds.add(visitMedicalHistory.getMedicalHistory().getId());
+		}
+		visit.setSelectedMedicalHistories(medicalHistoryIds);
+		
+		// Get social histories
+		queryStr =  "SELECT e FROM VisitSocialHistory e WHERE 1 = 1 ";
+		List<BaseEntity> visitSocialHistories = genericService.getByCriteria(queryStr, paramTupleList, " ");
+		Set<Long> socialHistoryIds = new HashSet<Long>();
+		
+		for (BaseEntity entity : visitSocialHistories) {
+			VisitSocialHistory visitSocialHistory = (VisitSocialHistory)entity;
+			socialHistoryIds.add(visitSocialHistory.getSocialHistory().getId());
+		}
+		visit.setSelectedSocialHistories(socialHistoryIds);
+				
 		return visit;
 		
 	}
@@ -171,4 +267,31 @@ public class VisitServiceImpl  implements VisitService {
 		return resultMap.keySet();
 	}
 	
+	public List<GenericVO> getMedicalHistories() {
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		String queryStr =  "SELECT e FROM MedicalHistory e WHERE 1 = 1 AND status = 0 ";
+		List<BaseEntity> childs = genericService.getByCriteria(queryStr, paramTupleList, " ORDER BY e.name ");
+		List<GenericVO> results = new ArrayList<>();
+		
+		for (BaseEntity ch : childs) {
+			MedicalHistory medicalHistory = (MedicalHistory)ch;
+			results.add(new GenericVO(medicalHistory.getId(), medicalHistory.getName()));
+		}
+		
+		return results;
+	}
+	
+	public List<GenericVO> getSocialHistories() {
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		String queryStr =  "SELECT e FROM SocialHistory e WHERE 1 = 1 AND status = 0 ";
+		List<BaseEntity> childs = genericService.getByCriteria(queryStr, paramTupleList, " ORDER BY e.name ");
+		List<GenericVO> results = new ArrayList<>();
+		
+		for (BaseEntity ch : childs) {
+			SocialHistory socialHistory = (SocialHistory)ch;
+			results.add(new GenericVO(socialHistory.getId(), socialHistory.getName()));
+		}
+		
+		return results;
+	}
 }

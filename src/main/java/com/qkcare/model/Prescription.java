@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -24,6 +23,9 @@ public class Prescription extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "ADMISSION_ID")
 	private Admission admission;
+	@ManyToOne
+	@JoinColumn(name = "VISIT_ID")
+	private Visit visit;
 	@Column(name = "PRESCRIPTION_DATETIME")
 	private Timestamp prescriptionDatetime;
 	@Column(name = "PRESCRIPTION_TYPE")
@@ -48,6 +50,12 @@ public class Prescription extends BaseEntity {
 	}
 	public void setAdmission(Admission admission) {
 		this.admission = admission;
+	}
+	public Visit getVisit() {
+		return visit;
+	}
+	public void setVisit(Visit visit) {
+		this.visit = visit;
 	}
 	public Timestamp getPrescriptionDatetime() {
 		return prescriptionDatetime;
