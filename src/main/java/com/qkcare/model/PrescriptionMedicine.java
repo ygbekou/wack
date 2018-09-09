@@ -21,7 +21,7 @@ public class PrescriptionMedicine extends BaseEntity {
 	private Prescription prescription;
 	@ManyToOne
 	@JoinColumn(name = "MEDICINE_ID")
-	private Medicine medicine;
+	private Product medicine;
 	private String dosage;
 	private Integer quantity;
 	private String frequency;
@@ -41,10 +41,10 @@ public class PrescriptionMedicine extends BaseEntity {
 	public void setPrescription(Prescription prescription) {
 		this.prescription = prescription;
 	}
-	public Medicine getMedicine() {
+	public Product getMedicine() {
 		return medicine;
 	}
-	public void setMedicine(Medicine medicine) {
+	public void setMedicine(Product medicine) {
 		this.medicine = medicine;
 	}
 	public String getDosage() {

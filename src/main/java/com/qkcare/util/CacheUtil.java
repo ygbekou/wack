@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.InitializingBean;
@@ -25,6 +26,11 @@ public class CacheUtil implements InitializingBean {
 	public static String ALLERGY = "allergy";
 	public static String MEDICAL_HISTORY = "medicalhistory";
 	public static String SOCIAL_HISTORY = "socialhistory";
+	public static String DISCHARGE_REASON = "dischargereason";
+	public static String LAB_TEST_GROUP = "labTestGroup";
+	public static String LAB_TEST = "labTest";
+	public static String LAB_TEST_METHOD = "labTestMethod";
+	public static String LAB_TEST_UNIT = "labTestUnit";
 	
 	
 	@Autowired 
@@ -87,34 +93,52 @@ public class CacheUtil implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		// TODO Auto-generated method stub
 		CACHE_MANAGER = CacheManager.getInstance();
-		CACHE_MANAGER.addCache(SYMPTOM);
-		Cache symptomCache = CACHE_MANAGER.getCache(SYMPTOM);
 		
-		symptomCache.put(new Element("active", this.getCategoryReferences("SELECT C.CATEGORY_ID, C.NAME CAT_NAME, SYMPTOM_ID, S.NAME SYMP_NAME "
+		this.addCacheToManager(SYMPTOM, "SELECT C.CATEGORY_ID, C.NAME CAT_NAME, SYMPTOM_ID, S.NAME SYMP_NAME "
 				+ "FROM SYMPTOM S "
 				+ "JOIN CATEGORY C ON S.CATEGORY_ID = C.CATEGORY_ID "
-				+ "WHERE S.STATUS = 0 AND C.STATUS = 0"), true));
+				+ "WHERE S.STATUS = 0 AND C.STATUS = 0", this::getCategoryReferences);
 		
-		CACHE_MANAGER.addCache(ALLERGY);
-		Cache allergyCache = CACHE_MANAGER.getCache(ALLERGY);
-		
-		allergyCache.put(new Element("active", this.getCategoryReferences("SELECT C.CATEGORY_ID, C.NAME CAT_NAME, ALLERGY_ID, A.NAME ALL_NAME "
+		this.addCacheToManager(ALLERGY, "SELECT C.CATEGORY_ID, C.NAME CAT_NAME, ALLERGY_ID, A.NAME ALL_NAME "
 				+ "FROM ALLERGY A "
 				+ "JOIN CATEGORY C ON A.CATEGORY_ID = C.CATEGORY_ID "
-				+ "WHERE A.STATUS = 0 AND C.STATUS = 0"), true));
+				+ "WHERE A.STATUS = 0 AND C.STATUS = 0", this::getCategoryReferences);
 		
-		CACHE_MANAGER.addCache(MEDICAL_HISTORY);
-		Cache medicalHistoryCache = CACHE_MANAGER.getCache(MEDICAL_HISTORY);
-		
-		medicalHistoryCache.put(new Element("active", this.getReferences("SELECT MEDICALHISTORY_ID, NAME "
+		this.addCacheToManager(MEDICAL_HISTORY, "SELECT MEDICALHISTORY_ID, NAME "
 				+ "FROM MEDICALHISTORY "
-				+ "WHERE STATUS = 0"), true));
+				+ "WHERE STATUS = 0", this::getReferences);
 		
-		CACHE_MANAGER.addCache(SOCIAL_HISTORY);
-		Cache socialHistoryCache = CACHE_MANAGER.getCache(SOCIAL_HISTORY);
-		socialHistoryCache.put(new Element("active", this.getReferences("SELECT SOCIALHISTORY_ID, NAME "
+		this.addCacheToManager(SOCIAL_HISTORY, "SELECT SOCIALHISTORY_ID, NAME "
 				+ "FROM SOCIALHISTORY "
-				+ "WHERE STATUS = 0"), true));
+				+ "WHERE STATUS = 0", this::getReferences);
+		
+		this.addCacheToManager(DISCHARGE_REASON, "SELECT DISCHARGE_REASON_ID, NAME "
+				+ "FROM DISCHARGE_REASON "
+				+ "WHERE STATUS = 0", this::getReferences);
+		
+		this.addCacheToManager(LAB_TEST_GROUP, "SELECT LAB_TEST_ID, NAME "
+				+ "FROM LAB_TEST "
+				+ "WHERE PARENT_ID IS NULL AND STATUS = 0", this::getReferences);
+		
+		this.addCacheToManager(LAB_TEST, "SELECT LAB_TEST_ID, NAME "
+				+ "FROM LAB_TEST "
+				+ "WHERE STATUS = 0", this::getReferences);
+		
+		this.addCacheToManager(LAB_TEST_METHOD, "SELECT LAB_TEST_METHOD_ID, NAME "
+				+ "FROM LAB_TEST_METHOD "
+				+ "WHERE STATUS = 0", this::getReferences);
+		
+		this.addCacheToManager(LAB_TEST_UNIT, "SELECT LAB_TEST_UNIT_ID, NAME "
+				+ "FROM LAB_TEST_UNIT "
+				+ "WHERE STATUS = 0", this::getReferences);
+		
+	}
+	
+	
+	private void addCacheToManager(String cacheKey, String sqlQuery, Function<String, List<GenericVO>> getCatg) {
+		CACHE_MANAGER.addCache(cacheKey);
+		Cache cache = CACHE_MANAGER.getCache(cacheKey);
+		cache.put(new Element("active", getCatg.apply(sqlQuery), true));
 	}
 	
 

@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +16,9 @@ public class Service extends BaseEntity {
 	@Column(name = "SERVICE_ID")
 	@GeneratedValue
 	private Long id;
+	@ManyToOne
+	@JoinColumn(name = "DOCTOR_ORDER_TYPE_ID")
+	private DoctorOrderType serviceType;
 	private String name;
 	private String description;
 	private int quantity;
@@ -26,6 +31,12 @@ public class Service extends BaseEntity {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public DoctorOrderType getServiceType() {
+		return serviceType;
+	}
+	public void setServiceType(DoctorOrderType serviceType) {
+		this.serviceType = serviceType;
 	}
 	public String getName() {
 		return name;

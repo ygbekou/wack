@@ -14,4 +14,6 @@ public interface BillingService {
 	public BaseEntity save(Bill bill);
 	
 	public BaseEntity findBill(Class cl, Long key);
+	
+	public BaseEntity findBillInitial(String itemNumber);
 }

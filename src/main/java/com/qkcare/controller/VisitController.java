@@ -20,9 +20,11 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qkcare.domain.GenericDto;
 import com.qkcare.model.BaseEntity;
+import com.qkcare.model.DoctorOrder;
 import com.qkcare.model.Visit;
 import com.qkcare.model.VisitVaccine;
 import com.qkcare.model.VitalSign;
+import com.qkcare.service.DoctorOrderService;
 import com.qkcare.service.GenericService;
 import com.qkcare.service.VisitService;
 import com.qkcare.util.Constants;
@@ -42,6 +44,10 @@ public class VisitController {
 		@Autowired 
 		@Qualifier("visitService")
 		VisitService visitService;
+		
+		@Autowired 
+		@Qualifier("doctorOrderService")
+		DoctorOrderService doctorOrderService;
 		
 		@RequestMapping(value="/visit/save",method = RequestMethod.POST)
 		public BaseEntity saveVisit(@RequestBody GenericDto dto) throws JsonParseException, 
@@ -88,5 +94,17 @@ public class VisitController {
 			BaseEntity result = visitService.findPrescription(Class.forName(Constants.PACKAGE_NAME + "Prescription"), id);
 			
 			return result;
+		}
+		
+		@RequestMapping(value="/doctororder/save",method = RequestMethod.POST)
+		public BaseEntity saveDoctorOrder(@RequestBody GenericDto dto) throws JsonParseException, 
+		JsonMappingException, IOException, ClassNotFoundException {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+					Class.forName(Constants.PACKAGE_NAME + "DoctorOrder"));
+			doctorOrderService.save((DoctorOrder)obj);
+			
+			return obj;
 		}
 }

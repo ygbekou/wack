@@ -30,6 +30,8 @@ public class Prescription extends BaseEntity {
 	private Timestamp prescriptionDatetime;
 	@Column(name = "PRESCRIPTION_TYPE")
 	private Integer prescriptionType;
+	@Column(name = "IS_DISCHARGE")
+	private String isDischarge;
 	private String notes;
 	private int status;
 	
@@ -68,6 +70,12 @@ public class Prescription extends BaseEntity {
 	}
 	public void setPrescriptionType(Integer prescriptionType) {
 		this.prescriptionType = prescriptionType;
+	}
+	public String getIsDischarge() {
+		return isDischarge;
+	}
+	public void setIsDischarge(String isDischarge) {
+		this.isDischarge = isDischarge;
 	}
 	public String getNotes() {
 		return notes;

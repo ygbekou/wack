@@ -21,11 +21,11 @@ public class Bill extends BaseEntity {
 	@GeneratedValue
 	private Long id;
 	@OneToOne
-	@JoinColumn(name = "PATIENT_ADMISSION_ID")
+	@JoinColumn(name = "ADMISSION_ID")
 	private Admission admission;
 	@OneToOne
-	@JoinColumn(name = "APPOINTMENT_ID")
-	private Appointment appointment;
+	@JoinColumn(name = "VISIT_ID")
+	private Visit visit;
 	@Column(name = "SUB_TOTAL")
 	private Double subTotal;
 	private Double taxes;
@@ -97,11 +97,11 @@ public class Bill extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public Appointment getAppointment() {
-		return appointment;
+	public Visit getVisit() {
+		return visit;
 	}
-	public void setAppointment(Appointment appointment) {
-		this.appointment = appointment;
+	public void setVisit(Visit visit) {
+		this.visit = visit;
 	}
 	public Date getBillDate() {
 		return billDate;
@@ -125,10 +125,23 @@ public class Bill extends BaseEntity {
 	// Transient attributes
 	
 	public String getPatientId() {
-		return this.getAppointment().getPatient().getMatricule();
+		if (this.visit != null) {
+			return this.getVisit().getPatient().getMatricule();
+		}
+		if (this.admission != null) {
+			return this.getAdmission().getPatient().getMatricule();
+		}
+		return "";
+		
 	}
 	
 	public String getPatientName() {
-		return this.getAppointment().getPatient().getName();
+		if (this.visit != null) {
+			return this.getVisit().getPatient().getName();
+		}
+		if (this.admission != null) {
+			return this.getAdmission().getPatient().getName();
+		}
+		return "";
 	}
 }

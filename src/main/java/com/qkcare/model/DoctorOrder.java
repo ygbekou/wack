@@ -1,6 +1,7 @@
 package com.qkcare.model;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "DOCTOR_ORDER")
@@ -42,6 +44,11 @@ public class DoctorOrder extends BaseEntity {
 	@Column(name = "RECEIVED_DATETIME")
 	private Timestamp receivedDatetime;
 	private int status;
+	
+	
+	// Transient
+	@Transient
+	List<LabTest> labTests;
 	
 	public Long getId() {
 		return id;
@@ -109,9 +116,17 @@ public class DoctorOrder extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	public List<LabTest> getLabTests() {
+		return labTests;
+	}
+	public void setLabTests(List<LabTest> labTests) {
+		this.labTests = labTests;
+	}
 	
 	// Transient attributes
 	public String getDoctorOrderTypeName() {
 		return this.getDoctorOrderType().getName();
 	}
+	
+	
 }

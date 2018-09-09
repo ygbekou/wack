@@ -75,8 +75,15 @@ public class BillingController {
 		}
 		
 		@RequestMapping(value="bill/{id}",method = RequestMethod.GET)
-		public BaseEntity getBill(@PathVariable("id") Long id) throws ClassNotFoundException{
+		public BaseEntity getBill(@PathVariable("id") Long id) throws ClassNotFoundException {
 			BaseEntity result = billingService.findBill(Class.forName(Constants.PACKAGE_NAME + "Bill"), id);
+			
+			return result;
+		}
+		
+		@RequestMapping(value="bill/itemNumber/{itemNumber}",method = RequestMethod.GET)
+		public BaseEntity getBillByItemNumber(@PathVariable("itemNumber") String itemNumber) {
+			BaseEntity result = billingService.findBillInitial(itemNumber);
 			
 			return result;
 		}

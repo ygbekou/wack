@@ -116,7 +116,7 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 			} else if ("Integer".equals(parameter.getValue3())) {
 				query.setParameter(parameter.getValue1(), new Integer(parameter.getValue2()));
 			} else if ("String".equals(parameter.getValue3())) {
-				query.setParameter(parameter.getValue1(), new String(parameter.getValue2()));
+				query.setParameter(parameter.getValue1(), parameter.getValue2());
 			} else if ("List".equals(parameter.getValue3())) {
 				query.setParameter(parameter.getValue1(), Arrays.asList(parameter.getValue2().split("\\s*,\\s*"))
 						.stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList()));

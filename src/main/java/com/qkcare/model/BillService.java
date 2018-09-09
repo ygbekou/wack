@@ -114,4 +114,8 @@ public class BillService extends BaseEntity {
 	public void setPatientAmount(Double patientAmount) {
 		this.patientAmount = patientAmount;
 	}
+	
+	public void setDefaultService(DoctorOrder doctorOrder) {
+		this.setDoctor(doctorOrder.getDoctor());
+	}
 }
