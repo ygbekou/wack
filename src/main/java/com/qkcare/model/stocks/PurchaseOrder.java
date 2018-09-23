@@ -1,6 +1,6 @@
 package com.qkcare.model.stocks;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,7 +14,6 @@ import javax.persistence.Transient;
 
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.Employee;
-import com.qkcare.model.InvestigationTest;
 
 @Entity
 @Table(name = "PURCHASE_ORDER")
@@ -36,13 +35,26 @@ public class PurchaseOrder extends BaseEntity {
 	@Column(name = "PURCHASE_ORDER_DATE")
 	private Date purchaseOrderDate;
 	private String comments;
+	@Column(name = "SUB_TOTAL")
+	private Double subTotal;
+	private Double taxes;
+	private Double discount;
+	@Column(name = "GRAND_TOTAL")
+	private Double grandTotal;
+	private Double due;
 	private int status;
 	
 	// Transient
 	@Transient
-	private List<InvestigationTest> investigationTests;
+	private List<PurchaseOrderProduct> purchaseOrderProducts;
 	
+	public PurchaseOrder() {}
 	
+	public PurchaseOrder(Long id, Date purchaseOrderDate, Long supplierId, String supplierName) {
+		this.id = id;
+		this.purchaseOrderDate = purchaseOrderDate;
+		this.supplier = new Supplier(supplierId, supplierName);
+	}
 	
 	public Long getId() {
 		return id;
@@ -80,6 +92,36 @@ public class PurchaseOrder extends BaseEntity {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
+	public Double getSubTotal() {
+		return subTotal;
+	}
+	public void setSubTotal(Double subTotal) {
+		this.subTotal = subTotal;
+	}
+	public Double getTaxes() {
+		return taxes;
+	}
+	public void setTaxes(Double taxes) {
+		this.taxes = taxes;
+	}
+	public Double getDiscount() {
+		return discount;
+	}
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+	public Double getGrandTotal() {
+		return grandTotal;
+	}
+	public void setGrandTotal(Double grandTotal) {
+		this.grandTotal = grandTotal;
+	}
+	public Double getDue() {
+		return due;
+	}
+	public void setDue(Double due) {
+		this.due = due;
+	}
 	public int getStatus() {
 		return status;
 	}
@@ -88,13 +130,23 @@ public class PurchaseOrder extends BaseEntity {
 	}
 	
 	
-	public List<InvestigationTest> getInvestigationTests() {
-		return investigationTests;
+	public List<PurchaseOrderProduct> getPurchaseOrderProducts() {
+		return purchaseOrderProducts;
 	}
-	public void setInvestigationTests(List<InvestigationTest> investigationTests) {
-		this.investigationTests = investigationTests;
+	public void setPurchaseOrderProducts(List<PurchaseOrderProduct> purchaseOrderProducts) {
+		this.purchaseOrderProducts = purchaseOrderProducts;
 	}
 	
 	
+	// Transients
+	public String getSupplierName() {
+		return this.getSupplier() != null ? this.getSupplier().getName() : "";
+	}
+	public String getRequestorName() {
+		return this.getRequestor() != null ? this.getRequestor().getName() : ""; 
+	}
+	public String getReceiverName() {
+		return this.getShipTo() != null ? this.getShipTo().getName() : "";
+	}
 	
 }

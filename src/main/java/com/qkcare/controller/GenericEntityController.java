@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 @RequestMapping(value="/service/{entity}")
 @CrossOrigin
-public class GenericEntityController {
+public class GenericEntityController extends BaseController {
 
 		@Autowired
 		@Qualifier("genericService")
@@ -45,13 +45,13 @@ public class GenericEntityController {
 		
 		@RequestMapping(value="/{id}",method = RequestMethod.GET)
 		public BaseEntity get(@PathVariable("entity") String entity, @PathVariable("id") Long id) throws ClassNotFoundException{
-			BaseEntity result = genericService.find(Class.forName(Constants.PACKAGE_NAME + entity), id);
+			BaseEntity result = genericService.find(this.getClass(entity), id);
 			return result;
 		}
 		
 		@RequestMapping(value="/all",method = RequestMethod.GET)
 		public List<BaseEntity> getAll(@PathVariable("entity") String entity) throws ClassNotFoundException{
-			 List<BaseEntity> entities = genericService.getAll(Class.forName(Constants.PACKAGE_NAME + entity));
+			 List<BaseEntity> entities = genericService.getAll(this.getClass(entity));
 			 System.out.println(entities);
 			 return entities;
 		}		
@@ -79,7 +79,7 @@ public class GenericEntityController {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
-					Class.forName(Constants.PACKAGE_NAME + entity));
+					this.getClass(entity));
 			genericService.save(obj);
 			return obj;
 		}
@@ -91,7 +91,7 @@ public class GenericEntityController {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
-					Class.forName(Constants.PACKAGE_NAME + entity));
+					this.getClass(entity));
 			genericService.save(obj);
 			
 			if (!file.isEmpty()) {
@@ -137,14 +137,14 @@ public class GenericEntityController {
 		@RequestMapping(value="/delete",method = RequestMethod.POST)
 		public String delete(@PathVariable("entity") String entity, @RequestBody List<Long> ids) throws JsonParseException, 
 		JsonMappingException, IOException, ClassNotFoundException {
-			this.genericService.delete(Class.forName(Constants.PACKAGE_NAME + entity), ids);
+			this.genericService.delete(this.getClass(entity), ids);
 			return "SUCCESS";
 		}
 		
 		@RequestMapping(value="/cascade/delete",method = RequestMethod.POST)
 		public String cascadeDelete(@PathVariable("entity") String entity, @RequestBody List<Long> ids) throws JsonParseException, 
 		JsonMappingException, IOException, ClassNotFoundException {
-			this.genericService.delete(Class.forName(Constants.PACKAGE_NAME + entity), ids);
+			this.genericService.delete(this.getClass(entity), ids);
 			return "SUCCESS";
 		}
 		

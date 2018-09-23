@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RestController
 @RequestMapping(value="/service/user/{entity}")
 @CrossOrigin
-public class UserController {
+public class UserController extends BaseController {
 	
 		private static final Logger LOGGER = Logger.getLogger(UserController.class);
 	

@@ -30,7 +30,7 @@ import com.qkcare.util.Constants;
 @RestController
 @RequestMapping(value="/service/billing")
 @CrossOrigin
-public class BillingController {
+public class BillingController extends BaseController {
 	
 		private static final Logger LOGGER = Logger.getLogger(BillingController.class);
 	

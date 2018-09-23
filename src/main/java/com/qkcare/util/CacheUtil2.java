@@ -40,7 +40,7 @@ public class CacheUtil2 implements InitializingBean {
 	public List<GenericVO> getCategoryReferences(String query) {
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
 		List<Object[]> list = this.genericService.getNativeByCriteria(query, 
-				paramTupleList, null);
+				paramTupleList, null, null);
 		Map<GenericVO, List<GenericVO>> resultMap = new HashMap<>();
 		List<GenericVO> results = new ArrayList<>();
 		Map<Long, GenericVO> keyMap = new HashMap<Long, GenericVO>();
@@ -70,7 +70,7 @@ public class CacheUtil2 implements InitializingBean {
 	public void populateReferenceCaches(Cache cache, String query) {
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
 		List<Object[]> list = this.genericService.getNativeByCriteria(query, 
-				paramTupleList, null);
+				paramTupleList, null, null);
 		
 		for (Object[] objects : list) {
 			Long elementId = new Long(objects[0].toString());

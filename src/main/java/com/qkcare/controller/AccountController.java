@@ -27,7 +27,7 @@ import com.qkcare.util.Constants;
 @RestController
 @RequestMapping(value="/service/account")
 @CrossOrigin
-public class AccountController {
+public class AccountController extends BaseController {
 	
 		private static final Logger LOGGER = Logger.getLogger(AccountController.class);
 	

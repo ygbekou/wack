@@ -67,16 +67,17 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 
 	public List<E> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy) {
 		
-		Query query = this.buildQuery(queryStr, parameters, orderBy, false);
+		Query query = this.buildQuery(queryStr, parameters, orderBy, null, false);
 		
 	    List<E> ListOfEmailDomains = query.getResultList();
 	    return ListOfEmailDomains;
 	}
 	
 	
-	public List<Object[]> getNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy) {
+	public List<Object[]> getNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, 
+			String orderBy, String groupBy) {
 		
-		Query query = this.buildQuery(queryStr, parameters, orderBy, true);
+		Query query = this.buildQuery(queryStr, parameters, orderBy, groupBy, true);
 		
 	    List<Object[]> list = query.getResultList();
 	    return list;
@@ -84,13 +85,14 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 	
 	public Integer deleteByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters) {
 		
-		Query query = this.buildQuery(queryStr, parameters, null, false);
+		Query query = this.buildQuery(queryStr, parameters, null, null, false);
 		
 	    Integer nbDel = query.executeUpdate();
 	    return nbDel;
 	}
 
-	private Query buildQuery(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy, boolean nativeQuery) {
+	private Query buildQuery(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy, 
+			String groupBy, boolean nativeQuery) {
 		StringBuilder queryBuilder = new StringBuilder(queryStr);
 		
 		// Build the query
@@ -98,9 +100,14 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 			queryBuilder.append(" AND " + parameter.getValue0() + " :" + parameter.getValue1());
 		}
 		
+		if (groupBy != null) {
+			queryBuilder.append(groupBy);
+		} 
+		
 		if (orderBy != null) {
 			queryBuilder.append(orderBy);
 		}
+		
 		
 		Query query = null;
 		

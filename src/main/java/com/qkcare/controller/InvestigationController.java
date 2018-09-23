@@ -36,7 +36,7 @@ import com.qkcare.util.Constants;
 @RestController
 @RequestMapping(value="/service/laboratory")
 @CrossOrigin
-public class InvestigationController {
+public class InvestigationController extends BaseController {
 	
 		private static final Logger LOGGER = Logger.getLogger(InvestigationController.class);
 	

@@ -21,40 +21,32 @@ public class Supplier extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SUPPLIER_ID")
 	private Long id;
-		
-	//@NotNull
-	//@Length(max = 75)
-	@Column(name = "NAME")
 	private String name;
-
-	//@Length(max = 100)
 	@Column(name = "CONTACT_NAME")
 	private String contactName;
-	
-	//@Length(max = 75)
 	@Column(name = "ADDRESS")
 	private String address;
-	
 	@Column(name = "CITY")
 	private String city;
-	
 	@ManyToOne
 	@JoinColumn(name = "COUNTRY_ID")
 	private Country country;
-	
-	//@Length(max = 50)
 	@Column(name = "EMAIL")
 	private String email;
-
 	@Column(name = "HOME_PHONE")
 	private String homePhone;
-	
 	@Column(name = "MOBILE_PHONE")
 	private String mobilePhone;
-	
 	@Column(name = "FAX")
 	private String fax;
-
+	private int status;
+	
+	public Supplier() {}
+	
+	public Supplier(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 	
 	public Long getId() {
 		return id;
@@ -134,6 +126,14 @@ public class Supplier extends BaseEntity {
 
 	public void setFax(String fax) {
 		this.fax = fax;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
 }

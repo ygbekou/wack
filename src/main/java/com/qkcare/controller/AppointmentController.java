@@ -31,7 +31,7 @@ import com.qkcare.util.Constants;
 @RestController
 @RequestMapping(value="/service/appointment")
 @CrossOrigin
-public class AppointmentController {
+public class AppointmentController extends BaseController {
 	
 		private static final Logger LOGGER = Logger.getLogger(AppointmentController.class);
 	

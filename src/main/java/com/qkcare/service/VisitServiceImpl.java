@@ -94,7 +94,7 @@ public class VisitServiceImpl  implements VisitService {
 	private List<Long> deriveAddedChilds(Long visitId, Set<Long> selectedIds, String childEntity) {
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
 		paramTupleList.add(Quartet.with("VISIT_ID = ", "visitId", visitId + "", "Long"));
-		List<Object[]> list = this.genericService.getNativeByCriteria("SELECT " + childEntity + "_ID FROM VISIT_" + childEntity + " WHERE 1 = 1 ", paramTupleList, null);
+		List<Object[]> list = this.genericService.getNativeByCriteria("SELECT " + childEntity + "_ID FROM VISIT_" + childEntity + " WHERE 1 = 1 ", paramTupleList, null, null);
 		Set<Long> existingAllergyIds = new HashSet<Long>();
 		
 		for (Object object : list) {

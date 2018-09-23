@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.qkcare.model.stocks.ReceiveOrder;
+
 @Entity
 @Table(name = "PRODUCT")
 public class Product extends BaseEntity {
@@ -29,9 +31,16 @@ public class Product extends BaseEntity {
 	private String name;
 	private String description;
 	private Double price;
+	@Column(name = "AVAILABLE_QTY")
+	private Integer quantityInStock;
 	private int status;
 	
 	public Product() {}
+	
+	public Product(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 	public Long getId() {
 		return id;
@@ -75,6 +84,12 @@ public class Product extends BaseEntity {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
+	public Integer getQuantityInStock() {
+		return quantityInStock;
+	}
+	public void setQuantityInStock(Integer quantityInStock) {
+		this.quantityInStock = quantityInStock;
+	}
 	public int getStatus() {
 		return status;
 	}
@@ -86,9 +101,9 @@ public class Product extends BaseEntity {
 	// TRansient fields for UI
 	
 	public String getCategoryName() {
-		return this.category.getName();
+		return this.category != null ? this.category.getName() : "";
 	}
 	public String getManufacturerName() {
-		return this.manufacturer.getName();
+		return this.manufacturer != null ? this.manufacturer.getName() : "";
 	}
 }

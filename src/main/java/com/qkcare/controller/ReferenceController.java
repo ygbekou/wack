@@ -22,7 +22,7 @@ import net.sf.ehcache.Element;
 @RestController
 @RequestMapping(value="/service/reference")
 @CrossOrigin
-public class ReferenceController {
+public class ReferenceController extends BaseController {
 	
 		private static final Logger LOGGER = Logger.getLogger(ReferenceController.class);
 	
