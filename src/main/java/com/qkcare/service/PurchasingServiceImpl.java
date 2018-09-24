@@ -5,14 +5,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import javax.persistence.Transient;
 import javax.transaction.Transactional;
 
 import org.javatuples.Quartet;
@@ -20,13 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.qkcare.model.BaseEntity;
-import com.qkcare.model.Bill;
-import com.qkcare.model.BillPayment;
-import com.qkcare.model.BillService;
-import com.qkcare.model.DoctorOrder;
-import com.qkcare.model.PackageService;
+import com.qkcare.model.Investigation;
+import com.qkcare.model.InvestigationTest;
+import com.qkcare.model.LabTest;
 import com.qkcare.model.Product;
-import com.qkcare.model.Visit;
+import com.qkcare.model.stocks.PatientSale;
+import com.qkcare.model.stocks.PatientSaleProduct;
 import com.qkcare.model.stocks.PurchaseOrder;
 import com.qkcare.model.stocks.PurchaseOrderProduct;
 import com.qkcare.model.stocks.ReceiveOrder;
@@ -127,4 +120,62 @@ public class PurchasingServiceImpl  implements PurchasingService {
 		
 	}
 	
+	public BaseEntity findReceiveOrder(Class cl, Long key) {
+		ReceiveOrder receiveOrder = (ReceiveOrder) this.genericService.find(cl, key);
+		
+		if (receiveOrder != null) {
+			List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+			paramTupleList.add(Quartet.with("e.receiveOrder.id = ", "receiveOrderId", key + "", "Long"));
+			String queryStr =  "SELECT e FROM ReceiveOrderProduct e WHERE 1 = 1";
+			List<BaseEntity> receiveOrders = genericService.getByCriteria(queryStr, paramTupleList, null);
+			List<ReceiveOrderProduct> receiveOrderProducts = new ArrayList<ReceiveOrderProduct>();
+			
+			for (BaseEntity entity : receiveOrders) {
+				ReceiveOrderProduct receiveOrderProduct = (ReceiveOrderProduct)entity;
+				receiveOrderProduct.setReceiveOrder(null);
+				receiveOrderProducts.add(receiveOrderProduct);
+			}
+			receiveOrder.setReceiveOrderProducts(receiveOrderProducts);
+		}
+		return receiveOrder;
+		
+	}
+	
+	
+	
+	// Product Sales 
+	@Transactional
+	public BaseEntity save(PatientSale patientSale) {
+		BaseEntity toReturn = this.genericService.save(patientSale);
+		
+		for (PatientSaleProduct psp : patientSale.getPatientSaleProducts()) {
+			psp.setPatientSale((PatientSale)toReturn);
+			this.genericService.save(psp);
+		}
+		
+		return toReturn;
+	}
+	
+	public BaseEntity findPatientSale(Class cl, Long key) {
+		PatientSale patientSale = (PatientSale) this.genericService.find(cl, key);
+		
+		if (patientSale != null) {
+			List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+			paramTupleList.add(Quartet.with("e.patientSale.id = ", "patientSaleId", key + "", "Long"));
+			String queryStr =  "SELECT e FROM PatientSaleProduct e WHERE 1 = 1";
+			List<BaseEntity> saleProducts = genericService.getByCriteria(queryStr, paramTupleList, null);
+			List<PatientSaleProduct> patientSaleProducts = new ArrayList<PatientSaleProduct>();
+			
+			for (BaseEntity entity : saleProducts) {
+				PatientSaleProduct patientSaleProduct = (PatientSaleProduct)entity;
+				patientSaleProduct.setPatientSale(null);
+				patientSaleProducts.add(patientSaleProduct);
+			}
+			patientSale.setPatientSaleProducts(patientSaleProducts);
+		}
+		return patientSale;
+		
+	}
+	
+
 }

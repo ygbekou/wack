@@ -23,6 +23,8 @@ import com.qkcare.model.BaseEntity;
 import com.qkcare.model.Bill;
 import com.qkcare.model.BillService;
 import com.qkcare.model.PackageService;
+import com.qkcare.model.stocks.PatientSale;
+import com.qkcare.model.stocks.PatientSaleProduct;
 import com.qkcare.model.stocks.PurchaseOrder;
 import com.qkcare.model.stocks.PurchaseOrderProduct;
 import com.qkcare.model.stocks.ReceiveOrder;
@@ -92,5 +94,35 @@ public class PurchasingController extends BaseController {
 			BaseEntity result = purchasingService.findInitialReceiveOrder(this.getClass("com.qkcare.model.stocks.PurchaseOrder"), id);
 			
 			return result != null ? result : new PurchaseOrder();
+		}
+		
+		@RequestMapping(value="receiveOrder/{id}",method = RequestMethod.GET)
+		public BaseEntity getReceiveOrder(@PathVariable("id") Long id) throws ClassNotFoundException {
+			BaseEntity result = purchasingService.findReceiveOrder(this.getClass("com.qkcare.model.stocks.ReceiveOrder"), id);
+			
+			return result != null ? result : new ReceiveOrder();
+		}
+
+		@RequestMapping(value="/patientSale/save",method = RequestMethod.POST)
+		public BaseEntity savePatientSale(@RequestBody GenericDto dto) throws JsonParseException, 
+		JsonMappingException, IOException, ClassNotFoundException {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+					this.getClass("com.qkcare.model.stocks.PatientSale"));
+			purchasingService.save((PatientSale)obj);
+			
+			for (PatientSaleProduct psp : ((PatientSale)obj).getPatientSaleProducts()) {
+				psp.setPatientSale(null);
+			}
+			
+			return obj;
+		}
+		
+		@RequestMapping(value="patientSale/{id}",method = RequestMethod.GET)
+		public BaseEntity getPatientSale(@PathVariable("id") Long id) throws ClassNotFoundException {
+			BaseEntity result = purchasingService.findPatientSale(this.getClass("com.qkcare.model.stocks.PatientSale"), id);
+			
+			return result != null ? result : new PatientSale();
 		}
 }
