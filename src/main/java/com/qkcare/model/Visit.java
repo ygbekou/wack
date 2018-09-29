@@ -1,6 +1,8 @@
 package com.qkcare.model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -24,17 +26,24 @@ public class Visit extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "PATIENT_ID")
 	private Patient patient;
+	@ManyToOne
+	@JoinColumn(name = "PACKAGE_ID")
+	private com.qkcare.model.Package pckage;
 	@Column(name = "VISIT_NUMBER")
 	private String visitNumber;
 	@Column(name = "CHIEF_OF_COMPLAIN")
 	private String chiefOfComplain;
 	@Column(name = "VISIT_DATETIME")
 	private Timestamp visitDatetime;
+	@Column(name = "IS_HEALTH_CHECKUP")
+	private int isHealthCheckup;
 	private int status;
 	
 	// Transient
 	@Transient
 	private VitalSign vitalSign;
+	@Transient 
+	List<Integer> isHealthCheckupSel;
 	
 	@Transient
 	List<VisitVaccine> givenVaccines;
@@ -69,6 +78,12 @@ public class Visit extends BaseEntity {
 	public void setPatient(Patient patient) {
 		this.patient = patient;
 	}
+	public com.qkcare.model.Package getPckage() {
+		return pckage;
+	}
+	public void setPckage(com.qkcare.model.Package pckage) {
+		this.pckage = pckage;
+	}
 	public String getVisitNumber() {
 		return visitNumber;
 	}
@@ -93,10 +108,13 @@ public class Visit extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
-	
-	
-	
+	public int getIsHealthCheckup() {
+		return isHealthCheckup;
+	}
+
+	public void setIsHealthCheckup(int isHealthCheckup) {
+		this.isHealthCheckup = isHealthCheckup;
+	}
 	public VitalSign getVitalSign() {
 		return vitalSign;
 	}
@@ -132,6 +150,16 @@ public class Visit extends BaseEntity {
 	}
 	public void setSelectedSocialHistories(Set<Long> selectedSocialHistories) {
 		this.selectedSocialHistories = selectedSocialHistories;
+	}
+
+	public List<Integer> getIsHealthCheckupSel() {
+		this.setIsHealthCheckupSel(Arrays.asList(isHealthCheckup));
+		return isHealthCheckupSel;
+	}
+
+	public void setIsHealthCheckupSel(List<Integer> isHealthCheckupSel) {
+		this.isHealthCheckupSel = isHealthCheckupSel;
+		this.setIsHealthCheckup(this.isHealthCheckupSel.get(0));
 	}
 	
 }
