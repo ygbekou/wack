@@ -54,6 +54,17 @@ public class Investigation extends BaseEntity {
 	@Transient
 	private List<InvestigationTest> investigationTests;
 	
+	public Investigation () {
+		
+	}
+	
+	public Investigation (DoctorOrder doctorOrder, LabTest labTest) {
+		this.setAdmission(doctorOrder.getAdmission());
+		this.setVisit(doctorOrder.getVisit());
+		this.setName(labTest.getName());
+		this.setLabTest(labTest);
+		this.setInvestigationDatetime(doctorOrder.getDoctorOrderDatetime());
+	}
 	
 	public Long getId() {
 		return id;

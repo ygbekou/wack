@@ -1,5 +1,7 @@
 package com.qkcare.model;
 
+import java.util.ArrayList;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.qkcare.model.stocks.PatientSaleProduct;
 
 @Entity
 @Table(name = "LAB_TEST")
@@ -36,6 +40,11 @@ public class LabTest extends BaseEntity {
 	@Column(name = "CRITICAL_HIGH", nullable = true)
 	private Double criticalHigh;
 	private int status;
+	
+	public LabTest() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}

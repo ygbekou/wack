@@ -1,6 +1,7 @@
 package com.qkcare.model.stocks;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -50,6 +51,30 @@ public class PatientSale extends BaseEntity {
 	@Transient
 	private List<PatientSaleProduct> patientSaleProducts;
 	
+	public PatientSale() {
+		this.patientSaleProducts = new ArrayList<PatientSaleProduct>();
+		this.subTotal = new Double(0);
+		this.grandTotal = new Double(0);
+		this.discount = new Double(0);
+		this.taxes = new Double(0);
+	}
+	
+	public PatientSale (DoctorOrder doctorOrder) {
+		this();
+		this.setAdmission(doctorOrder.getAdmission());
+		this.setVisit(doctorOrder.getVisit());
+		this.setNotes(doctorOrder.getDescription());
+		this.setSaleDatetime(doctorOrder.getDoctorOrderDatetime());
+		
+		for (Product product : doctorOrder.getProducts()) {
+			PatientSaleProduct patientSaleProduct = new PatientSaleProduct();
+			patientSaleProduct.setProduct(product);
+			patientSaleProduct.setQuantity(1);
+			patientSaleProduct.setUnitPrice(product.getPrice());
+			patientSaleProduct.setTotalAmount(patientSaleProduct.getQuantity() * patientSaleProduct.getUnitPrice());
+			this.addPatientSaleProduct(patientSaleProduct);
+		}
+	}
 	
 	public Long getId() {
 		return id;
@@ -124,4 +149,14 @@ public class PatientSale extends BaseEntity {
 	public void setPatientSaleProducts(List<PatientSaleProduct> patientSaleProducts) {
 		this.patientSaleProducts = patientSaleProducts;
 	}
+	
+	public void addPatientSaleProduct(PatientSaleProduct p) {
+		this.patientSaleProducts.add(p);
+		if (p.getUnitPrice() != null) {
+			this.subTotal  = this.subTotal + p.getUnitPrice();
+			this.grandTotal  = this.grandTotal + p.getUnitPrice();
+		}
+	}
+	
+	
 }
