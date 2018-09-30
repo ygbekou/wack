@@ -178,4 +178,59 @@ public class PurchasingServiceImpl  implements PurchasingService {
 	}
 	
 
+	public BaseEntity findInitialSaleReturn(Class cl, Long patientSaleId) throws NumberFormatException, ParseException {
+		String queryString = "SELECT PS.PATIENT_SALE_ID, PS.SALE_DATETIME, POP.PRODUCT_ID, "
+							+ "P.NAME AS P_NAME, POP.QUANTITY - IFNULL(SUM(ROP.QUANTITY), 0) AS QUANTITY "
+							+ "FROM PATIENT_SALE PS "
+							+ "JOIN PATIENT_SALE_PRODUCT PSP ON PS.PATIENT_SALE_ID = PSP.PATIENT_SALE_ID "
+							+ "LEFT OUTER JOIN SALE_RETURN SR ON PS.PATIENT_SALE_ID = SR.PATIENT_SALE_ID "
+							+ "LEFT OUTER JOIN SALE_RETURN_PRODUCT SRP ON RO.RECEIVE_ORDER_ID = ROP.RECEIVE_ORDER_ID "
+							+ "JOIN SUPPLIER SP ON PO.SUPPLIER_ID = SP.SUPPLIER_ID "
+							+ "JOIN PRODUCT P ON POP.PRODUCT_ID = P.PRODUCT_ID "
+							+ "WHERE 1 = 1 "
+							;
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		paramTupleList.add(Quartet.with("PO.PURCHASE_ORDER_ID = ", "patientSaleId", patientSaleId + "", "Long"));
+		List<Object[]> list = this.genericService.getNativeByCriteria(queryString, paramTupleList, 
+				" ORDER BY P.NAME ", " GROUP BY PO.PURCHASE_ORDER_ID, POP.PRODUCT_ID ");
+		
+		ReceiveOrder receiveOrder = new ReceiveOrder();
+		PurchaseOrder purchaseOrder = new PurchaseOrder();
+		List<ReceiveOrderProduct> receiveOrderProducts = new ArrayList<ReceiveOrderProduct>();
+		
+		DateFormat format = new SimpleDateFormat("yyyyMMdd");
+
+		for (Object[] objects : list) {
+			receiveOrder.setPurchaseOrder(new PurchaseOrder(new Long(objects[0].toString()), format.parse(objects[1].toString()), 
+					new Long(objects[2].toString()), String.valueOf(objects[3])));
+			receiveOrderProducts.add(new ReceiveOrderProduct(null, null, 
+					new Product(new Long(objects[4].toString()), String.valueOf(objects[5])), 
+					Integer.valueOf(objects[6].toString()), Integer.valueOf(objects[6].toString()) ));
+		}
+		receiveOrder.setReceiveOrderProducts(receiveOrderProducts);
+		
+		return receiveOrder;
+		
+	}
+	
+	public BaseEntity findSaleReturn(Class cl, Long key) {
+		ReceiveOrder receiveOrder = (ReceiveOrder) this.genericService.find(cl, key);
+		
+		if (receiveOrder != null) {
+			List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+			paramTupleList.add(Quartet.with("e.receiveOrder.id = ", "receiveOrderId", key + "", "Long"));
+			String queryStr =  "SELECT e FROM ReceiveOrderProduct e WHERE 1 = 1";
+			List<BaseEntity> receiveOrders = genericService.getByCriteria(queryStr, paramTupleList, null);
+			List<ReceiveOrderProduct> receiveOrderProducts = new ArrayList<ReceiveOrderProduct>();
+			
+			for (BaseEntity entity : receiveOrders) {
+				ReceiveOrderProduct receiveOrderProduct = (ReceiveOrderProduct)entity;
+				receiveOrderProduct.setReceiveOrder(null);
+				receiveOrderProducts.add(receiveOrderProduct);
+			}
+			receiveOrder.setReceiveOrderProducts(receiveOrderProducts);
+		}
+		return receiveOrder;
+		
+	}
 }
