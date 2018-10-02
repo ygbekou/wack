@@ -241,7 +241,9 @@ public class Patient extends BaseEntity {
 	public String getSex() {
 		return this.user.getSex();
 	}
-	
+	public Date getBirthDate() {
+		return this.user.getBirthDate();
+	}
 	
 	public String getName() {
 		return this.user.getFirstName() + " " + this.user.getLastName();

@@ -32,22 +32,30 @@ public class UserServiceImpl  implements UserService {
 			Field userField = entity.getClass().getDeclaredField("user");
 			userField.setAccessible(true);
 			Field matriculeField = null;
+			Field passwordField = null;
 			try {
 				matriculeField = entity.getClass().getDeclaredField("matricule");
 				if (matriculeField != null)
 					matriculeField.setAccessible(true);
+				
 			} catch(NoSuchFieldException nsfe) {
 				
 			}
 	        user = (User) userField.get(entity);
+	        passwordField = user.getClass().getDeclaredField("password");
+			if (passwordField != null) {
+				passwordField.setAccessible(true);
+        		passwordField.set(user, "1234");
+			}
 	        user = (User) genericService.save(user);
 	        
 	       
 	        if (user != null) {	 
 	        	if (matriculeField != null) {
-					matriculeField.set(entity, user.getUserName());
+					matriculeField.set(entity, "P" + user.getId());
 				}
-	        	if (!file.isEmpty()) {
+	        	
+	        	if (file != null && !file.isEmpty()) {
 					try {
 						String originalFileExtension = file.getOriginalFilename()
 								.substring(file.getOriginalFilename().lastIndexOf("."));

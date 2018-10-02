@@ -1,5 +1,6 @@
 package com.qkcare.service;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,7 +70,8 @@ public class GenericServiceImpl implements GenericService {
 		return this.genericDao.getAll(cl);
 	}
 	
-	public List<BaseEntity> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, String orderBy) {
+	public List<BaseEntity> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, 
+			String orderBy) {
 		return this.genericDao.getByCriteria(queryStr, parameters, orderBy);
 	}
 

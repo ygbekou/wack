@@ -1,11 +1,13 @@
 package com.qkcare.dao;
 
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.qkcare.model.BaseEntity;
+import com.qkcare.util.DateUtil;
 
 @SuppressWarnings("unchecked")
 @Repository
@@ -127,6 +130,12 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 			} else if ("List".equals(parameter.getValue3())) {
 				query.setParameter(parameter.getValue1(), Arrays.asList(parameter.getValue2().split("\\s*,\\s*"))
 						.stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList()));
+			} else if ("Date".equals(parameter.getValue3())) {
+				try {
+					query.setParameter(parameter.getValue1(), DateUtil.parseDate(parameter.getValue2(), "MM/dd/yyyy"), TemporalType.DATE);
+				} catch(ParseException pe) {
+					logger.error("Exception happened: " + pe);
+				}
 			}
 		}
 		

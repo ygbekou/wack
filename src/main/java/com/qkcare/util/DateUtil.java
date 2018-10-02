@@ -1,5 +1,6 @@
 package com.qkcare.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,5 +21,10 @@ public class DateUtil {
 	public static String formatDate(Date date, String formatString) {
 		SimpleDateFormat dt1 = new SimpleDateFormat(formatString);
         return dt1.format(date);
+	}
+	
+	public static Date parseDate(String dateStr, String formatString) throws ParseException {
+		SimpleDateFormat dt1 = new SimpleDateFormat(formatString);
+        return dt1.parse(dateStr);
 	}
 }

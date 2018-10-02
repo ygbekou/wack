@@ -52,7 +52,18 @@ public class UserController extends BaseController {
 					Class.forName(Constants.PACKAGE_NAME + entity));
 			userService.save(obj, file);
 			
-			
+			return obj;
+		}
+		
+		@RequestMapping(value="/saveWithoutPicture",method = RequestMethod.POST)
+		public BaseEntity saveWithoutPicture(@PathVariable("entity") String entity,
+				@RequestBody GenericDto dto) throws JsonParseException, 
+		JsonMappingException, IOException, ClassNotFoundException {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+					Class.forName(Constants.PACKAGE_NAME + entity));
+			userService.save(obj, null);
 			
 			return obj;
 		}

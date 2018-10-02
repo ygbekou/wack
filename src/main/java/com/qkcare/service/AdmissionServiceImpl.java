@@ -17,7 +17,6 @@ import com.qkcare.model.Prescription;
 import com.qkcare.model.PrescriptionDiagnosis;
 import com.qkcare.model.PrescriptionMedicine;
 import com.qkcare.model.Admission;
-import com.qkcare.model.AdmissionDiagnosis;
 
 @Service(value="admissionService")
 public class AdmissionServiceImpl  implements AdmissionService {

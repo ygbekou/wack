@@ -45,13 +45,13 @@ public class GenericEntityController extends BaseController {
 		
 		@RequestMapping(value="/{id}",method = RequestMethod.GET)
 		public BaseEntity get(@PathVariable("entity") String entity, @PathVariable("id") Long id) throws ClassNotFoundException{
-			BaseEntity result = genericService.find(this.getClass(entity), id);
+			BaseEntity result = genericService.find(this.getClass(this.convertEntity(entity)), id);
 			return result;
 		}
 		
 		@RequestMapping(value="/all",method = RequestMethod.GET)
 		public List<BaseEntity> getAll(@PathVariable("entity") String entity) throws ClassNotFoundException{
-			 List<BaseEntity> entities = genericService.getAll(this.getClass(entity));
+			 List<BaseEntity> entities = genericService.getAll(this.getClass(this.convertEntity(entity)));
 			 System.out.println(entities);
 			 return entities;
 		}		
@@ -66,7 +66,7 @@ public class GenericEntityController extends BaseController {
 				paramTupleList.add(Quartet.with(paramSplit[0], paramSplit[1], paramSplit[2], paramSplit[3]));
 			}
 			
-			String queryStr =  "SELECT e FROM " + entity + " e WHERE 1 = 1";
+			String queryStr =  "SELECT e FROM " + this.convertEntity(entity) + " e WHERE 1 = 1";
 			List<BaseEntity> entities = genericService.getByCriteria(queryStr, paramTupleList, null);
 			System.out.println(entities);
 			return entities;
@@ -79,7 +79,7 @@ public class GenericEntityController extends BaseController {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
-					this.getClass(entity));
+					this.getClass(this.convertEntity(entity)));
 			genericService.save(obj);
 			return obj;
 		}
