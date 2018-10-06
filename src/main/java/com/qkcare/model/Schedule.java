@@ -23,6 +23,9 @@ public class Schedule extends BaseEntity {
 	@JoinColumn(name = "DOCTOR_ID")
 	private Employee doctor;
 	@ManyToOne
+	@JoinColumn(name = "HOSPITAL_LOCATION_ID")
+	private HospitalLocation hospitalLocation;
+	@ManyToOne
 	@JoinColumn(name = "WEEK_DAY_ID")
 	private Weekday weekday;
 	@Column(name = "BEGIN_TIME")
@@ -46,6 +49,12 @@ public class Schedule extends BaseEntity {
 	}
 	public void setDoctor(Employee doctor) {
 		this.doctor = doctor;
+	}
+	public HospitalLocation getHospitalLocation() {
+		return hospitalLocation;
+	}
+	public void setHospitalLocation(HospitalLocation hospitalLocation) {
+		this.hospitalLocation = hospitalLocation;
 	}
 	public Weekday getWeekday() {
 		return weekday;
@@ -84,11 +93,14 @@ public class Schedule extends BaseEntity {
 	public String getDoctorName() {
 		return this.doctor.getFirstName() + " " + toValue(this.doctor.getMiddleName() + " ") + this.doctor.getLastName();
 	}
-	public String getDoctorDepartmentName() {
+	public String getDepartmentName() {
 		return this.doctor.getDepartmentName();
 	}
 	public String getDay() {
 		return this.weekday.getName();
+	}
+	public String getLocationName() {
+		return this.hospitalLocation != null ? this.hospitalLocation.getName() : "";
 	}
 	
 	private String toValue(String value) {

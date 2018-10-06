@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import com.qkcare.dao.AppointmentDao;
 import com.qkcare.dao.GenericDao;
 import com.qkcare.domain.ScheduleEvent;
+import com.qkcare.domain.SearchCriteria;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.BillService;
 import com.qkcare.model.Prescription;
@@ -43,11 +44,11 @@ public class AppointmentServiceImpl  implements AppointmentService {
 	GenericDao genericDao;
 	
 	@Transactional
-	public List<ScheduleEvent> getScheduleEvents(Long departmentId, Long doctorId) {
-		List<ScheduleEvent> scheduleEvents = this.appointmentDao.getScheduleEvents(departmentId, doctorId);
+	public List<ScheduleEvent> getScheduleEvents(SearchCriteria searchCriteria) {
+		List<ScheduleEvent> scheduleEvents = this.appointmentDao.getScheduleEvents(searchCriteria);
 		Map<String, String> apptMap = scheduleEvents.stream().collect(
                 Collectors.toMap(ScheduleEvent::getStart, ScheduleEvent::getEnd));
-		scheduleEvents.addAll(this.generateDoctorAvailabilities(doctorId, apptMap));
+		scheduleEvents.addAll(this.generateDoctorAvailabilities(searchCriteria, apptMap));
 		
 		return scheduleEvents;
 	}
@@ -72,13 +73,21 @@ public class AppointmentServiceImpl  implements AppointmentService {
 	}
 	
 	
-	private List<ScheduleEvent> generateDoctorAvailabilities(Long doctorId, Map<String, String> apptMap) {
+	private List<ScheduleEvent> generateDoctorAvailabilities(SearchCriteria searchCriteria, Map<String, String> apptMap) {
 		List<ScheduleEvent> events = new ArrayList<ScheduleEvent>();
 		LocalDate startDate = LocalDate.now().withDayOfMonth(1).plusMonths(-1);
 		LocalDate endDate = LocalDate.now().withDayOfMonth(1).plusMonths(2);
 		
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-		paramTupleList.add(Quartet.with("e.doctor.id = ", "doctorId", doctorId + "", "Long"));
+		if (searchCriteria.getDoctorId() != null) {
+			paramTupleList.add(Quartet.with("e.doctor.id = ", "doctorId", searchCriteria.getDoctorId() + "", "Long"));
+		}
+		if (searchCriteria.getDepartmentId() != null) {
+			paramTupleList.add(Quartet.with("e.doctor.department.id = ", "departmentId", searchCriteria.getDepartmentId() + "", "Long"));
+		}
+		if (searchCriteria.getHospitalLocationId() != null) {
+			paramTupleList.add(Quartet.with("e.hospitalLocation.id = ", "hospitalLocationId", searchCriteria.getHospitalLocationId() + "", "Long"));
+		}
 		String queryStr =  "SELECT e FROM Schedule e WHERE 1 = 1";
 		List<Schedule> schedules = (List)this.genericService.getByCriteria(queryStr, paramTupleList, null);
 		

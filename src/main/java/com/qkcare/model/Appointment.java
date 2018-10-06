@@ -32,6 +32,9 @@ public class Appointment extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "PATIENT_ID")
 	private Patient patient;
+	@ManyToOne
+	@JoinColumn(name = "HOSPITAL_LOCATION_ID")
+	private HospitalLocation hospitalLocation;
 	@Column(name = "APPOINTMENT_DATE")
 	private Date appointmentDate;
 	@Column(name = "BEGIN_TIME")
@@ -61,6 +64,12 @@ public class Appointment extends BaseEntity {
 	}
 	public void setDepartment(Department department) {
 		this.department = department;
+	}
+	public HospitalLocation getHospitalLocation() {
+		return hospitalLocation;
+	}
+	public void setHospitalLocation(HospitalLocation hospitalLocation) {
+		this.hospitalLocation = hospitalLocation;
 	}
 	public String getBeginTime() {
 		return beginTime;

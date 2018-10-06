@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.qkcare.domain.ScheduleEvent;
+import com.qkcare.domain.SearchCriteria;
 
 @SuppressWarnings("unchecked")
 @Repository
@@ -21,7 +22,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	@Autowired
 	private EntityManager entityManager;
 
-	public List<ScheduleEvent> getScheduleEvents(Long departmentId, Long doctorId) {
+	public List<ScheduleEvent> getScheduleEvents(SearchCriteria searchCriteria) {
 		// TODO Auto-generated method stub
 		List<ScheduleEvent> events = new ArrayList<ScheduleEvent>();
 		try {
@@ -33,22 +34,26 @@ public class AppointmentDaoImpl implements AppointmentDao {
 					+ "WHERE 1 = 1 ");
 			
 			
-			if (doctorId != null && doctorId > 0) {
+			if (searchCriteria.hasDoctorId()) {
 				sqlBuilder.append(" AND AP.DOCTOR_ID = :doctorId ");
 			}
-			
-			if (departmentId != null && departmentId > 0) {
+			if (searchCriteria.hasHospitalLocationId()) {
+				sqlBuilder.append(" AND AP.HOSPITAL_LOCATION_ID = :locationId ");
+			}
+			if (searchCriteria.hasDepartmentId()) {
 				sqlBuilder.append(" AND AP.DEPARTMENT_ID = :departmentId ");
 			}
-
+			
 			Query query = entityManager.createNativeQuery(sqlBuilder.toString());
 			
-			if (doctorId != null && doctorId > 0) {
-				query.setParameter("doctorId", doctorId);
+			if (searchCriteria.hasDoctorId()) {
+				query.setParameter("doctorId", searchCriteria.getDoctorId());
 			}
-			
-			if (departmentId != null && departmentId > 0) {
-				query.setParameter("departmentId", departmentId);
+			if (searchCriteria.hasDepartmentId()) {
+				query.setParameter("departmentId", searchCriteria.getDepartmentId());
+			}
+			if (searchCriteria.hasHospitalLocationId()) {
+				query.setParameter("locationId", searchCriteria.getHospitalLocationId());
 			}
 			
 			List<Object[]> list = query.getResultList();

@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +35,7 @@ public class UserServiceImpl  implements UserService {
 			Field matriculeField = null;
 			Field passwordField = null;
 			try {
-				matriculeField = entity.getClass().getDeclaredField("matricule");
+				matriculeField = entity.getClass().getDeclaredField("medicalRecordNumber");
 				if (matriculeField != null)
 					matriculeField.setAccessible(true);
 				
@@ -52,7 +53,7 @@ public class UserServiceImpl  implements UserService {
 	       
 	        if (user != null) {	 
 	        	if (matriculeField != null) {
-					matriculeField.set(entity, "P" + user.getId());
+					matriculeField.set(entity, StringUtils.leftPad(user.getId().toString(), 8));
 				}
 	        	
 	        	if (file != null && !file.isEmpty()) {

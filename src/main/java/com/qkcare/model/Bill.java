@@ -124,12 +124,12 @@ public class Bill extends BaseEntity {
 	
 	// Transient attributes
 	
-	public String getPatientId() {
+	public String getPatientMRN() {
 		if (this.visit != null) {
-			return this.getVisit().getPatient().getMatricule();
+			return this.getVisit().getPatient().getMedicalRecordNumber();
 		}
 		if (this.admission != null) {
-			return this.getAdmission().getPatient().getMatricule();
+			return this.getAdmission().getPatient().getMedicalRecordNumber();
 		}
 		return "";
 		

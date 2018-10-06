@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qkcare.domain.GenericDto;
 import com.qkcare.domain.ScheduleEvent;
+import com.qkcare.domain.SearchCriteria;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.Prescription;
 import com.qkcare.model.PrescriptionDiagnosis;
@@ -39,9 +40,9 @@ public class AppointmentController extends BaseController {
 		@Qualifier("appointmentService")
 		AppointmentService appointmentService;
 				
-		@RequestMapping(value="department/{departmentId}/doctor/{doctorId}",method = RequestMethod.GET)
-		public List<ScheduleEvent> get(@PathVariable("departmentId") Long departmentId, @PathVariable("doctorId") Long doctorId) throws ClassNotFoundException{
-			List<ScheduleEvent> result = appointmentService.getScheduleEvents(departmentId, doctorId);
+		@RequestMapping(value="/scheduleAndAppointments",method = RequestMethod.POST)
+		public List<ScheduleEvent> get(@RequestBody SearchCriteria searchCriteria) throws ClassNotFoundException{
+			List<ScheduleEvent> result = appointmentService.getScheduleEvents(searchCriteria);
 			return result;
 		}
 		

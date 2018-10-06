@@ -113,8 +113,8 @@ public class Admission extends BaseEntity {
 	
 	
 	// Transient attributes
-	public String getPatientId() {
-		return this.getPatient().getMatricule();
+	public String getPatientMRN() {
+		return this.getPatient().getMedicalRecordNumber();
 	}
 	
 	public String getPatientName() {

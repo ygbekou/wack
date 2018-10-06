@@ -22,7 +22,8 @@ public class Patient extends BaseEntity {
 	@Column(name = "PATIENT_ID")
 	@GeneratedValue
 	private Long id;
-	private String matricule;
+	@Column(name = "MEDICAL_RECORD_NUMBER")
+	private String medicalRecordNumber;
 	@OneToOne
 	@JoinColumn(name = "USER_ID")
 	private User user;
@@ -75,11 +76,11 @@ public class Patient extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getMatricule() {
-		return matricule;
+	public String getMedicalRecordNumber() {
+		return medicalRecordNumber;
 	}
-	public void setMatricule(String matricule) {
-		this.matricule = matricule;
+	public void setMedicalRecordNumber(String medicalRecordNumber) {
+		this.medicalRecordNumber = medicalRecordNumber;
 	}
 	public User getUser() {
 		return user;
