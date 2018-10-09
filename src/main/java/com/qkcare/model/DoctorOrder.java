@@ -4,13 +4,19 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import com.qkcare.model.enums.DoctorOrderStatusEnum;
+import com.qkcare.model.enums.DoctorOrderTypeEnum;
+
 
 @Entity
 @Table(name = "DOCTOR_ORDER")
@@ -26,9 +32,8 @@ public class DoctorOrder extends BaseEntity {
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "VISIT_ID", nullable = true)
 	private Visit visit;
-	@ManyToOne
-	@JoinColumn(name = "DOCTOR_ORDER_TYPE_ID")
-	private DoctorOrderType doctorOrderType;
+	@Column(name = "DOCTOR_ORDER_TYPE_ID")
+	private DoctorOrderTypeEnum doctorOrderTypeEnum;
 	@ManyToOne
 	@JoinColumn(name = "DOCTOR_ORDER_PRIORITY_ID")
 	private DoctorOrderPriority doctorOrderPriority;
@@ -43,7 +48,8 @@ public class DoctorOrder extends BaseEntity {
 	private Employee doctor;
 	@Column(name = "RECEIVED_DATETIME")
 	private Timestamp receivedDatetime;
-	private int status;
+	@Column(name = "DOCTOR_ORDER_STATUS_ID")
+	private DoctorOrderStatusEnum statusEnum;
 	
 	
 	// Transient
@@ -71,11 +77,17 @@ public class DoctorOrder extends BaseEntity {
 	public void setVisit(Visit visit) {
 		this.visit = visit;
 	}
-	public DoctorOrderType getDoctorOrderType() {
-		return doctorOrderType;
+	public DoctorOrderTypeEnum getDoctorOrderTypeEnum() {
+		return doctorOrderTypeEnum;
 	}
-	public void setDoctorOrderType(DoctorOrderType doctorOrderType) {
-		this.doctorOrderType = doctorOrderType;
+	public void setDoctorOrderTypeEnum(DoctorOrderTypeEnum doctorOrderTypeEnum) {
+		this.doctorOrderTypeEnum = doctorOrderTypeEnum;
+	}
+	public DoctorOrderStatusEnum getStatusEnum() {
+		return statusEnum;
+	}
+	public void setStatusEnum(DoctorOrderStatusEnum statusEnum) {
+		this.statusEnum = statusEnum;
 	}
 	public DoctorOrderPriority getDoctorOrderPriority() {
 		return doctorOrderPriority;
@@ -113,12 +125,6 @@ public class DoctorOrder extends BaseEntity {
 	public void setReceivedDatetime(Timestamp receivedDatetime) {
 		this.receivedDatetime = receivedDatetime;
 	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
 	public List<LabTest> getLabTests() {
 		return labTests;
 	}
@@ -131,10 +137,29 @@ public class DoctorOrder extends BaseEntity {
 	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
+	
 	// Transient attributes
 	public String getDoctorOrderTypeName() {
-		return this.getDoctorOrderType().getName();
+		return this.getDoctorOrderTypeEnum().getDescription();
+	}
+	
+	public String getDoctorOrderStatusName() {
+		return this.getStatusEnum().getDescription();
 	}
 	
 	
+	// From Model to Enum
+	public DoctorOrderType getDoctorOrderType() {
+		return new DoctorOrderType(Long.valueOf(doctorOrderTypeEnum.getType()), doctorOrderTypeEnum.getDescription());
+	}
+	public void setDoctorOrderType(DoctorOrderType doctorOrderType) {
+		this.setDoctorOrderTypeEnum(DoctorOrderTypeEnum.valueOf(doctorOrderType.getName()));
+	}
+	
+	public DoctorOrderStatus getStatus() {
+		return new DoctorOrderStatus(Long.valueOf(statusEnum.getStatus()), statusEnum.getDescription());
+	}
+	public void setStatus(DoctorOrderStatus status) {
+		this.setStatusEnum(DoctorOrderStatusEnum.valueOf(status.getName()));
+	}
 }

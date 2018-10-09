@@ -18,6 +18,13 @@ public class DoctorOrderType extends BaseEntity {
 	private String description;
 	private int status;
 	
+	public DoctorOrderType() {}
+	
+	public DoctorOrderType(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	
 	public String getName() {
 		return name;
 	}

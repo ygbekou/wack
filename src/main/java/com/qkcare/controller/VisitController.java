@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qkcare.domain.GenericDto;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.DoctorOrder;
+import com.qkcare.model.DoctorOrderStatus;
 import com.qkcare.model.Visit;
 import com.qkcare.model.VisitVaccine;
 import com.qkcare.model.VitalSign;
@@ -104,6 +105,19 @@ public class VisitController extends BaseController {
 			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
 					Class.forName(Constants.PACKAGE_NAME + "DoctorOrder"));
 			doctorOrderService.save((DoctorOrder)obj);
+			
+			return obj;
+		}
+		
+		@RequestMapping(value="/doctororder/changeStatus",method = RequestMethod.POST)
+		public BaseEntity changeStatus(@RequestBody GenericDto dto) throws JsonParseException, 
+		JsonMappingException, IOException, ClassNotFoundException {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+					Class.forName(Constants.PACKAGE_NAME + "DoctorOrder"));
+			
+			doctorOrderService.save((DoctorOrder)obj, true);
 			
 			return obj;
 		}

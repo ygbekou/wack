@@ -72,4 +72,8 @@ public class PrescriptionMedicine extends BaseEntity {
 		this.numberOfDays = numberOfDays;
 	}
 	
+	// Transient
+	public String getMedicineType() {
+		return this.medicine.getCategoryName();
+	}
 }

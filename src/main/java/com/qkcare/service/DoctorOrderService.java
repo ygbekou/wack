@@ -13,4 +13,6 @@ public interface DoctorOrderService {
 	
 	public BaseEntity save(DoctorOrder doctorOrder);
 	
+	public BaseEntity save(DoctorOrder doctorOrder, boolean notChildInclude);
+	
 }

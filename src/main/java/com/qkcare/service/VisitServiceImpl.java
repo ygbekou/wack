@@ -46,6 +46,10 @@ public class VisitServiceImpl  implements VisitService {
 		Visit v = (Visit)this.genericService.save(visit);
 		
 		VitalSign vitalSign = visit.getVitalSign();
+		
+		if (vitalSign.getVitalSignDatetime() == null) {
+			vitalSign.setVitalSignDatetime(visit.getVisitDatetime());
+		}
 		vitalSign.setVisit(visit);
 		this.genericService.save(vitalSign);
 		

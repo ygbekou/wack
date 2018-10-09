@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.qkcare.model.enums.DoctorOrderStatusEnum;
+import com.qkcare.model.enums.PrescriptionType;
+
 @Entity
 @Table(name = "PRESCRIPTION")
 public class Prescription extends BaseEntity {
@@ -29,7 +32,7 @@ public class Prescription extends BaseEntity {
 	@Column(name = "PRESCRIPTION_DATETIME")
 	private Timestamp prescriptionDatetime;
 	@Column(name = "PRESCRIPTION_TYPE")
-	private Integer prescriptionType;
+	private PrescriptionType prescriptionType;
 	@Column(name = "IS_DISCHARGE")
 	private String isDischarge;
 	private String notes;
@@ -65,17 +68,17 @@ public class Prescription extends BaseEntity {
 	public void setPrescriptionDatetime(Timestamp prescriptionDatetime) {
 		this.prescriptionDatetime = prescriptionDatetime;
 	}
-	public Integer getPrescriptionType() {
+	public PrescriptionType getPrescriptionType() {
 		return prescriptionType;
 	}
-	public void setPrescriptionType(Integer prescriptionType) {
+	public void setPrescriptionType(PrescriptionType prescriptionType) {
 		this.prescriptionType = prescriptionType;
 	}
-	public String getIsDischarge() {
-		return isDischarge;
+	public Boolean getIsDischarge() {
+		return "Y".equals(this.isDischarge) ? true : false;
 	}
-	public void setIsDischarge(String isDischarge) {
-		this.isDischarge = isDischarge;
+	public void setIsDischarge(Boolean isDischarge) {
+		this.isDischarge = isDischarge == true ? "Y" : "N";
 	}
 	public String getNotes() {
 		return notes;
@@ -89,6 +92,9 @@ public class Prescription extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	
+	
+	// Transient
 	public List<PrescriptionMedicine> getPrescriptionMedicines() {
 		return prescriptionMedicines;
 	}
@@ -101,4 +107,14 @@ public class Prescription extends BaseEntity {
 	public void setPrescriptionDiagnoses(List<PrescriptionDiagnosis> prescriptionDiagnoses) {
 		this.prescriptionDiagnoses = prescriptionDiagnoses;
 	}
+	
+	
+	public String getPrescriptionTypeName() {
+		return this.getPrescriptionType().getDescription();
+	}
+	
+	public String getIsDischargeDesc() {
+		return isDischarge;
+	}
+	
 }

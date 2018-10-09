@@ -7,23 +7,24 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "PRESCRIPTION_TYPE")
-public class PrescriptionType extends BaseEntity {
+@Table(name = "DOCTOR_ORDER_STATUS")
+public class DoctorOrderStatus extends BaseEntity {
 	
 	@Id
 	@GeneratedValue
-	@Column(name = "PRESCRIPTION_TYPE_ID")
+	@Column(name = "DOCTOR_ORDER_STATUS_ID")
 	private Long id;	
 	private String name;
 	private String description;
 	private int status;
 	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
+	public DoctorOrderStatus() {}
+	
+	public DoctorOrderStatus(Long id, String name) {
 		this.id = id;
+		this.name = name;
 	}
+	
 	public String getName() {
 		return name;
 	}
@@ -41,6 +42,14 @@ public class PrescriptionType extends BaseEntity {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

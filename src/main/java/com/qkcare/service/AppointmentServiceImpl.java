@@ -59,13 +59,17 @@ public class AppointmentServiceImpl  implements AppointmentService {
 		BaseEntity toReturn = this.genericService.save(prescription);
 		
 		for (PrescriptionMedicine pm : prescription.getPrescriptionMedicines()) {
-			pm.setPrescription((Prescription)toReturn);
-			this.genericService.save(pm);
+			if (pm.getMedicine() != null && pm.getMedicine().getId() != null) {
+				pm.setPrescription((Prescription)toReturn);
+				this.genericService.save(pm);
+			}
 		}
 		
 		for (PrescriptionDiagnosis pd : prescription.getPrescriptionDiagnoses()) {
-			pd.setPrescription((Prescription)toReturn);
-			this.genericService.save(pd);
+			if (StringUtils.isNotEmpty(pd.getDiagnosis())) {
+				pd.setPrescription((Prescription)toReturn);
+				this.genericService.save(pd);
+			}
 		}
 		
 		

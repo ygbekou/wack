@@ -31,6 +31,9 @@ public class CacheUtil implements InitializingBean {
 	public static String LAB_TEST = "labTest";
 	public static String LAB_TEST_METHOD = "labTestMethod";
 	public static String LAB_TEST_UNIT = "labTestUnit";
+	public static String DOCTOR_ORDER_STATUS = "doctorOrderStatus";
+	public static String DOCTOR_ORDER_TYPE = "doctorOrderType";
+	public static String PRESCRIPTION_TYPE = "prescriptionType";
 	
 	
 	@Autowired 
@@ -131,6 +134,17 @@ public class CacheUtil implements InitializingBean {
 		this.addCacheToManager(LAB_TEST_UNIT, "SELECT LAB_TEST_UNIT_ID, NAME "
 				+ "FROM LAB_TEST_UNIT "
 				+ "WHERE STATUS = 0", this::getReferences);
+		
+		this.addCacheToManager(DOCTOR_ORDER_STATUS, "SELECT DOCTOR_ORDER_STATUS_ID, NAME "
+				+ "FROM DOCTOR_ORDER_STATUS "
+				+ "WHERE STATUS = 0", this::getReferences);
+		
+		this.addCacheToManager(DOCTOR_ORDER_TYPE, "SELECT DOCTOR_ORDER_TYPE_ID, NAME "
+				+ "FROM DOCTOR_ORDER_TYPE "
+				+ "WHERE STATUS = 0", this::getReferences);
+		
+		this.addCacheToManager(PRESCRIPTION_TYPE, "SELECT PRESCRIPTION_TYPE_ID, NAME "
+				+ "FROM PRESCRIPTION_TYPE ", this::getReferences);
 		
 	}
 	
