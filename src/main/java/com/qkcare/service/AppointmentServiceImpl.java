@@ -83,14 +83,14 @@ public class AppointmentServiceImpl  implements AppointmentService {
 		LocalDate endDate = LocalDate.now().withDayOfMonth(1).plusMonths(2);
 		
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-		if (searchCriteria.getDoctorId() != null) {
-			paramTupleList.add(Quartet.with("e.doctor.id = ", "doctorId", searchCriteria.getDoctorId() + "", "Long"));
+		if (searchCriteria.getDoctor().getId() != null) {
+			paramTupleList.add(Quartet.with("e.doctor.id = ", "doctorId", searchCriteria.getDoctor().getId() + "", "Long"));
 		}
-		if (searchCriteria.getDepartmentId() != null) {
-			paramTupleList.add(Quartet.with("e.doctor.department.id = ", "departmentId", searchCriteria.getDepartmentId() + "", "Long"));
+		if (searchCriteria.getDepartment().getId() != null) {
+			paramTupleList.add(Quartet.with("e.doctor.department.id = ", "departmentId", searchCriteria.getDepartment().getId() + "", "Long"));
 		}
-		if (searchCriteria.getHospitalLocationId() != null) {
-			paramTupleList.add(Quartet.with("e.hospitalLocation.id = ", "hospitalLocationId", searchCriteria.getHospitalLocationId() + "", "Long"));
+		if (searchCriteria.getHospitalLocation().getId() != null) {
+			paramTupleList.add(Quartet.with("e.hospitalLocation.id = ", "hospitalLocationId", searchCriteria.getHospitalLocation().getId() + "", "Long"));
 		}
 		String queryStr =  "SELECT e FROM Schedule e WHERE 1 = 1";
 		List<Schedule> schedules = (List)this.genericService.getByCriteria(queryStr, paramTupleList, null);

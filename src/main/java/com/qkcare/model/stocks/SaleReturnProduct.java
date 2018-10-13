@@ -28,6 +28,14 @@ public class SaleReturnProduct extends BaseEntity {
 	private Product product;
 	@Column(name = "QUANTITY")
 	private int quantity;
+	@Column(name = "UNIT_PRICE")
+	private Double unitPrice;
+	@Column(name = "DISCOUNT_PERCENTAGE")
+	private Double discountPercentage;
+	@Column(name = "DISCOUNT_AMOUNT")
+	private Double discountAmount;
+	@Column(name = "TOTAL_AMOUNT")
+	private Double totalAmount;
 	private int status;
 	
 	@Transient
@@ -66,6 +74,30 @@ public class SaleReturnProduct extends BaseEntity {
 	}
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	public Double getUnitPrice() {
+		return unitPrice;
+	}
+	public void setUnitPrice(Double unitPrice) {
+		this.unitPrice = unitPrice;
+	}
+	public Double getDiscountPercentage() {
+		return discountPercentage;
+	}
+	public void setDiscountPercentage(Double discountPercentage) {
+		this.discountPercentage = discountPercentage;
+	}
+	public Double getDiscountAmount() {
+		return discountAmount;
+	}
+	public void setDiscountAmount(Double discountAmount) {
+		this.discountAmount = discountAmount;
+	}
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 	public int getStatus() {
 		return status;

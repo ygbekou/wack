@@ -137,7 +137,9 @@ public class Employee extends BaseEntity {
 	public String getName() {
 		return this.user.getFirstName() + " " + this.user.getLastName();
 	}
-	
+	public String getGroupName() {
+		return this.user.getUserGroup().getName();
+	}
 	
 	// Overriding equals() to compare two Complex objects
     @Override

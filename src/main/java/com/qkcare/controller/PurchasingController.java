@@ -128,9 +128,9 @@ public class PurchasingController extends BaseController {
 		
 		@RequestMapping(value="patientSale/newSaleReturn/{id}",method = RequestMethod.GET)
 		public BaseEntity getInitialReturn(@PathVariable("id") Long id) throws ClassNotFoundException, NumberFormatException, ParseException {
-			BaseEntity result = purchasingService.findInitialReceiveOrder(this.getClass("com.qkcare.model.stocks.PurchaseOrder"), id);
+			BaseEntity result = purchasingService.findInitialSaleReturn(this.getClass("com.qkcare.model.stocks.PatientSale"), id);
 			
-			return result != null ? result : new PurchaseOrder();
+			return result != null ? result : new PatientSale();
 		}
 		
 }

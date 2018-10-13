@@ -1,5 +1,6 @@
 package com.qkcare.model.stocks;
 
+import java.util.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,11 @@ public class PatientSale extends BaseEntity {
 		this.grandTotal = new Double(0);
 		this.discount = new Double(0);
 		this.taxes = new Double(0);
+	}
+	
+	public PatientSale(Long id, Timestamp saleDatetime) {
+		this.id = id;
+		this.saleDatetime = saleDatetime;
 	}
 	
 	public PatientSale (DoctorOrder doctorOrder) {
@@ -158,5 +164,11 @@ public class PatientSale extends BaseEntity {
 		}
 	}
 	
+	public String getPatientId() {
+		return this.getVisit() != null ? this.getVisit().getPatient().getMedicalRecordNumber() : "";
+	}
+	public String getPatientName() {
+		return this.getVisit() != null ? this.getVisit().getPatient().getName() : "";
+	}
 	
 }

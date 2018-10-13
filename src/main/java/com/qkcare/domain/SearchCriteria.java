@@ -2,15 +2,19 @@ package com.qkcare.domain;
 
 import java.io.Serializable;
 
+import com.qkcare.model.Department;
+import com.qkcare.model.Employee;
+import com.qkcare.model.HospitalLocation;
+
 public class SearchCriteria implements Serializable {
 	
 	Long id;
 	String lastName;
 	String firstName;
 	String birthDate;
-	Long departmentId;
-	Long hospitalLocationId;
-	Long doctorId;
+	Department department;
+	HospitalLocation hospitalLocation;
+	Employee doctor;
 	
 	public SearchCriteria() {}
 
@@ -38,34 +42,34 @@ public class SearchCriteria implements Serializable {
 	public void setBirthDate(String birthDate) {
 		this.birthDate = birthDate;
 	}
-	public Long getDepartmentId() {
-		return departmentId;
+	public Department getDepartment() {
+		return department;
 	}
-	public void setDepartmentId(Long departmentId) {
-		this.departmentId = departmentId;
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
-	public Long getHospitalLocationId() {
-		return hospitalLocationId;
+	public HospitalLocation getHospitalLocation() {
+		return hospitalLocation;
 	}
-	public void setHospitalLocationId(Long hospitalLocationId) {
-		this.hospitalLocationId = hospitalLocationId;
+	public void setHospitalLocation(HospitalLocation hospitalLocation) {
+		this.hospitalLocation = hospitalLocation;
 	}
-	public Long getDoctorId() {
-		return doctorId;
+	public Employee getDoctor() {
+		return doctor;
 	}
-	public void setDoctorId(Long doctorId) {
-		this.doctorId = doctorId;
+	public void setDoctor(Employee doctor) {
+		this.doctor = doctor;
 	}
 	
 	public boolean hasDoctorId() {
-		return getDoctorId() != null && getDoctorId() > 0;
+		return getDoctor() != null && getDoctor().getId() > 0;
 	}
 	
 	public boolean hasHospitalLocationId() {
-		return getHospitalLocationId() != null && getHospitalLocationId() > 0;
+		return getHospitalLocation() != null && getHospitalLocation().getId() > 0;
 	}
 	
 	public boolean hasDepartmentId() {
-		return getDepartmentId() != null && getDepartmentId() > 0;
+		return getDepartment() != null && getDepartment().getId() > 0;
 	}
 }

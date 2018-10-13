@@ -1,9 +1,12 @@
 package com.qkcare.service;
 
 
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +14,7 @@ import javax.transaction.Transactional;
 
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import com.qkcare.model.BaseEntity;
@@ -24,6 +28,8 @@ import com.qkcare.model.stocks.PurchaseOrder;
 import com.qkcare.model.stocks.PurchaseOrderProduct;
 import com.qkcare.model.stocks.ReceiveOrder;
 import com.qkcare.model.stocks.ReceiveOrderProduct;
+import com.qkcare.model.stocks.SaleReturn;
+import com.qkcare.model.stocks.SaleReturnProduct;
 
 @Service(value="purchasingService")
 public class PurchasingServiceImpl  implements PurchasingService {
@@ -179,58 +185,57 @@ public class PurchasingServiceImpl  implements PurchasingService {
 	
 
 	public BaseEntity findInitialSaleReturn(Class cl, Long patientSaleId) throws NumberFormatException, ParseException {
-		String queryString = "SELECT PS.PATIENT_SALE_ID, PS.SALE_DATETIME, POP.PRODUCT_ID, "
-							+ "P.NAME AS P_NAME, POP.QUANTITY - IFNULL(SUM(ROP.QUANTITY), 0) AS QUANTITY "
+		String queryString = "SELECT PS.PATIENT_SALE_ID, PS.SALE_DATETIME, PSP.PRODUCT_ID, "
+							+ "P.NAME AS P_NAME, PSP.QUANTITY AS ORIGINAL_QUANTITY, IFNULL(SUM(SRP.QUANTITY), 0) AS QUANTITY "
 							+ "FROM PATIENT_SALE PS "
 							+ "JOIN PATIENT_SALE_PRODUCT PSP ON PS.PATIENT_SALE_ID = PSP.PATIENT_SALE_ID "
 							+ "LEFT OUTER JOIN SALE_RETURN SR ON PS.PATIENT_SALE_ID = SR.PATIENT_SALE_ID "
-							+ "LEFT OUTER JOIN SALE_RETURN_PRODUCT SRP ON RO.RECEIVE_ORDER_ID = ROP.RECEIVE_ORDER_ID "
-							+ "JOIN SUPPLIER SP ON PO.SUPPLIER_ID = SP.SUPPLIER_ID "
-							+ "JOIN PRODUCT P ON POP.PRODUCT_ID = P.PRODUCT_ID "
+							+ "LEFT OUTER JOIN SALE_RETURN_PRODUCT SRP ON SR.SALE_RETURN_ID = SRP.SALE_RETURN_ID "
+							+ "JOIN PRODUCT P ON PSP.PRODUCT_ID = P.PRODUCT_ID "
 							+ "WHERE 1 = 1 "
 							;
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-		paramTupleList.add(Quartet.with("PO.PURCHASE_ORDER_ID = ", "patientSaleId", patientSaleId + "", "Long"));
+		paramTupleList.add(Quartet.with("PS.PATIENT_SALE_ID = ", "patientSaleId", patientSaleId + "", "Long"));
 		List<Object[]> list = this.genericService.getNativeByCriteria(queryString, paramTupleList, 
-				" ORDER BY P.NAME ", " GROUP BY PO.PURCHASE_ORDER_ID, POP.PRODUCT_ID ");
+				" ORDER BY P.NAME ", " GROUP BY PS.PATIENT_SALE_ID, PSP.PRODUCT_ID ");
 		
-		ReceiveOrder receiveOrder = new ReceiveOrder();
-		PurchaseOrder purchaseOrder = new PurchaseOrder();
-		List<ReceiveOrderProduct> receiveOrderProducts = new ArrayList<ReceiveOrderProduct>();
+		SaleReturn saleReturn = new SaleReturn();
+		PatientSale patientSale = new PatientSale();
+		List<SaleReturnProduct> saleReturnProducts = new ArrayList<SaleReturnProduct>();
 		
-		DateFormat format = new SimpleDateFormat("yyyyMMdd");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); 
 
 		for (Object[] objects : list) {
-			receiveOrder.setPurchaseOrder(new PurchaseOrder(new Long(objects[0].toString()), format.parse(objects[1].toString()), 
-					new Long(objects[2].toString()), String.valueOf(objects[3])));
-			receiveOrderProducts.add(new ReceiveOrderProduct(null, null, 
-					new Product(new Long(objects[4].toString()), String.valueOf(objects[5])), 
-					Integer.valueOf(objects[6].toString()), Integer.valueOf(objects[6].toString()) ));
+			saleReturn.setPatientSale(new PatientSale(new Long(objects[0].toString()), 
+					Timestamp.valueOf(LocalDateTime.parse(objects[1].toString().substring(0, objects[1].toString().length() - 2), formatter))));
+			saleReturnProducts.add(new SaleReturnProduct(null, null, 
+					new Product(new Long(objects[2].toString()), String.valueOf(objects[3])), 
+					Integer.valueOf(objects[4].toString()), Integer.valueOf(objects[5].toString())));
 		}
-		receiveOrder.setReceiveOrderProducts(receiveOrderProducts);
+		saleReturn.setSaleReturnProducts(saleReturnProducts);
 		
-		return receiveOrder;
+		return saleReturn;
 		
 	}
 	
 	public BaseEntity findSaleReturn(Class cl, Long key) {
-		ReceiveOrder receiveOrder = (ReceiveOrder) this.genericService.find(cl, key);
+		SaleReturn saleReturn = (SaleReturn) this.genericService.find(cl, key);
 		
-		if (receiveOrder != null) {
+		if (saleReturn != null) {
 			List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-			paramTupleList.add(Quartet.with("e.receiveOrder.id = ", "receiveOrderId", key + "", "Long"));
-			String queryStr =  "SELECT e FROM ReceiveOrderProduct e WHERE 1 = 1";
-			List<BaseEntity> receiveOrders = genericService.getByCriteria(queryStr, paramTupleList, null);
-			List<ReceiveOrderProduct> receiveOrderProducts = new ArrayList<ReceiveOrderProduct>();
+			paramTupleList.add(Quartet.with("e.saleReturn.id = ", "saleReturnId", key + "", "Long"));
+			String queryStr =  "SELECT e FROM SaleReturnProduct e WHERE 1 = 1";
+			List<BaseEntity> saleReturns = genericService.getByCriteria(queryStr, paramTupleList, null);
+			List<SaleReturnProduct> saleReturnProducts = new ArrayList<SaleReturnProduct>();
 			
-			for (BaseEntity entity : receiveOrders) {
-				ReceiveOrderProduct receiveOrderProduct = (ReceiveOrderProduct)entity;
-				receiveOrderProduct.setReceiveOrder(null);
-				receiveOrderProducts.add(receiveOrderProduct);
+			for (BaseEntity entity : saleReturns) {
+				SaleReturnProduct saleReturnProduct = (SaleReturnProduct)entity;
+				saleReturnProduct.setSaleReturn(null);
+				saleReturnProducts.add(saleReturnProduct);
 			}
-			receiveOrder.setReceiveOrderProducts(receiveOrderProducts);
+			saleReturn.setSaleReturnProducts(saleReturnProducts);
 		}
-		return receiveOrder;
+		return saleReturn;
 		
 	}
 }

@@ -47,13 +47,13 @@ public class AppointmentDaoImpl implements AppointmentDao {
 			Query query = entityManager.createNativeQuery(sqlBuilder.toString());
 			
 			if (searchCriteria.hasDoctorId()) {
-				query.setParameter("doctorId", searchCriteria.getDoctorId());
+				query.setParameter("doctorId", searchCriteria.getDoctor().getId());
 			}
 			if (searchCriteria.hasDepartmentId()) {
-				query.setParameter("departmentId", searchCriteria.getDepartmentId());
+				query.setParameter("departmentId", searchCriteria.getDepartment().getId());
 			}
 			if (searchCriteria.hasHospitalLocationId()) {
-				query.setParameter("locationId", searchCriteria.getHospitalLocationId());
+				query.setParameter("locationId", searchCriteria.getHospitalLocation().getId());
 			}
 			
 			List<Object[]> list = query.getResultList();

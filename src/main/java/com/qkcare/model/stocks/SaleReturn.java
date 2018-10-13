@@ -28,12 +28,17 @@ public class SaleReturn extends BaseEntity {
 	private String comments;
 	@Column(name = "RETURN_DATETIME")
 	private Timestamp returnDatetime;
+	private Double subTotal;
+	private Double taxes;
+	private Double discount;
+	@Column(name = "GRAND_TOTAL")
+	private Double grandTotal;
 	private int status;
 	
 	
 	// Transient
 	@Transient
-	private List<ReceiveOrderProduct> receiveOrderProducts;
+	private List<SaleReturnProduct> saleReturnProducts;
 	
 	
 	public Long getId() {
@@ -60,17 +65,43 @@ public class SaleReturn extends BaseEntity {
 	public void setReturnDatetime(Timestamp returnDatetime) {
 		this.returnDatetime = returnDatetime;
 	}
+	public Double getSubTotal() {
+		return subTotal;
+	}
+	public void setSubTotal(Double subTotal) {
+		this.subTotal = subTotal;
+	}
+	public Double getTaxes() {
+		return taxes;
+	}
+	public void setTaxes(Double taxes) {
+		this.taxes = taxes;
+	}
+	public Double getDiscount() {
+		return discount;
+	}
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+	public Double getGrandTotal() {
+		return grandTotal;
+	}
+	public void setGrandTotal(Double grandTotal) {
+		this.grandTotal = grandTotal;
+	}
 	public int getStatus() {
 		return status;
 	}
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public List<ReceiveOrderProduct> getReceiveOrderProducts() {
-		return receiveOrderProducts;
+	
+	// Transient
+	public List<SaleReturnProduct> getSaleReturnProducts() {
+		return saleReturnProducts;
 	}
-	public void setReceiveOrderProducts(List<ReceiveOrderProduct> receiveOrderProducts) {
-		this.receiveOrderProducts = receiveOrderProducts;
+	public void setSaleReturnProducts(List<SaleReturnProduct> saleReturnProducts) {
+		this.saleReturnProducts = saleReturnProducts;
 	}
 	
 	

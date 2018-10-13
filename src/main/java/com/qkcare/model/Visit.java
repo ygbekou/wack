@@ -162,4 +162,13 @@ public class Visit extends BaseEntity {
 		this.setIsHealthCheckup(this.isHealthCheckupSel.get(0));
 	}
 	
+	
+	// Transient
+	
+	public String getPatientId() {
+		return this.getPatient().getMedicalRecordNumber();
+	}
+	public String getPatientName() {
+		return this.getPatient().getName();
+	}
 }

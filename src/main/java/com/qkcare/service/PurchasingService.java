@@ -26,4 +26,8 @@ public interface PurchasingService {
 	public BaseEntity save(PatientSale patientSale);
 	
 	public BaseEntity findPatientSale(Class cl, Long key);
+	
+	public BaseEntity findSaleReturn(Class cl, Long key);
+	
+	public BaseEntity findInitialSaleReturn(Class cl, Long patientSaleId) throws NumberFormatException, ParseException;
 }
