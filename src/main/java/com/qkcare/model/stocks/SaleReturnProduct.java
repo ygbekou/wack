@@ -36,19 +36,20 @@ public class SaleReturnProduct extends BaseEntity {
 	private Double discountAmount;
 	@Column(name = "TOTAL_AMOUNT")
 	private Double totalAmount;
-	private int status;
 	
 	@Transient
 	private int originalQuantity;
 	
 	public SaleReturnProduct() {}
 	
-	public SaleReturnProduct(Long id, SaleReturn saleReturn, Product product, Integer originalQuantity, Integer quantity) {
+	public SaleReturnProduct(Long id, SaleReturn saleReturn, Product product, 
+			Integer originalQuantity, Integer quantity, Double unitPrice) {
 		this.id = id;
 		this.saleReturn = saleReturn;
 		this.product = product;
 		this.originalQuantity = originalQuantity;
 		this.quantity = quantity;
+		this.unitPrice = unitPrice;
 	}
 	
 	public Long getId() {
@@ -99,12 +100,6 @@ public class SaleReturnProduct extends BaseEntity {
 	public void setTotalAmount(Double totalAmount) {
 		this.totalAmount = totalAmount;
 	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
 
 	
 	// Transients
@@ -117,7 +112,6 @@ public class SaleReturnProduct extends BaseEntity {
 	public String getProductName() {
 		return this.product != null ? this.product.getName() : "";
 	}
-	
 	public String getProductDescription() {
 		return this.product != null ? this.product.getDescription() : "";
 	}

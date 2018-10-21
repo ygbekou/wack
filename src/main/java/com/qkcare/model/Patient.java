@@ -64,8 +64,18 @@ public class Patient extends BaseEntity {
 	private String referralPhone;
 	@Column(name="MEDICAL_HISTORY")
 	private String medicalHistory;
+	@Column(name="IS_SELF_RESPONSIBLE")
+	private String selfResponsible;
+	@Column(name="RP_FIRST_NAME")
+	private String responsiblePartyFirstName;
+	@Column(name="RP_LAST_NAME")
+	private String responsiblePartyLastName;
+	@Column(name="ACCOUNT_NUMBER")
+	private String accountNumber;
 	@Column(name="BLOOD_GROUP")
 	private BloodGroup bloodGroup;
+	
+	
 	private int status;
 	
 	public Patient() {}
@@ -199,13 +209,43 @@ public class Patient extends BaseEntity {
 	public MaritalStatus getMaritalStatus() {
 		return maritalStatus;
 	}
-
 	public void setMaritalStatus(MaritalStatus maritalStatus) {
 		this.maritalStatus = maritalStatus;
 	}
+	public String getSelfResponsible() {
+		return selfResponsible;
+	}
+	public void setSelfResponsible(String selfResponsible) {
+		this.selfResponsible = selfResponsible;
+	}
+	public String getResponsiblePartyFirstName() {
+		return responsiblePartyFirstName;
+	}
+	public void setResponsiblePartyFirstName(String responsiblePartyFirstName) {
+		this.responsiblePartyFirstName = responsiblePartyFirstName;
+	}
+	public String getResponsiblePartyLastName() {
+		return responsiblePartyLastName;
+	}
+	public void setResponsiblePartyLastName(String responsiblePartyLastName) {
+		this.responsiblePartyLastName = responsiblePartyLastName;
+	}
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
 	
 	// Transient fields for UI
 
+	public Boolean getIsSelfResponsible() {
+		return "Y".equals(this.getSelfResponsible());
+	}
+	public void setIsSelfResponsible(Boolean isSelfResponsible) {
+		this.setSelfResponsible(isSelfResponsible ? "Y" : "N");
+	}
 	public String getMaritalStatusName() {
 		return this.maritalStatus != null ? this.maritalStatus.getName() : "";
 	}

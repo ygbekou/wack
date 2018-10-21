@@ -27,6 +27,8 @@ public class Admission extends BaseEntity {
 	private com.qkcare.model.Package pckage;
 	@Column(name = "ADMISSION_DATETIME")
 	private Timestamp admissionDatetime;
+	@Column(name = "ADMISSION_REASON")
+	private String admissionReason;
 	@Column(name = "CONTACT_NAME")
 	private String contatName;
 	@Column(name = "CONTACT_RELATION")
@@ -67,6 +69,12 @@ public class Admission extends BaseEntity {
 	}
 	public void setAdmissionDatetime(Timestamp admissionDatetime) {
 		this.admissionDatetime = admissionDatetime;
+	}
+	public String getAdmissionReason() {
+		return admissionReason;
+	}
+	public void setAdmissionReason(String admissionReason) {
+		this.admissionReason = admissionReason;
 	}
 	public String getContatName() {
 		return contatName;
@@ -113,10 +121,9 @@ public class Admission extends BaseEntity {
 	
 	
 	// Transient attributes
-	public String getPatientMRN() {
+	public String getPatientId() {
 		return this.getPatient().getMedicalRecordNumber();
 	}
-	
 	public String getPatientName() {
 		return this.getPatient().getName();
 	}

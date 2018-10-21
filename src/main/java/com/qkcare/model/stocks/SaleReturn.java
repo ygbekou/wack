@@ -1,6 +1,7 @@
 package com.qkcare.model.stocks;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -28,6 +29,7 @@ public class SaleReturn extends BaseEntity {
 	private String comments;
 	@Column(name = "RETURN_DATETIME")
 	private Timestamp returnDatetime;
+	@Column(name = "SUB_TOTAL")
 	private Double subTotal;
 	private Double taxes;
 	private Double discount;
@@ -104,5 +106,11 @@ public class SaleReturn extends BaseEntity {
 		this.saleReturnProducts = saleReturnProducts;
 	}
 	
+	public Long getPatientSaleId() {
+		return this.getPatientSale().getId();
+	}
+	public Timestamp getPatientSaleDatetime() {
+		return this.getPatientSale().getSaleDatetime();
+	}
 	
 }

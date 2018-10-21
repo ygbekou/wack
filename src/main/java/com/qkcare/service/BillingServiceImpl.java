@@ -50,6 +50,13 @@ public class BillingServiceImpl  implements BillingService {
 			this.genericService.save(bs);
 		}
 		
+		for (BillPayment bp : bill.getBillPayments()) {
+			if (bp.getAmount() != null && bp.getAmount() > 0) {
+				bp.setBill((Bill)toReturn);
+				this.genericService.save(bp);
+			}
+		}
+		
 		return toReturn;
 	}
 	
@@ -81,6 +88,7 @@ public class BillingServiceImpl  implements BillingService {
 			BillPayment billPayment = (BillPayment)entity;
 			billPayment.setBill(null);
 			billPayments.add(billPayment);
+			bill.addPayment(billPayment.getAmount());
 		}
 		bill.setBillPayments(billPayments);
 		

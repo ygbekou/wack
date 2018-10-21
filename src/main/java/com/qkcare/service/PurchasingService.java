@@ -8,6 +8,7 @@ import com.qkcare.model.BaseEntity;
 import com.qkcare.model.stocks.PatientSale;
 import com.qkcare.model.stocks.PurchaseOrder;
 import com.qkcare.model.stocks.ReceiveOrder;
+import com.qkcare.model.stocks.SaleReturn;
 
 
 @Service(value="purchasingService")
@@ -26,6 +27,8 @@ public interface PurchasingService {
 	public BaseEntity save(PatientSale patientSale);
 	
 	public BaseEntity findPatientSale(Class cl, Long key);
+	
+	public BaseEntity save(SaleReturn saleReturn);
 	
 	public BaseEntity findSaleReturn(Class cl, Long key);
 	

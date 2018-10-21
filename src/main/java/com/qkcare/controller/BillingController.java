@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qkcare.domain.GenericDto;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.Bill;
+import com.qkcare.model.BillPayment;
 import com.qkcare.model.BillService;
 import com.qkcare.model.PackageService;
 import com.qkcare.service.BillingService;
@@ -68,6 +69,10 @@ public class BillingController extends BaseController {
 			billingService.save((Bill)obj);
 			
 			for (BillService bs : ((Bill)obj).getBillServices()) {
+				bs.setBill(null);
+			}
+			
+			for (BillPayment bs : ((Bill)obj).getBillPayments()) {
 				bs.setBill(null);
 			}
 			

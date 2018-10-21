@@ -183,10 +183,30 @@ public class PurchasingServiceImpl  implements PurchasingService {
 		
 	}
 	
+	// Sale Return
+	@Transactional
+	public BaseEntity save(SaleReturn saleReturn) {
+		
+		BaseEntity toReturn = this.genericService.save(saleReturn);
+		
+		for (SaleReturnProduct srp : saleReturn.getSaleReturnProducts()) {
+			srp.setSaleReturn((SaleReturn)toReturn);
+			this.genericService.save(srp);
+			
+			if (saleReturn.getStatus() == 2) {
+				Product product = (Product) this.genericService.find(Product.class, srp.getProduct().getId());
+				product.setQuantityInStock(product.getQuantityInStock() - srp.getQuantity());
+				this.genericService.save(product);
+			}
+		}
+		
+		return toReturn;
+	}
 
 	public BaseEntity findInitialSaleReturn(Class cl, Long patientSaleId) throws NumberFormatException, ParseException {
 		String queryString = "SELECT PS.PATIENT_SALE_ID, PS.SALE_DATETIME, PSP.PRODUCT_ID, "
-							+ "P.NAME AS P_NAME, PSP.QUANTITY AS ORIGINAL_QUANTITY, IFNULL(SUM(SRP.QUANTITY), 0) AS QUANTITY "
+							+ "P.NAME AS P_NAME, P.PRICE AS P_PRICE, PSP.QUANTITY AS ORIGINAL_QUANTITY, "
+							+ "IFNULL(SUM(SRP.QUANTITY), 0) AS QUANTITY "
 							+ "FROM PATIENT_SALE PS "
 							+ "JOIN PATIENT_SALE_PRODUCT PSP ON PS.PATIENT_SALE_ID = PSP.PATIENT_SALE_ID "
 							+ "LEFT OUTER JOIN SALE_RETURN SR ON PS.PATIENT_SALE_ID = SR.PATIENT_SALE_ID "
@@ -200,7 +220,6 @@ public class PurchasingServiceImpl  implements PurchasingService {
 				" ORDER BY P.NAME ", " GROUP BY PS.PATIENT_SALE_ID, PSP.PRODUCT_ID ");
 		
 		SaleReturn saleReturn = new SaleReturn();
-		PatientSale patientSale = new PatientSale();
 		List<SaleReturnProduct> saleReturnProducts = new ArrayList<SaleReturnProduct>();
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); 
@@ -209,8 +228,9 @@ public class PurchasingServiceImpl  implements PurchasingService {
 			saleReturn.setPatientSale(new PatientSale(new Long(objects[0].toString()), 
 					Timestamp.valueOf(LocalDateTime.parse(objects[1].toString().substring(0, objects[1].toString().length() - 2), formatter))));
 			saleReturnProducts.add(new SaleReturnProduct(null, null, 
-					new Product(new Long(objects[2].toString()), String.valueOf(objects[3])), 
-					Integer.valueOf(objects[4].toString()), Integer.valueOf(objects[5].toString())));
+					new Product(new Long(objects[2].toString()), String.valueOf(objects[3]), Double.valueOf(objects[4].toString())), 
+					Integer.valueOf(objects[5].toString()), Integer.valueOf(objects[6].toString()), Double.valueOf(objects[4].toString())
+					));
 		}
 		saleReturn.setSaleReturnProducts(saleReturnProducts);
 		

@@ -21,6 +21,9 @@ public class VitalSign extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "VISIT_ID")
 	private Visit visit;
+	@OneToOne
+	@JoinColumn(name = "ADMISSION_ID")
+	private Admission admission;
 	@Column(name = "VITAL_SIGN_DATETIME")
 	private Timestamp vitalSignDatetime;
 	private Double temperature;
@@ -47,6 +50,12 @@ public class VitalSign extends BaseEntity {
 	}
 	public void setVisit(Visit visit) {
 		this.visit = visit;
+	}
+	public Admission getAdmission() {
+		return admission;
+	}
+	public void setAdmission(Admission admission) {
+		this.admission = admission;
 	}
 	public Timestamp getVitalSignDatetime() {
 		return vitalSignDatetime;
@@ -111,11 +120,17 @@ public class VitalSign extends BaseEntity {
 	
 	// Transient attributes
 	public String getPatientMRN() {
-		return (this.getVisit() != null && this.getVisit().getPatient() != null) ? this.getVisit().getPatient().getMedicalRecordNumber() : null;
+			return (this.getVisit() != null && this.getVisit().getPatient() != null) 
+					? this.getVisit().getPatient().getMedicalRecordNumber() : 
+						(this.getAdmission() != null && this.getAdmission().getPatient() != null) 
+							? this.getAdmission().getPatient().getMedicalRecordNumber() : 	null;
 	}
 	
 	public String getPatientName() {
-		return (this.getVisit() != null && this.getVisit().getPatient() != null) ? this.getVisit().getPatient().getName() : null;
+		return (this.getVisit() != null && this.getVisit().getPatient() != null) 
+				? this.getVisit().getPatient().getName() : 
+					(this.getAdmission() != null && this.getAdmission().getPatient() != null) 
+						? this.getAdmission().getPatient().getName() : 	null;
 	}
 
 }

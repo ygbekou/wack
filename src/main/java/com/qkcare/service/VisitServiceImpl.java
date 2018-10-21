@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.hibernate.hql.internal.ast.util.NodeTraverser.VisitationStrategy;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +18,11 @@ import org.springframework.stereotype.Service;
 import com.qkcare.domain.GenericVO;
 import com.qkcare.model.Allergy;
 import com.qkcare.model.BaseEntity;
-import com.qkcare.model.Category;
 import com.qkcare.model.MedicalHistory;
 import com.qkcare.model.Prescription;
 import com.qkcare.model.PrescriptionDiagnosis;
 import com.qkcare.model.PrescriptionMedicine;
 import com.qkcare.model.SocialHistory;
-import com.qkcare.model.Vaccine;
 import com.qkcare.model.Visit;
 import com.qkcare.model.VisitAllergy;
 import com.qkcare.model.VisitMedicalHistory;
@@ -42,7 +39,6 @@ public class VisitServiceImpl  implements VisitService {
 	
 	@Transactional
 	public BaseEntity save(Visit visit) {
-		visit.setVisitNumber("aaa");
 		Visit v = (Visit)this.genericService.save(visit);
 		
 		VitalSign vitalSign = visit.getVitalSign();
@@ -87,8 +83,10 @@ public class VisitServiceImpl  implements VisitService {
 		
 		// Save Vaccines
 		for (VisitVaccine vv : visit.getGivenVaccines()) {
-			vv.setVisit(visit);
-			this.genericService.save(vv);
+			if (vv.getVaccine() != null && vv.getVaccine().getId() != null) {
+				vv.setVisit(visit);
+				this.genericService.save(vv);
+			}
 		}
 		
 		return v;

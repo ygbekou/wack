@@ -27,4 +27,5 @@ public class DateUtil {
 		SimpleDateFormat dt1 = new SimpleDateFormat(formatString);
         return dt1.parse(dateStr);
 	}
+	
 }

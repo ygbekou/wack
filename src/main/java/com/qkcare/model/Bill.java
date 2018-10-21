@@ -36,6 +36,9 @@ public class Bill extends BaseEntity {
 	private Double due;
 	@Column(name = "BILL_DATE")
 	private Date billDate;
+	@Column(name = "DUE_DATE")
+	private Date dueDate;
+	private String notes;
 	private int status;
 	
 	@Transient
@@ -43,6 +46,10 @@ public class Bill extends BaseEntity {
 	@Transient
 	List<BillPayment> billPayments;
 
+	public Bill() {
+		
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -109,6 +116,18 @@ public class Bill extends BaseEntity {
 	public void setBillDate(Date billDate) {
 		this.billDate = billDate;
 	}
+	public Date getDueDate() {
+		return dueDate;
+	}
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
+	}
+	public String getNotes() {
+		return notes;
+	}
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
 	public List<BillService> getBillServices() {
 		return billServices;
 	}
@@ -122,6 +141,11 @@ public class Bill extends BaseEntity {
 		this.billPayments = billPayments;
 	}
 	
+	public void addPayment(Double paymentAmount) {
+		this.setPaid(this.getPaid() + paymentAmount);
+		this.setDue(this.getGrandTotal() - this.getPaid());
+		
+	}
 	// Transient attributes
 	
 	public String getPatientMRN() {

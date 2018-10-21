@@ -29,6 +29,8 @@ import com.qkcare.model.stocks.PurchaseOrder;
 import com.qkcare.model.stocks.PurchaseOrderProduct;
 import com.qkcare.model.stocks.ReceiveOrder;
 import com.qkcare.model.stocks.ReceiveOrderProduct;
+import com.qkcare.model.stocks.SaleReturn;
+import com.qkcare.model.stocks.SaleReturnProduct;
 import com.qkcare.service.BillingService;
 import com.qkcare.service.GenericService;
 import com.qkcare.service.PurchasingService;
@@ -126,11 +128,34 @@ public class PurchasingController extends BaseController {
 			return result != null ? result : new PatientSale();
 		}
 		
+		@RequestMapping(value="/saleReturn/save",method = RequestMethod.POST)
+		public BaseEntity saveSaleReturn(@RequestBody GenericDto dto) throws JsonParseException, 
+		JsonMappingException, IOException, ClassNotFoundException {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+					this.getClass("com.qkcare.model.stocks.SaleReturn"));
+			purchasingService.save((SaleReturn)obj);
+			
+			for (SaleReturnProduct psp : ((SaleReturn)obj).getSaleReturnProducts()) {
+				psp.setSaleReturn(null);
+			}
+			
+			return obj;
+		}
+		
 		@RequestMapping(value="patientSale/newSaleReturn/{id}",method = RequestMethod.GET)
 		public BaseEntity getInitialReturn(@PathVariable("id") Long id) throws ClassNotFoundException, NumberFormatException, ParseException {
 			BaseEntity result = purchasingService.findInitialSaleReturn(this.getClass("com.qkcare.model.stocks.PatientSale"), id);
 			
 			return result != null ? result : new PatientSale();
+		}
+		
+		@RequestMapping(value="saleReturn/{id}",method = RequestMethod.GET)
+		public BaseEntity getSaleReturn(@PathVariable("id") Long id) throws ClassNotFoundException {
+			BaseEntity result = purchasingService.findSaleReturn(this.getClass("com.qkcare.model.stocks.SaleReturn"), id);
+			
+			return result != null ? result : new SaleReturn();
 		}
 		
 }
