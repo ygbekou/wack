@@ -1,5 +1,7 @@
 package com.qkcare.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,6 +28,8 @@ public class BillService extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "DOCTOR_ID")
 	private Employee doctor;
+	@Column(name = "SERVICE_DATE")
+	private Date serviceDate;
 	private String description;
 	private int quantity;
 	@Column(name = "UNIT_AMOUNT")
@@ -65,6 +69,12 @@ public class BillService extends BaseEntity {
 	}
 	public void setDoctor(Employee doctor) {
 		this.doctor = doctor;
+	}
+	public Date getServiceDate() {
+		return serviceDate;
+	}
+	public void setServiceDate(Date serviceDate) {
+		this.serviceDate = serviceDate;
 	}
 	public String getDescription() {
 		return description;

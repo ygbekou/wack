@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="patientIdCard" pageWidth="243" pageHeight="153" orientation="Landscape" columnWidth="243" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="i18n" uuid="a1ce2892-313d-4055-9251-ae90d8a70a19">
+	<property name="ireport.zoom" value="2.143588810000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.unit." value="cm"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="cm"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="cm"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="cm"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="cm"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="cm"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="cm"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="qkcare"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="281"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="707"/>
+	<subDataset name="HOSPITAL_INFO" uuid="41eb46c6-a502-4c48-88fd-02fd7ba04684">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="qkcare"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT NAME, LOGO FROM HOSPITAL]]>
+		</queryString>
+		<field name="NAME" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="NAME"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="hospital"/>
+		</field>
+		<field name="LOGO" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="LOGO"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="hospital"/>
+		</field>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Development\\qkcare\\src\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="USER_IMAGE_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Development\\qkcareinterface\\src\\assets\\images\\User\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PATIENT_ID_PARAM" class="java.lang.Long">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT CONCAT(U.LAST_NAME, ' ', U.FIRST_NAME, ' ', U.MIDDLE_NAME) AS FULL_NAME,
+U.PICTURE AS PIC, U.BIRTH_DATE, P.PATIENT_ID
+FROM USERS U
+JOIN PATIENT P ON U.USER_ID = P.USER_ID
+WHERE P.PATIENT_ID = 2]]>
+	</queryString>
+	<field name="FULL_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="FULL_NAME"/>
+	</field>
+	<field name="PIC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="PIC"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="BIRTH_DATE" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="BIRTH_DATE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="users"/>
+	</field>
+	<field name="PATIENT_ID" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="PATIENT_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="patient"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="153">
+			<rectangle radius="9">
+				<reportElement x="-10" y="14" width="103" height="29" backcolor="#0066FF" uuid="f9176137-e891-4742-bf85-e658f3f9a343"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="rgba(0, 0, 0, 0.0)"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="0" width="243" height="25" backcolor="#0066FF" uuid="322312fd-7022-402a-94b2-6809567395d8"/>
+				<graphicElement>
+					<pen lineWidth="0.0" lineColor="rgba(0, 0, 0, 0.0)"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="137" width="243" height="15" backcolor="#0066FF" uuid="6271ec23-5c1d-4bf0-bf85-b19bc028964f"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<image scaleImage="RetainShape" vAlign="Middle" onErrorType="Blank">
+				<reportElement x="0" y="44" width="91" height="93" uuid="284aeb97-a21e-4f4d-a3d4-08d67ac0291a"/>
+				<imageExpression><![CDATA[$P{USER_IMAGE_DIR} +$F{PIC}]]></imageExpression>
+			</image>
+			<image scaleImage="RetainShape" onErrorType="Blank">
+				<reportElement positionType="Float" x="0" y="0" width="90" height="39" uuid="3a06f165-b1f4-4c6e-adc2-7fee8ba54299">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "logo.GIF"]]></imageExpression>
+			</image>
+			<subreport>
+				<reportElement stretchType="RelativeToTallestObject" x="90" y="0" width="152" height="25" uuid="74712499-683c-4fd8-91f9-5e5d41df0d81"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["hospital_header.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="90" y="50" width="152" height="20" uuid="9156015f-e568-450e-9557-1e721820e317"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Algerian"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FULL_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="90" y="70" width="152" height="13" uuid="1df03673-748e-4c81-9700-a1d8f907b73a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BIRTH_DATE}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="91" y="117" width="151" height="20" uuid="845dfcac-d6b7-469f-ac10-5ed2cb17f2c0"/>
+				<jr:Codabar xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA[$F{PATIENT_ID}]]></jr:codeExpression>
+				</jr:Codabar>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>

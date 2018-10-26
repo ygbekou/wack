@@ -1,5 +1,6 @@
 package com.qkcare.dao;
 
+import java.sql.Connection;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -130,6 +132,9 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 			} else if ("List".equals(parameter.getValue3())) {
 				query.setParameter(parameter.getValue1(), Arrays.asList(parameter.getValue2().split("\\s*,\\s*"))
 						.stream().map(s -> Long.parseLong(s.trim())).collect(Collectors.toList()));
+			} else if ("List<String>".equals(parameter.getValue3())) {
+				query.setParameter(parameter.getValue1(), Arrays.asList(parameter.getValue2().split("\\s*,\\s*"))
+						.stream().map(s -> s.trim()).collect(Collectors.toList()));
 			} else if ("Date".equals(parameter.getValue3())) {
 				try {
 					query.setParameter(parameter.getValue1(), DateUtil.parseDate(parameter.getValue2(), "MM/dd/yyyy"), TemporalType.DATE);
@@ -147,6 +152,11 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 		
 		return query;
 		
+	}
+	
+	
+	public Session getConnection() {
+		return entityManager.unwrap(Session.class);
 	}
 
 }

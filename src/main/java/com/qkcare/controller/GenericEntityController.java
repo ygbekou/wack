@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -92,45 +93,24 @@ public class GenericEntityController extends BaseController {
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
 					this.getClass(entity));
-			genericService.save(obj);
 			
-			if (!file.isEmpty()) {
-				try {
-					String originalFileExtension = file.getOriginalFilename()
-							.substring(file.getOriginalFilename().lastIndexOf("."));
+			this.genericService.saveWithFiles(obj, Arrays.asList(file), Arrays.asList("fileLocation"));
+	
+			return obj;
+		}
+		
+		@RequestMapping(value="/saveHospital",method = RequestMethod.POST)
+		public BaseEntity saveHospital(@PathVariable("entity") String entity, 
+				@RequestPart("logo") MultipartFile logo, @RequestPart("favicon") MultipartFile favicon, 
+				@RequestPart("dto") GenericDto dto) throws JsonParseException, 
+			JsonMappingException, IOException, ClassNotFoundException {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
+					this.getClass(entity));
 
-					// transfer to upload folder
-					String storageDirectory = null;
-					if (entity != null) {					
-						storageDirectory = Constants.DOC_FOLDER	+ entity + File.separator;
-						File dir = new File(storageDirectory);
-						if (!dir.exists()) {
-							dir.mkdirs();
-						}
-
-					} else {
-						throw new Exception("Unknown");
-					}
-					
-					String newFilename = null;
-					newFilename = obj.getId() + originalFileExtension;
-					
-
-					File newFile = new File(storageDirectory + "/" + newFilename);
-					Field field = obj.getClass().getDeclaredField("fileLocation");
-					field.setAccessible(true);
-			        field.set(obj, newFile.getAbsolutePath());
-			        genericService.save(obj);
-			        
-					file.transferTo(newFile);
-			        
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+			this.genericService.saveWithFiles(obj, Arrays.asList(logo, favicon), Arrays.asList("logo", "favicon"));
 			
-			
-					
 			return obj;
 		}
 		

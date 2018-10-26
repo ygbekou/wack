@@ -1,7 +1,9 @@
 package com.qkcare.dao;
 
+import java.sql.Connection;
 import java.util.List;
 
+import org.hibernate.Session;
 import org.javatuples.Quartet;
 
 public interface GenericDao<E,K> {
@@ -15,4 +17,6 @@ public interface GenericDao<E,K> {
 	public List<Object[]> getNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, 
 			String orderBy, String groupBy);
 	public Integer deleteByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
+	public Session getConnection();
+	
 }

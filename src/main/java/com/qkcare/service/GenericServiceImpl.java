@@ -1,5 +1,8 @@
 package com.qkcare.service;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.sql.Connection;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
@@ -9,12 +12,15 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.Session;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.qkcare.dao.GenericDao;
 import com.qkcare.model.BaseEntity;
+import com.qkcare.util.Constants;
 
 @Service(value="genericService")
 public class GenericServiceImpl implements GenericService {
@@ -40,6 +46,27 @@ public class GenericServiceImpl implements GenericService {
 			return this.genericDao.merge(entity);
 		}
 				             
+	}
+	
+	@Transactional
+	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, List<String> attributes) {
+		this.save(entity);
+		
+		try {
+			int i = 0;
+			for (MultipartFile file : files) {
+				String fileName = saveFile(file, entity.getClass().getSimpleName());
+				Field field = entity.getClass().getDeclaredField(attributes.get(i));
+				field.setAccessible(true);
+		        field.set(entity, fileName);
+		        this.save(entity);
+		        i++;
+			}
+		} catch(Exception ex) {
+			
+		}
+				
+		return entity;
 	}
 	
 	@Transactional
@@ -82,5 +109,44 @@ public class GenericServiceImpl implements GenericService {
 	
 	public Integer deleteByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters) {
 		return this.genericDao.deleteByCriteria(queryStr, parameters);
+	}
+	
+	public Session getConnection() {
+		return this.genericDao.getConnection();
+	}
+	
+	private String saveFile(MultipartFile file, String entityName) {
+		if (!file.isEmpty()) {
+			try {
+				String originalFileExtension = file.getOriginalFilename()
+						.substring(file.getOriginalFilename().lastIndexOf("."));
+	
+				// transfer to upload folder
+				String storageDirectory = null;
+				if (entityName != null) {					
+					storageDirectory = Constants.DOC_FOLDER	+ entityName + File.separator;
+					File dir = new File(storageDirectory);
+					if (!dir.exists()) {
+						dir.mkdirs();
+					}
+	
+				} else {
+					throw new Exception("Unknown");
+				}
+				
+				String newFilename = null;
+				newFilename = "logo" + originalFileExtension;
+				
+				File newFile = new File(storageDirectory + "/" + newFilename);
+		        file.transferTo(newFile);
+		        
+		        return newFilename;
+		        
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return null;
 	}
 }

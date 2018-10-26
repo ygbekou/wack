@@ -11,4 +11,5 @@ public class BaseController {
 	protected String convertEntity(String entity) {
 		return entity.replaceAll("_", ".");
 	}
+
 }
