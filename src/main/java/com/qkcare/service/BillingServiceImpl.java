@@ -4,9 +4,7 @@ package com.qkcare.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.persistence.Transient;
 import javax.transaction.Transactional;
 
 import org.javatuples.Quartet;
@@ -123,6 +121,27 @@ public class BillingServiceImpl  implements BillingService {
 		bill.setBillServices(billServices);
 		
 		return bill;
+		
+	}
+	
+	public BaseEntity findPackage(Class cl, Long key) {
+		com.qkcare.model.Package packge = (com.qkcare.model.Package) this.genericService.find(cl, key);
+		
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		paramTupleList.add(Quartet.with("e.pckage.id = ", "packageId", key + "", "Long"));
+		String queryStr =  "SELECT e FROM PackageService e WHERE 1 = 1";
+		List<BaseEntity> services = genericService.getByCriteria(queryStr, paramTupleList, null);
+		List<PackageService> packageServices = new ArrayList<PackageService>();
+		
+		for (BaseEntity entity : services) {
+			PackageService packageService = (PackageService)entity;
+			packageService.setPckage(null);
+			packageServices.add(packageService);
+		}
+		packge.setPackageServices(packageServices);
+		
+		
+		return packge;
 		
 	}
 }

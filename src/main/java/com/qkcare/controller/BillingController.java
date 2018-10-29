@@ -92,4 +92,11 @@ public class BillingController extends BaseController {
 			
 			return result;
 		}
+		
+		@RequestMapping(value="package/{id}",method = RequestMethod.GET)
+		public BaseEntity getPackage(@PathVariable("id") Long id) throws ClassNotFoundException {
+			BaseEntity result = billingService.findPackage(Class.forName(Constants.PACKAGE_NAME + "Package"), id);
+			
+			return result;
+		}
 }
