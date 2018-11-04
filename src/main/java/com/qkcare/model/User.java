@@ -164,4 +164,10 @@ public class User extends BaseEntity {
 		this.status = status;
 	}
 	
+	// Transient 
+	
+	public String getName() {
+		return this.getFirstName() + (this.getMiddleName() != null ? (" " + this.getMiddleName() + " ") : " ") + this.getLastName();
+	}
+	
 }

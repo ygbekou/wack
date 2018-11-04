@@ -9,9 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.qkcare.util.DateUtil;
 
 
@@ -35,6 +38,7 @@ public class Appointment extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "HOSPITAL_LOCATION_ID")
 	private HospitalLocation hospitalLocation;
+	@JsonFormat(timezone = "GMT-05:00")
 	@Column(name = "APPOINTMENT_DATE")
 	private Date appointmentDate;
 	@Column(name = "BEGIN_TIME")
@@ -43,6 +47,7 @@ public class Appointment extends BaseEntity {
 	private String endTime;
 	private String problem;
 	private int status;
+	
 	
 	public Appointment() {}
 
@@ -107,12 +112,12 @@ public class Appointment extends BaseEntity {
 	public void setAppointmentDate(Date appointmentDate) {
 		this.appointmentDate = appointmentDate;
 	}
-
+	
+	
 
 	public String getDoctorName() {
 		return this.doctor != null ? this.doctor.getName() : "";
 	}
-	
 	public String getDepartmentName() {
 		return this.department != null ? this.department.getName() : "";
 	}
