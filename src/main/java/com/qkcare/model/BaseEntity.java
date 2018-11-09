@@ -22,7 +22,9 @@ public abstract class BaseEntity {
 	
 	@Transient
 	private List<String> errors;
-
+	@Transient
+	public String customValidator = "";
+	
 	public abstract Long getId() ;
 
 	public Date getModDate() {
@@ -56,6 +58,14 @@ public abstract class BaseEntity {
 
 	public void setErrors(List<String> errors) {
 		this.errors = errors;
+	}
+	
+	public String getCustomValidator() {
+		return customValidator;
+	}
+
+	public void setCustomValidator(String customValidator) {
+		this.customValidator = customValidator;
 	}
 
 	@Override

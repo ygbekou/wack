@@ -68,27 +68,48 @@ public class BillingController extends BaseController {
 					Class.forName(Constants.PACKAGE_NAME + "Bill"));
 			billingService.save((Bill)obj);
 			
-			for (BillService bs : ((Bill)obj).getBillServices()) {
-				bs.setBill(null);
+			if (((Bill)obj).getBillServices()!= null) {
+				for (BillService bs : ((Bill)obj).getBillServices()) {
+					bs.setBill(null);
+				}
 			}
 			
-			for (BillPayment bs : ((Bill)obj).getBillPayments()) {
-				bs.setBill(null);
+			if (((Bill)obj).getBillPayments()!= null) {
+				for (BillPayment bs : ((Bill)obj).getBillPayments()) {
+					bs.setBill(null);
+				}
 			}
 			
 			return obj;
 		}
 		
+		@RequestMapping(value="/payment/save",method = RequestMethod.POST)
+		public BaseEntity savePayment(@RequestBody GenericDto dto) throws JsonParseException, 
+		JsonMappingException, IOException, ClassNotFoundException {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+					Class.forName(Constants.PACKAGE_NAME + "BillPayment"));
+			
+			billingService.save((BillPayment)obj);
+			
+			return this.getBill(((BillPayment)obj).getBill().getId());
+		}
+		
 		@RequestMapping(value="bill/{id}",method = RequestMethod.GET)
 		public BaseEntity getBill(@PathVariable("id") Long id) throws ClassNotFoundException {
-			BaseEntity result = billingService.findBill(Class.forName(Constants.PACKAGE_NAME + "Bill"), id);
+			BaseEntity result = billingService.findBill(Class.forName(Constants.PACKAGE_NAME + "Bill"), id, null, null);
 			
 			return result;
 		}
 		
-		@RequestMapping(value="bill/itemNumber/{itemNumber}",method = RequestMethod.GET)
-		public BaseEntity getBillByItemNumber(@PathVariable("itemNumber") String itemNumber) {
-			BaseEntity result = billingService.findBillInitial(itemNumber);
+		@RequestMapping(value="bill/itemLabel/{itemLabel}/itemNumber/{itemNumber}",method = RequestMethod.GET)
+		public BaseEntity getBillByItemNumber(@PathVariable("itemLabel") String itemLabel,
+				@PathVariable("itemNumber") String itemNumber) {
+			BaseEntity result = billingService.findBill(null, null, itemLabel, Long.valueOf(itemNumber));
+			if (result == null) {
+				result = billingService.findBillInitial(itemLabel, itemNumber);
+			}
 			
 			return result;
 		}

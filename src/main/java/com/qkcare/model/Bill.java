@@ -1,5 +1,6 @@
 package com.qkcare.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,12 @@ public class Bill extends BaseEntity {
 	List<BillPayment> billPayments;
 
 	public Bill() {
-		
+		this.setSubTotal(0d);
+		this.setTaxes(0d);
+		this.setDiscount(0d);
+		this.setGrandTotal(0d);
+		this.setPaid(0d);
+		this.setDue(0d);
 	}
 	
 	public Long getId() {
@@ -141,11 +147,26 @@ public class Bill extends BaseEntity {
 		this.billPayments = billPayments;
 	}
 	
+	public void removePayment(Double paymentAmount) {
+		this.setPaid(this.getPaid() - paymentAmount);
+		this.setDue(this.getGrandTotal() - this.getPaid());
+	}
+	
 	public void addPayment(Double paymentAmount) {
 		this.setPaid(this.getPaid() + paymentAmount);
 		this.setDue(this.getGrandTotal() - this.getPaid());
-		
 	}
+	
+	public void addBillService(BillService billService) {
+		if (this.getBillServices() == null) {
+			this.setBillServices(new ArrayList<BillService>());
+		}
+		this.getBillServices().add(billService);
+		this.setSubTotal(this.getSubTotal() + billService.getNetAmount());
+		this.setGrandTotal(this.getGrandTotal() + billService.getNetAmount());
+		this.setDue(this.getDue() + billService.getNetAmount());
+	}
+	
 	// Transient attributes
 	
 	public String getPatientMRN() {

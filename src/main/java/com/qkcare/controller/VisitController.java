@@ -69,6 +69,15 @@ public class VisitController extends BaseController {
 			return obj;
 		}
 		
+		@RequestMapping(value="/visit/updateStatus",method = RequestMethod.POST)
+		public BaseEntity updateStatus(@RequestBody Visit visit) {
+			Visit oldVisit = (Visit) this.genericService.find(Visit.class, visit.getId());
+			oldVisit.setStatus(visit.getStatus());
+			this.genericService.save(oldVisit);
+			
+			return oldVisit;
+		}
+		
 		@RequestMapping(value="visit/get/{id}",method = RequestMethod.GET)
 		public BaseEntity getVisit(@PathVariable("id") Long id) throws ClassNotFoundException{
 			BaseEntity result = visitService.findVisit(Class.forName(Constants.PACKAGE_NAME + "Visit"), id);

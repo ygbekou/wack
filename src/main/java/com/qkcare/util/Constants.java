@@ -4,6 +4,7 @@ import java.util.Locale;
 
 public class Constants {
 	public final static String PACKAGE_NAME = "com.qkcare.model.";
+	public final static String VALIDATOR_PACKAGE_NAME = "com.qkcare.validator.";
 	public static String DOC_FOLDER = "C:\\Development\\qkcareinterface\\src\\assets\\docs\\";
 	public static String IMAGE_FOLDER = "C:\\Development\\qkcareinterface\\src\\assets\\images\\";
 	public static String REPORT_RESULT_FOLDER = "C:\\Development\\qkcareinterface\\src\\assets\\reports\\";  

@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.Bill;
+import com.qkcare.model.BillPayment;
 
 
 @Service(value="billingService")
@@ -13,9 +14,11 @@ public interface BillingService {
 	
 	public BaseEntity save(Bill bill);
 	
-	public BaseEntity findBill(Class cl, Long key);
+	public BaseEntity save(BillPayment billPayment);
 	
-	public BaseEntity findBillInitial(String itemNumber);
+	public BaseEntity findBill(Class cl, Long key, String itemLabel, Long itemId);
+	
+	public BaseEntity findBillInitial(String itemLabel, String itemNumber);
 	
 	public BaseEntity findPackage(Class cl, Long key);
 }

@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -40,6 +39,8 @@ public class BillService extends BaseEntity {
 	private Double discountPercentage;
 	@Column(name = "DISCOUNT_AMOUNT")
 	private Double discountAmount;
+	@Column(name = "NET_AMOUNT")
+	private Double netAmount;
 	@Column(name = "PAYER_AMOUNT")
 	private Double payerAmount;
 	@Column(name = "PATIENT_AMOUNT")
@@ -111,6 +112,12 @@ public class BillService extends BaseEntity {
 	}
 	public void setDiscountAmount(Double discountAmount) {
 		this.discountAmount = discountAmount;
+	}
+	public Double getNetAmount() {
+		return netAmount;
+	}
+	public void setNetAmount(Double netAmount) {
+		this.netAmount = netAmount;
 	}
 	public Double getPayerAmount() {
 		return payerAmount;

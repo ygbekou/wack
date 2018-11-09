@@ -9,6 +9,7 @@ import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.qkcare.domain.ScheduleEvent;
@@ -22,16 +23,23 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	@Autowired
 	private EntityManager entityManager;
 
+	@Value("${schedule.appointment.new.color}")
+	private String scheduleAppointmentNewColor;
+	
+	@Value("${schedule.appointment.confirm.color}")
+	private String scheduleAppointmentConfirmColor;
+	
+	
 	public List<ScheduleEvent> getScheduleEvents(SearchCriteria searchCriteria) {
 		// TODO Auto-generated method stub
 		List<ScheduleEvent> events = new ArrayList<ScheduleEvent>();
 		try {
 			StringBuilder sqlBuilder = new StringBuilder("SELECT AP.APPOINTMENT_ID, U.FIRST_NAME, U.MIDDLE_NAME, "
-					+ "U.LAST_NAME, AP.APPOINTMENT_DATE, AP.BEGIN_TIME, AP.END_TIME "
+					+ "U.LAST_NAME, AP.APPOINTMENT_DATE, AP.BEGIN_TIME, AP.END_TIME, AP.STATUS "
 					+ "FROM APPOINTMENT AP " 
 					+ "JOIN PATIENT P ON AP.PATIENT_ID = P.PATIENT_ID "
 					+ "JOIN USERS U ON P.USER_ID = U.USER_ID "
-					+ "WHERE 1 = 1 ");
+					+ "WHERE 1 = 1 AND AP.STATUS != 0 ");
 			
 			
 			if (searchCriteria.hasDoctorId()) {
@@ -66,6 +74,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
 				event.setStart(obj[4].toString().split(" ")[0] + "T" + obj[5].toString());
 				event.setEnd(obj[4].toString().split(" ")[0] + "T" + obj[6].toString());
 				event.setClassName("availability");
+				if (obj[7].toString().equals("1")) // This is for saved ones
+					event.setColor(scheduleAppointmentNewColor);
+				else if (obj[7].toString().equals("2")) // This is for confirmed ones
+					event.setColor(scheduleAppointmentConfirmColor);
 				events.add(event);
 			}
 			

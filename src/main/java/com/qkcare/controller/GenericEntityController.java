@@ -3,14 +3,18 @@ package com.qkcare.controller;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.javatuples.Pair;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +48,9 @@ public class GenericEntityController extends BaseController {
 		@Qualifier("genericService")
 		GenericService genericService;
 		
+		@Autowired
+		private ApplicationContext context;
+		
 		@RequestMapping(value="/{id}",method = RequestMethod.GET)
 		public BaseEntity get(@PathVariable("entity") String entity, @PathVariable("id") Long id) throws ClassNotFoundException{
 			BaseEntity result = genericService.find(this.getClass(this.convertEntity(entity)), id);
@@ -76,12 +83,28 @@ public class GenericEntityController extends BaseController {
 		
 		@RequestMapping(value="/save",method = RequestMethod.POST)
 		public BaseEntity save(@PathVariable("entity") String entity, @RequestBody GenericDto dto) throws JsonParseException, 
-		JsonMappingException, IOException, ClassNotFoundException {
+		JsonMappingException, IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
 					this.getClass(this.convertEntity(entity)));
-			genericService.save(obj);
+			
+			Pair<Boolean, List<String>> results = Pair.with(true, new ArrayList());
+			try {
+				Class validator = this.getClass(Constants.VALIDATOR_PACKAGE_NAME + entity + "CustomValidator"); 
+				Method aMethod = validator.getMethod("validate", BaseEntity.class);
+				results = (Pair<Boolean, List<String>>) aMethod.invoke(context.getBean(validator), obj);
+			}
+			catch (ClassNotFoundException ex) {
+				
+			}
+				
+			if (results.getValue0()) {
+				genericService.save(obj);
+			}
+			else {
+				obj.setErrors(results.getValue1());
+			}
 			return obj;
 		}
 		

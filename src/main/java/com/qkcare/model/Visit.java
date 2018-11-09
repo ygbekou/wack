@@ -29,6 +29,9 @@ public class Visit extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "PACKAGE_ID")
 	private com.qkcare.model.Package pckage;
+	@ManyToOne
+	@JoinColumn(name = "DOCTOR_ID")
+	private Employee doctor;
 	@Column(name = "CHIEF_OF_COMPLAIN")
 	private String chiefOfComplain;
 	@Column(name = "VISIT_DATETIME")
@@ -81,6 +84,12 @@ public class Visit extends BaseEntity {
 	}
 	public void setPckage(com.qkcare.model.Package pckage) {
 		this.pckage = pckage;
+	}
+	public Employee getDoctor() {
+		return doctor;
+	}
+	public void setDoctor(Employee doctor) {
+		this.doctor = doctor;
 	}
 	public String getChiefOfComplain() {
 		return chiefOfComplain;
@@ -162,5 +171,8 @@ public class Visit extends BaseEntity {
 	}
 	public String getPatientName() {
 		return this.getPatient().getName();
+	}
+	public String getDoctorName() {
+		return this.getDoctor().getName();
 	}
 }

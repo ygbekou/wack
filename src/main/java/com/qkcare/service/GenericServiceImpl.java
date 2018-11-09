@@ -37,6 +37,7 @@ public class GenericServiceImpl implements GenericService {
 	
 	@Transactional
 	public BaseEntity save(BaseEntity entity) {	
+
 		entity.setModDate(new Date());                    
 		entity.setModifiedBy(1L);    
 		if (entity.getId() == null) {
