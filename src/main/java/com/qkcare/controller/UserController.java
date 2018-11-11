@@ -41,6 +41,8 @@ public class UserController extends BaseController {
 		@Autowired 
 		@Qualifier("userService")
 		UserService userService;
+		
+	    
 				
 		@RequestMapping(value="/save",method = RequestMethod.POST)
 		public BaseEntity save(@PathVariable("entity") String entity, 

@@ -2,6 +2,8 @@ package com.qkcare.service;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -10,14 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.qkcare.dao.GenericDao;
 import com.qkcare.dao.UserDao;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.User;
 import com.qkcare.util.Constants;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 @Service(value="userService")
-public class UserServiceImpl  implements UserService {
+public class UserServiceImpl  implements UserService, UserDetailsService {
 	
 	@Autowired
 	GenericService genericService;
@@ -104,5 +110,18 @@ public class UserServiceImpl  implements UserService {
 	@Transactional
 	public User getUser(String email, String userName, String password) {
 		return userDao.getUser(email, userName, password);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		User user = userDao.getUser(null, userName, null);
+		if(user == null){
+			throw new UsernameNotFoundException("Invalid username or password.");
+		}
+		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), getAuthority());
+	}
+	
+	private List<SimpleGrantedAuthority> getAuthority() {
+		return Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
 	}
 }

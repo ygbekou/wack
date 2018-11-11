@@ -251,7 +251,7 @@ INSERT INTO CATEGORY(CREATE_DATE, MOD_DATE, MOD_BY, CATEGORY_ID, NAME) VALUES (n
 INSERT INTO CATEGORY(CREATE_DATE, MOD_DATE, MOD_BY, CATEGORY_ID, NAME) VALUES (now(), now(), 1, 5, 'VACCINE');
 INSERT INTO CATEGORY(CREATE_DATE, MOD_DATE, MOD_BY, CATEGORY_ID, NAME) VALUES (now(), now(), 1, 6, 'SERVICE_TARIF');
 
-insert into USERS (user_group_id, user_name, password, first_name, last_name, sex) values (1, 'admin', '1234', 'Admin', 'Admin', 'M')
+insert into USERS (user_group_id, user_name, password, first_name, last_name, sex) values (1, 'admin', '$2a$10$TpGAfZgpYQWWA1/b08miJ.tZs06jIz60LeKO5PVU1ogVB2snOf2A2', 'Admin', 'Admin', 'M')
 
 ALTER TABLE CATEGORY AUTO_INCREMENT=101;
 
