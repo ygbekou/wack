@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +28,7 @@ import com.qkcare.model.User;
 import com.qkcare.service.GenericService;
 import com.qkcare.service.UserService;
 import com.qkcare.util.Constants;
+import com.qkcare.util.SimpleMail;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -42,7 +46,6 @@ public class UserController extends BaseController {
 		@Qualifier("userService")
 		UserService userService;
 		
-	    
 				
 		@RequestMapping(value="/save",method = RequestMethod.POST)
 		public BaseEntity save(@PathVariable("entity") String entity, 
@@ -85,4 +88,38 @@ public class UserController extends BaseController {
 			return new User();
 
 		}
+		
+		@RequestMapping(value = "/sendPassword", method = RequestMethod.POST)
+		public @ResponseBody String sendPassword(@PathVariable("entity") String entity, @RequestBody User user) {
+
+			if (user == null || (user.getEmail() == null && user.getUserName() == null)) {
+				return "Failure";
+			}
+
+			User storedUser = this.userService.getUser(user.getEmail(), user.getUserName(), null);
+
+			if (storedUser == null) {
+				return "Failure";
+			}
+
+			try {
+
+				String mail = "<blockquote><h2><b>Bonjour "
+						+ (storedUser.getSex() != null && storedUser.getSex().equals("M") ? "Madame" : "Monsieur")
+						+ "</b></h2><h2>Votre Mot de passe est:" + storedUser.getPassword()
+						+ "  </h2><h2>Veuillez le garder secret en supprimant cet e-mail.</h2><h2>Encore une fois, merci de votre interet en notre organisation.</h2><h2><b>Le Directeur.</b></h2></blockquote>";
+				SimpleMail.sendMail("Votre Mot de passe sur le site de ",
+						mail, "ericgbekou@gmail.com", "ericgbekou@hotmail.com",
+						"smtp.gmail.com", "softenzainc@gmail.com",
+						"softenza123", false);
+
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "Failure";
+			}
+
+			return "Success";
+		}
+
 }
