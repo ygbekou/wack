@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -51,12 +52,18 @@ public class UserController extends BaseController {
 		public BaseEntity save(@PathVariable("entity") String entity, 
 				@RequestPart("file") MultipartFile file, @RequestPart GenericDto dto) throws JsonParseException, 
 		JsonMappingException, IOException, ClassNotFoundException {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
-					Class.forName(Constants.PACKAGE_NAME + entity));
-			userService.save(obj, file);
-			
+			BaseEntity obj = null;
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+						Class.forName(Constants.PACKAGE_NAME + entity));
+				userService.save(obj, file);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				obj.setErrors(Arrays.asList(e.getMessage()));
+			}
 			return obj;
 		}
 		
@@ -64,12 +71,18 @@ public class UserController extends BaseController {
 		public BaseEntity saveWithoutPicture(@PathVariable("entity") String entity,
 				@RequestBody GenericDto dto) throws JsonParseException, 
 		JsonMappingException, IOException, ClassNotFoundException {
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
-					Class.forName(Constants.PACKAGE_NAME + entity));
-			userService.save(obj, null);
-			
+			BaseEntity obj = null;
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+				obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+						Class.forName(Constants.PACKAGE_NAME + entity));
+				userService.save(obj, null);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				obj.setErrors(Arrays.asList(e.getMessage()));
+			}
 			return obj;
 		}
 		

@@ -49,8 +49,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
                 authorizeRequests()
+                .antMatchers("/", "/index.html", "/assets/*", "/static/index.html", "/home", "/about").permitAll()
+                .antMatchers("/css/**", "/js/**","/images/**").permitAll()
                 .antMatchers("/service/token/*").permitAll()
                 .antMatchers("/service/user/forgot/*").permitAll()
+                .antMatchers("/service/com.qkcare.model.website.SectionItem/allByCriteria").permitAll()
+                
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
