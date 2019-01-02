@@ -17,6 +17,10 @@ public class Hospital extends BaseEntity {
 	private Long id;
 	private String name;
 	private String description;
+	@Column(name ="META_KEYWORD")
+	private String metaKeyword;
+	@Column(name ="META_DESCRIPTION")
+	private String metaDescription;
 	private String address;
 	@Column(name = "EMAIL")
 	private String email;
@@ -24,6 +28,12 @@ public class Hospital extends BaseEntity {
 	private String phone;
 	private String logo;
 	private String favicon;
+	@Column(name = "BACKGROUND_SLIDER")
+	private String backgroundSlider;
+	@Column(name = "BANNER_CONTENT_HEADER")
+	private String bannerContentHeader;
+	@Column(name = "BANNER_CONTENT_PARAGRAPH")
+	private String bannerContentParagraph;
 	private String copyright;
 	@Column(name = "TWITTER_API")
 	private String twitterApi;
@@ -64,6 +74,18 @@ public class Hospital extends BaseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public String getMetaKeyword() {
+		return metaKeyword;
+	}
+	public void setMetaKeyword(String metaKeyword) {
+		this.metaKeyword = metaKeyword;
+	}
+	public String getMetaDescription() {
+		return metaDescription;
+	}
+	public void setMetaDescription(String metaDescription) {
+		this.metaDescription = metaDescription;
+	}
 	public String getAddress() {
 		return address;
 	}
@@ -93,6 +115,24 @@ public class Hospital extends BaseEntity {
 	}
 	public void setFavicon(String favicon) {
 		this.favicon = favicon;
+	}
+	public String getBackgroundSlider() {
+		return backgroundSlider;
+	}
+	public void setBackgroundSlider(String backgroundSlider) {
+		this.backgroundSlider = backgroundSlider;
+	}
+	public String getBannerContentHeader() {
+		return bannerContentHeader;
+	}
+	public void setBannerContentHeader(String bannerContentHeader) {
+		this.bannerContentHeader = bannerContentHeader;
+	}
+	public String getBannerContentParagraph() {
+		return bannerContentParagraph;
+	}
+	public void setBannerContentParagraph(String bannerContentParagraph) {
+		this.bannerContentParagraph = bannerContentParagraph;
 	}
 	public String getCopyright() {
 		return copyright;

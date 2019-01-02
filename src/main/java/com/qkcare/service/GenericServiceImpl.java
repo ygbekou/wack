@@ -2,8 +2,6 @@ package com.qkcare.service;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,7 +54,7 @@ public class GenericServiceImpl implements GenericService {
 		try {
 			int i = 0;
 			for (MultipartFile file : files) {
-				String fileName = saveFile(file, entity.getClass().getSimpleName());
+				String fileName = saveFile(file, entity.getClass().getSimpleName(), attributes.get(i));
 				Field field = entity.getClass().getDeclaredField(attributes.get(i));
 				field.setAccessible(true);
 		        field.set(entity, fileName);
@@ -116,7 +114,7 @@ public class GenericServiceImpl implements GenericService {
 		return this.genericDao.getConnection();
 	}
 	
-	private String saveFile(MultipartFile file, String entityName) {
+	private String saveFile(MultipartFile file, String entityName, String fileLabel) {
 		if (!file.isEmpty()) {
 			try {
 				String originalFileExtension = file.getOriginalFilename()
@@ -136,7 +134,7 @@ public class GenericServiceImpl implements GenericService {
 				}
 				
 				String newFilename = null;
-				newFilename = "logo" + originalFileExtension;
+				newFilename = fileLabel + originalFileExtension;
 				
 				File newFile = new File(storageDirectory + "/" + newFilename);
 		        file.transferTo(newFile);

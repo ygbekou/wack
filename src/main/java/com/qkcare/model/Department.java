@@ -16,6 +16,7 @@ public class Department extends BaseEntity {
 	private Long id;	
 	private String name;
 	private String description;
+	private String fileLocation;
 	private int status;
 	
 	public Long getId() {
@@ -35,6 +36,12 @@ public class Department extends BaseEntity {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getFileLocation() {
+		return fileLocation;
+	}
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
 	}
 	public int getStatus() {
 		return status;
