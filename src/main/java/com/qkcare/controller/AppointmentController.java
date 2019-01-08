@@ -3,12 +3,12 @@ package com.qkcare.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qkcare.domain.GenericDto;
 import com.qkcare.domain.ScheduleEvent;
 import com.qkcare.domain.SearchCriteria;
+import com.qkcare.model.Appointment;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.Prescription;
 import com.qkcare.model.PrescriptionDiagnosis;
@@ -64,5 +65,15 @@ public class AppointmentController extends BaseController {
 			return obj;
 		}
 		
+		@RequestMapping(value = "/list/byMonth", method = RequestMethod.GET, headers = "Accept=application/json")
+		public Map<Integer, List<Appointment>> getAppointmentsByMonth() {
+			return this.appointmentService.getAppointmentsByMonth();
+		}
+		
+		
+		@RequestMapping(value = "/list/upcomings", method = RequestMethod.GET, headers = "Accept=application/json")
+		public List<Appointment> getUpcomingAppointments() {
+			return this.appointmentService.getUpcomingAppointments();
+		}
 		
 }

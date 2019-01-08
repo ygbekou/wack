@@ -141,6 +141,12 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 				} catch(ParseException pe) {
 					logger.error("Exception happened: " + pe);
 				}
+			} else if ("Date2".equals(parameter.getValue3())) {
+				try {
+					query.setParameter(parameter.getValue1(), DateUtil.parseDate(parameter.getValue2(), "MM-dd-yyyy"), TemporalType.DATE);
+				} catch(ParseException pe) {
+					logger.error("Exception happened: " + pe);
+				}
 			} else if ("Timestamp".equals(parameter.getValue3())) {
 				try {
 					query.setParameter(parameter.getValue1(), DateUtil.parseDate(parameter.getValue2(), "MM/dd/yyyy hh:mm:ss a"), TemporalType.TIMESTAMP);

@@ -129,7 +129,7 @@ public class GenericEntityController extends BaseController {
 			}
 				
 			if (results.getValue0()) {
-				this.genericService.saveWithFiles(obj, Arrays.asList(file), Arrays.asList("fileLocation"));
+				this.genericService.saveWithFiles(obj, Arrays.asList(file), Arrays.asList("fileLocation"), true);
 			}
 			else {
 				obj.setErrors(results.getValue1());
@@ -149,10 +149,11 @@ public class GenericEntityController extends BaseController {
 					this.getClass(entity));
 
 			this.genericService.saveWithFiles(obj, Arrays.asList(logo, favicon, backgroundSlider), 
-					Arrays.asList("logo", "favicon", "backgroundSlider"));
+					Arrays.asList("logo", "favicon", "backgroundSlider"), false);
 			
 			return obj;
 		}
+		
 		
 		@RequestMapping(value="/delete",method = RequestMethod.POST)
 		public String delete(@PathVariable("entity") String entity, @RequestBody List<Long> ids) throws JsonParseException, 

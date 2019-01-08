@@ -1,6 +1,7 @@
 package com.qkcare.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -24,4 +25,6 @@ public interface AdmissionService {
 	public BaseEntity transferBed(BedAssignment bedAssignment);
 	
 	public BaseEntity findPrescription(Class cl, Long key);
+	
+	public Map<Integer, List<Admission>> getAdmissionsByMonth();
 }

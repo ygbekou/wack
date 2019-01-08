@@ -48,13 +48,13 @@ public class GenericServiceImpl implements GenericService {
 	}
 	
 	@Transactional
-	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, List<String> attributes) {
+	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, List<String> attributes, boolean useId) {
 		this.save(entity);
 		
 		try {
 			int i = 0;
 			for (MultipartFile file : files) {
-				String fileName = saveFile(file, entity.getClass().getSimpleName(), attributes.get(i));
+				String fileName = saveFile(file, entity.getClass().getSimpleName(), useId ? entity.getId() + "" : attributes.get(i));
 				Field field = entity.getClass().getDeclaredField(attributes.get(i));
 				field.setAccessible(true);
 		        field.set(entity, fileName);

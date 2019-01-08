@@ -1,11 +1,13 @@
 package com.qkcare.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
 import com.qkcare.domain.GenericVO;
+import com.qkcare.model.Admission;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.Visit;
 
@@ -26,5 +28,7 @@ public interface VisitService {
 	public List<GenericVO> getMedicalHistories();
 	
 	public List<GenericVO> getSocialHistories();
+	
+	public Map<Integer, List<Visit>> getVisitsByMonth();
 	
 }

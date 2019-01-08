@@ -3,6 +3,7 @@ package com.qkcare.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qkcare.domain.GenericDto;
+import com.qkcare.model.Appointment;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.DoctorOrder;
 import com.qkcare.model.DoctorOrderStatus;
@@ -129,5 +131,10 @@ public class VisitController extends BaseController {
 			doctorOrderService.save((DoctorOrder)obj, true);
 			
 			return obj;
+		}
+		
+		@RequestMapping(value = "/list/byMonth", method = RequestMethod.GET, headers = "Accept=application/json")
+		public Map<Integer, List<Visit>> getVisitsByMonth() {
+			return this.visitService.getVisitsByMonth();
 		}
 }

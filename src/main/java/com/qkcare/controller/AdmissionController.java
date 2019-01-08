@@ -4,6 +4,7 @@ package com.qkcare.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import com.qkcare.model.BillService;
 import com.qkcare.model.DoctorAssignment;
 import com.qkcare.model.PackageService;
 import com.qkcare.model.Admission;
+import com.qkcare.model.Appointment;
 import com.qkcare.model.enums.TransferType;
 import com.qkcare.service.AdmissionService;
 import com.qkcare.service.BillingService;
@@ -114,4 +116,9 @@ public class AdmissionController extends BaseController {
 			return obj;
 		}
 		
+		
+		@RequestMapping(value = "/list/byMonth", method = RequestMethod.GET, headers = "Accept=application/json")
+		public Map<Integer, List<Admission>> getAdmissionsByMonth() {
+			return this.admissionService.getAdmissionsByMonth();
+		}
 }

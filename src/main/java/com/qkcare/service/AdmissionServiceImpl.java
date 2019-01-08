@@ -1,8 +1,12 @@
 package com.qkcare.service;
 
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -17,6 +21,7 @@ import com.qkcare.model.Prescription;
 import com.qkcare.model.PrescriptionDiagnosis;
 import com.qkcare.model.PrescriptionMedicine;
 import com.qkcare.model.Admission;
+import com.qkcare.model.Appointment;
 
 @Service(value="admissionService")
 public class AdmissionServiceImpl  implements AdmissionService {
@@ -185,5 +190,36 @@ public class AdmissionServiceImpl  implements AdmissionService {
 		
 		return prescription;
 		
+	}
+	
+	public Map<Integer, List<Admission>> getAdmissionsByMonth() {
+		
+		LocalDate today = LocalDate.now();
+		LocalDate startDate = today.withDayOfMonth(1).plusMonths(-12);
+		LocalDate endDate = today.withDayOfMonth(today.lengthOfMonth());
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		paramTupleList.add(Quartet.with("e.admissionDatetime >= ", "admissionStartDate", startDate.format(formatter), "Date"));
+		paramTupleList.add(Quartet.with("e.admissionDatetime <= ", "admissionEndDate", endDate.format(formatter), "Date"));
+		String queryStr =  "SELECT e FROM Admission e WHERE 1 = 1";
+		
+		List<Admission> admissions = (List)this.genericService.getByCriteria(queryStr, 
+				paramTupleList, " ORDER BY admissionDatetime");
+		
+		Map<Integer, List<Admission>> dataMap = new HashMap<>();
+		
+		for (Admission admission : admissions) {
+			Integer monthIndex = admission.getAdmissionDatetime().getMonth();
+			
+			if (dataMap.get(monthIndex) == null) {
+				dataMap.put(monthIndex, new ArrayList<Admission>());
+			}
+			
+			dataMap.get(monthIndex).add(admission);
+		}
+		
+		return dataMap;
 	}
 }

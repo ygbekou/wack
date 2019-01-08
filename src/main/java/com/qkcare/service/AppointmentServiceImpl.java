@@ -2,9 +2,11 @@ package com.qkcare.service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,8 +14,6 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.javatuples.Pair;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,12 @@ import com.qkcare.dao.AppointmentDao;
 import com.qkcare.dao.GenericDao;
 import com.qkcare.domain.ScheduleEvent;
 import com.qkcare.domain.SearchCriteria;
+import com.qkcare.model.Appointment;
 import com.qkcare.model.BaseEntity;
-import com.qkcare.model.BillService;
 import com.qkcare.model.Prescription;
 import com.qkcare.model.PrescriptionDiagnosis;
 import com.qkcare.model.PrescriptionMedicine;
 import com.qkcare.model.Schedule;
-import com.qkcare.model.Weekday;
 
 @Service(value="appointmentService")
 public class AppointmentServiceImpl  implements AppointmentService {
@@ -77,6 +76,57 @@ public class AppointmentServiceImpl  implements AppointmentService {
 	}
 	
 	
+	public Map<Integer, List<Appointment>> getAppointmentsByMonth() {
+		
+		LocalDate today = LocalDate.now();
+		LocalDate startDate = today.withDayOfMonth(1).plusMonths(-12);
+		LocalDate endDate = today.withDayOfMonth(today.lengthOfMonth());
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		paramTupleList.add(Quartet.with("e.appointmentDate >= ", "appointmentStartDate", startDate.format(formatter), "Date"));
+		paramTupleList.add(Quartet.with("e.appointmentDate <= ", "appointmentEndDate", endDate.format(formatter), "Date"));
+		String queryStr =  "SELECT e FROM Appointment e WHERE 1 = 1";
+		
+		List<Appointment> appointments = (List)this.genericService.getByCriteria(queryStr, 
+				paramTupleList, " ORDER BY appointmentDate");
+		
+		Map<Integer, List<Appointment>> dataMap = new HashMap<>();
+		
+		for (Appointment appointment : appointments) {
+			Integer monthIndex = appointment.getAppointmentDate().getMonth();
+			
+			if (dataMap.get(monthIndex) == null) {
+				dataMap.put(monthIndex, new ArrayList<Appointment>());
+			}
+			
+			dataMap.get(monthIndex).add(appointment);
+		}
+		
+		return dataMap;
+	}
+	
+	public List<Appointment> getUpcomingAppointments() {
+		
+		LocalDate startDate = LocalDate.now().plusDays(-365);
+		LocalDate endDate = LocalDate.now();
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		paramTupleList.add(Quartet.with("e.appointmentDate >= ", "appointmentStartDate", startDate.format(formatter), "Date"));
+		paramTupleList.add(Quartet.with("e.appointmentDate <= ", "appointmentEndDate", endDate.format(formatter), "Date"));
+		paramTupleList.add(Quartet.with("e.status <= ", "status", "0", "Integer"));
+		
+		String queryStr =  "SELECT e FROM Appointment e WHERE 1 = 1";
+		
+		List<Appointment> appointments = (List)this.genericService.getByCriteria(queryStr, 
+				paramTupleList, " ORDER BY appointmentDate");
+		
+		return appointments;
+	}
+
 	private List<ScheduleEvent> generateDoctorAvailabilities(SearchCriteria searchCriteria, Map<String, String> apptMap) {
 		List<ScheduleEvent> events = new ArrayList<ScheduleEvent>();
 		LocalDate startDate = LocalDate.now().withDayOfMonth(1).plusMonths(-1);
@@ -189,4 +239,5 @@ public class AppointmentServiceImpl  implements AppointmentService {
 
 		return myDate;
 	}
+	
 }

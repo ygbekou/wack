@@ -1,6 +1,8 @@
 package com.qkcare.service;
 
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.qkcare.domain.GenericVO;
+import com.qkcare.model.Admission;
 import com.qkcare.model.Allergy;
 import com.qkcare.model.BaseEntity;
 import com.qkcare.model.MedicalHistory;
@@ -295,5 +298,36 @@ public class VisitServiceImpl  implements VisitService {
 		}
 		
 		return results;
+	}
+	
+	public Map<Integer, List<Visit>> getVisitsByMonth() {
+		
+		LocalDate today = LocalDate.now();
+		LocalDate startDate = today.withDayOfMonth(1).plusMonths(-12);
+		LocalDate endDate = today.withDayOfMonth(today.lengthOfMonth());
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+		
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		paramTupleList.add(Quartet.with("e.visitDatetime >= ", "visitStartDate", startDate.format(formatter), "Date"));
+		paramTupleList.add(Quartet.with("e.visitDatetime <= ", "visitEndDate", endDate.format(formatter), "Date"));
+		String queryStr =  "SELECT e FROM Visit e WHERE 1 = 1";
+		
+		List<Visit> visits = (List)this.genericService.getByCriteria(queryStr, 
+				paramTupleList, " ORDER BY visitDatetime");
+		
+		Map<Integer, List<Visit>> dataMap = new HashMap<>();
+		
+		for (Visit visit : visits) {
+			Integer monthIndex = visit.getVisitDatetime().getMonth();
+			
+			if (dataMap.get(monthIndex) == null) {
+				dataMap.put(monthIndex, new ArrayList<Visit>());
+			}
+			
+			dataMap.get(monthIndex).add(visit);
+		}
+		
+		return dataMap;
 	}
 }

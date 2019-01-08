@@ -16,6 +16,7 @@ public class Department extends BaseEntity {
 	private Long id;	
 	private String name;
 	private String description;
+	@Column(name ="PICTURE")
 	private String fileLocation;
 	private int status;
 	

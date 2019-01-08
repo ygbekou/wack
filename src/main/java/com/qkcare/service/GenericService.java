@@ -13,7 +13,7 @@ import com.qkcare.model.BaseEntity;
 public interface GenericService {
 	
 	public BaseEntity save(BaseEntity entity);
-	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, List<String> attributes);
+	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, List<String> attributes, boolean useId);
 	public void delete(BaseEntity entity);
 	public void delete(Class cl, List<Long> ids);
 	public BaseEntity find(Class cl, Long key);
