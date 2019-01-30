@@ -95,4 +95,9 @@ public class SectionItem extends BaseEntity {
 	public String getSectionName() {
 		return this.getSection().getName();
 	}
+	
+	public String getStatusDesc() {
+		return status == 0 ? "Actif" : "Inactif";
+	}
+
 }

@@ -23,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wack.domain.GenericDto;
+import com.wack.domain.GenericResponse;
 import com.wack.model.BaseEntity;
 import com.wack.service.GenericService;
 import com.wack.util.Constants;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -136,6 +138,7 @@ public class GenericEntityController extends BaseController {
 			JsonMappingException, IOException, ClassNotFoundException {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
 			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
 					this.getClass(entity));
 
@@ -145,11 +148,18 @@ public class GenericEntityController extends BaseController {
 		}
 		
 		
-		@RequestMapping(value="/delete",method = RequestMethod.POST)
-		public String delete(@PathVariable("entity") String entity, @RequestBody List<Long> ids) throws JsonParseException, 
-		JsonMappingException, IOException, ClassNotFoundException {
-			this.genericService.delete(this.getClass(entity), ids);
-			return "SUCCESS";
+		@RequestMapping(value="/delete/{id}",method = RequestMethod.GET, produces = "application/json")
+		public GenericResponse delete(@PathVariable("entity") String entity, 
+				@PathVariable("id") Long id) throws JsonParseException, 
+				JsonMappingException, IOException, ClassNotFoundException {
+			try {
+				List<Long> ids = new ArrayList<>();
+				ids.add(id);
+				this.genericService.delete(this.getClass(entity), ids);
+				return new GenericResponse("SUCCESS");
+			} catch(Exception e) {
+				return new GenericResponse("FAILURE");
+			}
 		}
 		
 		@RequestMapping(value="/cascade/delete",method = RequestMethod.POST)
