@@ -97,34 +97,11 @@ public class UserController extends BaseController {
 		@RequestMapping(value = "/sendPassword", method = RequestMethod.POST)
 		public @ResponseBody String sendPassword(@PathVariable("entity") String entity, @RequestBody User user) {
 
-			if (user == null || (user.getEmail() == null && user.getUserName() == null)) {
+			if (user == null || (user.getUserName() == null)) {
 				return "Failure";
 			}
 
-			User storedUser = this.userService.getUser(user.getEmail(), user.getUserName(), null);
-
-			if (storedUser == null) {
-				return "Failure";
-			}
-
-			try {
-
-				String mail = "<blockquote><h2><b>Bonjour "
-						+ (storedUser.getSex() != null && storedUser.getSex().equals("M") ? "Madame" : "Monsieur")
-						+ "</b></h2><h2>Votre Mot de passe est:" + storedUser.getPassword()
-						+ "  </h2><h2>Veuillez le garder secret en supprimant cet e-mail.</h2><h2>Encore une fois, merci de votre interet en notre organisation.</h2><h2><b>Le Directeur.</b></h2></blockquote>";
-				SimpleMail.sendMail("Votre Mot de passe sur le site de ",
-						mail, "ericgbekou@gmail.com", "ericgbekou@hotmail.com",
-						"smtp.gmail.com", "softenzainc@gmail.com",
-						"softenza123", false);
-
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return "Failure";
-			}
-
-			return "Success";
+			return this.userService.sendPassword(user, null);
 		}
 
 }

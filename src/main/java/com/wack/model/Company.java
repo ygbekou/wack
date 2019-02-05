@@ -26,6 +26,8 @@ public class Company extends BaseEntity {
 	private String email;
 	@Column(name = "PHONE")
 	private String phone;
+	private String phone2;
+	private String fax;
 	private String logo;
 	private String favicon;
 	@Column(name = "BACKGROUND_SLIDER")
@@ -45,8 +47,6 @@ public class Company extends BaseEntity {
 	private String twitterUrl;
 	@Column(name = "INSTAGRAM_URL")
 	private String instagramUrl;
-	@Column(name = "GOOGLE_PLUS_URL")
-	private String googlePlusUrl;
 	@Column(name = "FOOTER_PARAGRAPH1")
 	private String footerParagraph1;
 	@Column(name = "FOOTER_PARAGRAPH2")
@@ -54,6 +54,10 @@ public class Company extends BaseEntity {
 	@Column(name = "FOOTER_PARAGRAPH3")
 	private String footerParagraph3;
 	private String language;
+	@Column(name = "FROM_EMAIL")
+	private String fromEmail;
+	@Column(name = "TO_EMAIL")
+	private String toEmail;
 	private int status;
 	
 	
@@ -104,6 +108,18 @@ public class Company extends BaseEntity {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	public String getPhone2() {
+		return phone2;
+	}
+	public void setPhone2(String phone2) {
+		this.phone2 = phone2;
+	}
+	public String getFax() {
+		return fax;
+	}
+	public void setFax(String fax) {
+		this.fax = fax;
 	}
 	public String getLogo() {
 		return logo;
@@ -171,12 +187,6 @@ public class Company extends BaseEntity {
 	public void setInstagramUrl(String instagramUrl) {
 		this.instagramUrl = instagramUrl;
 	}
-	public String getGooglePlusUrl() {
-		return googlePlusUrl;
-	}
-	public void setGooglePlusUrl(String googlePlusUrl) {
-		this.googlePlusUrl = googlePlusUrl;
-	}
 	public String getFooterParagraph1() {
 		return footerParagraph1;
 	}
@@ -194,6 +204,18 @@ public class Company extends BaseEntity {
 	}
 	public void setFooterParagraph3(String footerParagraph3) {
 		this.footerParagraph3 = footerParagraph3;
+	}
+	public String getFromEmail() {
+		return fromEmail;
+	}
+	public void setFromEmail(String fromEmail) {
+		this.fromEmail = fromEmail;
+	}
+	public String getToEmail() {
+		return toEmail;
+	}
+	public void setToEmail(String toEmail) {
+		this.toEmail = toEmail;
 	}
 	public int getStatus() {
 		return status;

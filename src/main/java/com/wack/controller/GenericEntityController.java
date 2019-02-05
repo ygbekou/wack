@@ -27,6 +27,7 @@ import com.wack.domain.GenericResponse;
 import com.wack.model.BaseEntity;
 import com.wack.service.GenericService;
 import com.wack.util.Constants;
+import com.wack.service.MyMailSender;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -168,5 +169,5 @@ public class GenericEntityController extends BaseController {
 			this.genericService.delete(this.getClass(entity), ids);
 			return "SUCCESS";
 		}
-		
+	
 }
