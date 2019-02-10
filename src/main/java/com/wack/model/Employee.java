@@ -88,7 +88,7 @@ public class Employee extends BaseEntity {
 		public String getEmail() {
 			return this.user.getEmail();
 		}
-		public String getHomePhone() {
+		public String getPhone() {
 			return this.user.getHomePhone();
 		}
 		public String getAddress() {

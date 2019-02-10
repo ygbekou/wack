@@ -99,5 +99,25 @@ public class SectionItem extends BaseEntity {
 	public String getStatusDesc() {
 		return status == 0 ? "Actif" : "Inactif";
 	}
+	
+	
+	// Transient
+	public String getText1() {
+		String[] texts = description.split("\\|");
+		
+		return texts.length > 0 ? texts[0] : "" ;
+	}
+	
+	public String getText2() {
+		String[] texts = description.split("\\|");
+		
+		return texts.length > 1 ? texts[1] : "" ;
+	}
+	
+	public String getText3() {
+		String[] texts = description.split("\\|");
+		
+		return texts.length > 2 ? texts[2] : "" ;
+	}
 
 }

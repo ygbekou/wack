@@ -1,7 +1,5 @@
 package com.wack.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,6 +40,8 @@ public class User extends BaseEntity {
 	private String country;
 	@Column(name="ZIP_CODE")
 	private String zipCode;
+	@Column(name="FIRST_TIME_LOGIN")
+	private String firstTimeLogin;
 	private int status;
 	
 	public User() {}
@@ -146,6 +146,12 @@ public class User extends BaseEntity {
 	}
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+	public String getFirstTimeLogin() {
+		return firstTimeLogin;
+	}
+	public void setFirstTimeLogin(String firstTimeLogin) {
+		this.firstTimeLogin = firstTimeLogin;
 	}
 	public int getStatus() {
 		return status;

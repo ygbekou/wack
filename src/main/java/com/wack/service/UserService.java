@@ -14,4 +14,6 @@ public interface UserService {
 	public User getUser(String email, String userName, String password);
 	
 	public String sendPassword(User user, String password);
+	
+	public String changePassword(User user, String password);
 }

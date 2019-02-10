@@ -58,20 +58,15 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
 			
 			Field userField = entity.getClass().getDeclaredField("user");
 			userField.setAccessible(true);
-			Field matriculeField = null;
 			Field passwordField = null;
-			try {
-				matriculeField = entity.getClass().getDeclaredField("medicalRecordNumber");
-				if (matriculeField != null)
-					matriculeField.setAccessible(true);
-				
-			} catch(NoSuchFieldException nsfe) {
-				
-			}
-	        user = (User) userField.get(entity);
+
+			user = (User) userField.get(entity);
 	        passwordField = user.getClass().getDeclaredField("password");
 	        String generatedPassword = null;
-			if (passwordField != null) {
+	        
+	        boolean isUserExisting = user.getId() != null && user.getId() > 0;
+	        
+			if (!isUserExisting && passwordField != null) {
 				passwordField.setAccessible(true);
         		//passwordField.set(user, encoder.encode(passwordField.get(user).toString()));
 				generatedPassword = stringGenerator.generate(8);
@@ -79,7 +74,7 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
 			}
 	        user = (User) genericService.save(user);
 	        
-	        if (passwordField != null) {
+	        if (!isUserExisting && passwordField != null) {
 	        	if (generatedPassword != null) {
 	        		this.sendPassword(user, generatedPassword);
 	        	}
@@ -88,10 +83,7 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
 	        
 	       
 	        if (user != null) {	 
-	        	if (matriculeField != null) {
-					matriculeField.set(entity, StringUtils.leftPad(user.getId().toString(), 8));
-				}
-	        	
+	  
 	        	if (file != null && !file.isEmpty()) {
 					try {
 						String originalFileExtension = file.getOriginalFilename()
@@ -130,6 +122,7 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
 	        	userField.set(entity, user);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new NullPointerException();
 		} 
 				
@@ -163,6 +156,7 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
 			
 			if (StringUtils.isEmpty(password)) {
 				storedUser.setPassword(encoder.encode(generatedPassword));	
+				storedUser.setFirstTimeLogin("Y");
 			    this.genericService.save(storedUser);
 			}
 			
@@ -172,6 +166,25 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
 			
 			mailSender.sendMail(company.getFromEmail(), storedUser.getEmail().split("'"), 
 					"Message from " + company.getName(), emailMessage);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			return "Failure";
+		}
+		
+		return "Success";
+		
+	}
+	
+	@Transactional
+	public String changePassword(User user, String password) {		
+		try {
+			User storedUser = this.getUser(user.getEmail(), user.getUserName(), null);
+			
+			if (!StringUtils.isEmpty(password)) {
+				storedUser.setPassword(encoder.encode(password));	
+				storedUser.setFirstTimeLogin("N");
+			    this.genericService.save(storedUser);
+			}
 		} catch(Exception ex) {
 			return "Failure";
 		}
