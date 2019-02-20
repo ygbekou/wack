@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
 
+
 @Entity
 @Table(name="SECTION_ITEM")
 public class SectionItem extends BaseEntity {

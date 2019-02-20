@@ -29,6 +29,9 @@ public class Section extends BaseEntity {
 	
 	private Integer status;
 	
+	@Column(name="SHOW_IN_MENU")
+	private String showInMenu;
+	
 	private String language;
 
 	
@@ -79,6 +82,14 @@ public class Section extends BaseEntity {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public String getShowInMenu() {
+		return showInMenu;
+	}
+
+	public void setShowInMenu(String showInMenu) {
+		this.showInMenu = showInMenu;
 	}
 
 	public String getLanguage() {
