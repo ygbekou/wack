@@ -12,4 +12,8 @@ public interface UserService {
 	public BaseEntity save(BaseEntity entity, MultipartFile file);
 	
 	public User getUser(String email, String userName, String password);
+	
+	public String sendPassword(User user, String password);
+	
+	public String changePassword(User user, String password);
 }

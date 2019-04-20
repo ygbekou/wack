@@ -1,0 +1,55 @@
+DEPLOYMENT STEPS:
+
+1.	Install Java
+	a.	Download JAVA and copy to /home/ec2-user/apps/ - jdk-8u191-linux-x64.tar.gz
+	b.	Unzip the JAVA jar to /home/ec2-user/apps/ - tar zxvf jdk-8u191-linux-x64.tar.gz
+
+	
+2.	Install MySQL
+
+	a.	Remove mariadb  		--  sudo yum remove mariadb*  
+	b.	Run the installation 	--  sudo yum -y install http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-server-5.6.6_m9-1.linux2.6.x86_64.rpm
+									sudo yum -y install http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-client-5.6.6_m9-1.linux2.6.x86_64.rpm
+	c.	Change password  		--  /usr/bin/mysqladmin -u root password 'admin'
+								--	/usr/bin/mysqladmin -u root -h ip-172-31-94-187.ec2.internal password 'admin'
+	c.	Start MySQL   			--   sudo service mysql start
+	
+3.	Run the create_table.sql and seed_data.sql
+	a.	Connect to mysql        --  mysql -uroot -padmin
+	b.	Run the create_table.sql-- source /home/ec2-user/apps/create_table.sql;
+	c.	Run the seed_data.sql	--	source /home/ec2-user/apps/seed_data.sql;
+
+4.  Start the application
+	a.	Run the jar 			--	nohup jdk1.8.0_191/bin/java -jar wack-0.0.1-SNAPSHOT.jar &
+	b.	Check if any java process running --	ps -ef | grep java
+	c.	See how communication is going between server and UI	--	tail -f nohoup.out
+	
+	
+	
+
+	
+	Tomcat Application Steps:
+	
+1. 	Create Amazon instance --  Use Linux AMI 
+
+2. 	Create a new key or using an existing
+
+2. 	Run the Security Wizard    --   Add Rule for HTTP and HTTPS
+
+3. 	Converting the key   --   Open PuttyGen, Click Conversions and select the key created on Amazon.
+
+4. 	Enable PAssword Authentication -- 
+	a.	Connect to th einstance server using putty 
+	b.	Open the sshd_config file ---   sudo vi /etc/ssh/sshd_config
+	c.  Change PasswordAuthentication to Yes --- Searching by typing /PasswordAuthentication
+	d.	Restart the sshd service   --  sudo service sshd restart
+	e.  Change the password for ec2-user  -- sudo passwd ec2-user   and  put a new password  (Now you can login to the server using the username/passwd)
+	
+5.	Install MySQL
+
+	a.	Remove mariadb  		--  sudo yum remove mariadb*  
+	b.	Run the installation 	--  sudo yum -y install http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-server-5.6.6_m9-1.linux2.6.x86_64.rpm
+									sudo yum -y install http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-client-5.6.6_m9-1.linux2.6.x86_64.rpm
+	c.	Change password  		--  /usr/bin/mysqladmin -u root password 'admin'
+								--	/usr/bin/mysqladmin -u root -h ip-172-31-94-187.ec2.internal password 'admin'
+	c.	Start MySQL   			--   sudo service mysql start

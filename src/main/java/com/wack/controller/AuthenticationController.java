@@ -52,8 +52,8 @@ public class AuthenticationController {
         final User user = userService.getUser(null,loginUser.getUserName(), null);
         final String token = jwtTokenUtil.generateToken(user);
         return ResponseEntity.ok(new AuthToken(token, loginUser.getUserName(), loginUser.getPassword(), 
-        		user.getFirstName(), user.getLastName(), "Admin", user.getPicture(), 
-        		Arrays.asList(new Long[]{user.getUserGroup().getId()})));
+        		user.getFirstName(), user.getLastName(), user.getUserGroup().getName(), user.getPicture(), 
+        		user.getFirstTimeLogin(), Arrays.asList(new Long[]{user.getUserGroup().getId()})));
         
     }
 

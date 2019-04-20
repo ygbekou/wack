@@ -17,12 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wack.domain.GenericDto;
+import com.wack.domain.GenericResponse;
 import com.wack.model.BaseEntity;
 import com.wack.model.User;
 import com.wack.service.UserService;
 import com.wack.util.Constants;
-import com.wack.util.SimpleMail;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +49,9 @@ public class UserController extends BaseController {
 			try {
 				ObjectMapper mapper = new ObjectMapper();
 				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-				obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+				mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+				obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
+						.replaceAll("/", "\\/").replaceAll("&#039;", "'"),
 						Class.forName(Constants.PACKAGE_NAME + entity));
 				userService.save(obj, file);
 			}
@@ -67,7 +70,9 @@ public class UserController extends BaseController {
 			try {
 				ObjectMapper mapper = new ObjectMapper();
 				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-				obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"),
+				mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+				obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
+						.replaceAll("/", "\\/").replaceAll("&#039;", "'"),
 						Class.forName(Constants.PACKAGE_NAME + entity));
 				userService.save(obj, null);
 			}
@@ -95,36 +100,23 @@ public class UserController extends BaseController {
 		}
 		
 		@RequestMapping(value = "/sendPassword", method = RequestMethod.POST)
-		public @ResponseBody String sendPassword(@PathVariable("entity") String entity, @RequestBody User user) {
+		public @ResponseBody GenericResponse sendPassword(@PathVariable("entity") String entity, @RequestBody User user) {
 
-			if (user == null || (user.getEmail() == null && user.getUserName() == null)) {
-				return "Failure";
+			if (user == null || (user.getUserName() == null)) {
+				return new GenericResponse("Failure");
 			}
 
-			User storedUser = this.userService.getUser(user.getEmail(), user.getUserName(), null);
+			return new GenericResponse(this.userService.sendPassword(user, null));
+		}
+		
+		@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+		public @ResponseBody GenericResponse changePassword(@PathVariable("entity") String entity, @RequestBody User user) {
 
-			if (storedUser == null) {
-				return "Failure";
+			if (user == null || (user.getUserName() == null)) {
+				return new GenericResponse("Failure");
 			}
 
-			try {
-
-				String mail = "<blockquote><h2><b>Bonjour "
-						+ (storedUser.getSex() != null && storedUser.getSex().equals("M") ? "Madame" : "Monsieur")
-						+ "</b></h2><h2>Votre Mot de passe est:" + storedUser.getPassword()
-						+ "  </h2><h2>Veuillez le garder secret en supprimant cet e-mail.</h2><h2>Encore une fois, merci de votre interet en notre organisation.</h2><h2><b>Le Directeur.</b></h2></blockquote>";
-				SimpleMail.sendMail("Votre Mot de passe sur le site de ",
-						mail, "ericgbekou@gmail.com", "ericgbekou@hotmail.com",
-						"smtp.gmail.com", "softenzainc@gmail.com",
-						"softenza123", false);
-
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return "Failure";
-			}
-
-			return "Success";
+			return new GenericResponse(this.userService.changePassword(user, user.getPassword()));
 		}
 
 }

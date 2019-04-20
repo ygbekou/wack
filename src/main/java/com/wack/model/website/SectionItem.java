@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
 
+
 @Entity
 @Table(name="SECTION_ITEM")
 public class SectionItem extends BaseEntity {
@@ -98,6 +99,26 @@ public class SectionItem extends BaseEntity {
 	
 	public String getStatusDesc() {
 		return status == 0 ? "Actif" : "Inactif";
+	}
+	
+	
+	// Transient
+	public String getText1() {
+		String[] texts = description.split("\\|");
+		
+		return texts.length > 0 ? texts[0] : "" ;
+	}
+	
+	public String getText2() {
+		String[] texts = description.split("\\|");
+		
+		return texts.length > 1 ? texts[1] : "" ;
+	}
+	
+	public String getText3() {
+		String[] texts = description.split("\\|");
+		
+		return texts.length > 2 ? texts[2] : "" ;
 	}
 
 }

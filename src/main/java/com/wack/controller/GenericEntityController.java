@@ -27,6 +27,7 @@ import com.wack.domain.GenericResponse;
 import com.wack.model.BaseEntity;
 import com.wack.service.GenericService;
 import com.wack.util.Constants;
+import com.wack.service.MyMailSender;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -81,7 +82,9 @@ public class GenericEntityController extends BaseController {
 		JsonMappingException, IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
+			mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
+					.replaceAll("/", "\\/").replaceAll("&#039;", "'"),
 					this.getClass(this.convertEntity(entity)));
 			
 			Pair<Boolean, List<String>> results = Pair.with(true, new ArrayList());
@@ -109,7 +112,9 @@ public class GenericEntityController extends BaseController {
 		JsonMappingException, IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, BeansException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
+			mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
+					.replaceAll("/", "\\/").replaceAll("&#039;", "'"), 
 					this.getClass(entity));
 			
 			Pair<Boolean, List<String>> results = Pair.with(true, new ArrayList());
@@ -139,7 +144,8 @@ public class GenericEntityController extends BaseController {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"").replaceAll("/", "\\/"), 
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
+					.replaceAll("/", "\\/").replaceAll("&#039;", "'"), 
 					this.getClass(entity));
 
 			this.genericService.saveWithFiles(obj, Arrays.asList(files), false, null);
@@ -168,5 +174,5 @@ public class GenericEntityController extends BaseController {
 			this.genericService.delete(this.getClass(entity), ids);
 			return "SUCCESS";
 		}
-		
+	
 }

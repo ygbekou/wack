@@ -11,10 +11,12 @@ public class GenericDto {
 	public void setJson(String json) {
 		this.json = json;
 	}
+	
 	public String getPackageName() {
 		return packageName;
 	}
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
+	
 }
