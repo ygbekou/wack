@@ -80,5 +80,9 @@ public class SliderText extends BaseEntity {
 	public void setText3(String text3) {
 		this.text3 = text3;
 	}
+	
+	public String getSliderName() {
+		return this.getSlider().getName();
+	}
 
 }

@@ -10,14 +10,17 @@ DEPLOYMENT STEPS:
 	a.	Remove mariadb  		--  sudo yum remove mariadb*  
 	b.	Run the installation 	--  sudo yum -y install http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-server-5.6.6_m9-1.linux2.6.x86_64.rpm
 									sudo yum -y install http://dev.mysql.com/get/Downloads/MySQL-5.6/MySQL-client-5.6.6_m9-1.linux2.6.x86_64.rpm
-	c.	Change password  		--  /usr/bin/mysqladmin -u root password 'admin'
-								--	/usr/bin/mysqladmin -u root -h ip-172-31-94-187.ec2.internal password 'admin'
 	c.	Start MySQL   			--   sudo service mysql start
+	d.	Change password  		--  /usr/bin/mysqladmin -u root password 'admin'
+								--	/usr/bin/mysqladmin -u root -h ip-172-31-94-187.ec2.internal password 'admin'
+	
 	
 3.	Run the create_table.sql and seed_data.sql
 	a.	Connect to mysql        --  mysql -uroot -padmin
-	b.	Run the create_table.sql-- source /home/ec2-user/apps/create_table.sql;
-	c.	Run the seed_data.sql	--	source /home/ec2-user/apps/seed_data.sql;
+	b.	Create database wack 	--  create database wack;
+	c.	Use database wack		-- use wack;
+	d.	Run the create_table.sql-- source /home/ec2-user/apps/create_table.sql;
+	e.	Run the seed_data.sql	--	source /home/ec2-user/apps/seed_data.sql;
 
 4.  Start the application
 	a.	Run the jar 			--	nohup jdk1.8.0_191/bin/java -jar wack-0.0.1-SNAPSHOT.jar &
@@ -53,3 +56,24 @@ DEPLOYMENT STEPS:
 	c.	Change password  		--  /usr/bin/mysqladmin -u root password 'admin'
 								--	/usr/bin/mysqladmin -u root -h ip-172-31-94-187.ec2.internal password 'admin'
 	c.	Start MySQL   			--   sudo service mysql start
+	
+	
+
+
+
+**********     UI APP BUILD AND INSTALLATION PROCESS       ************************
+npm run ng build --prod
+
+sudo mkdir /var/www/html
+
+sudo chmod -R 777 /var/www
+
+sudo chmod -R 777 /var/www/html
+
+Install Apache --   sudo yum -y install httpd
+Start Apache   --   sudo service httpd start
+
+
+
+From FileZilla copy all dist contents to /var/www/html
+

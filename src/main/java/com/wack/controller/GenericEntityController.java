@@ -27,7 +27,6 @@ import com.wack.domain.GenericResponse;
 import com.wack.model.BaseEntity;
 import com.wack.service.GenericService;
 import com.wack.util.Constants;
-import com.wack.service.MyMailSender;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -154,7 +153,7 @@ public class GenericEntityController extends BaseController {
 		}
 		
 		
-		@RequestMapping(value="/delete/{id}",method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value="/delete/{id}", method = RequestMethod.GET, produces = "application/json")
 		public GenericResponse delete(@PathVariable("entity") String entity, 
 				@PathVariable("id") Long id) throws JsonParseException, 
 				JsonMappingException, IOException, ClassNotFoundException {
@@ -163,8 +162,12 @@ public class GenericEntityController extends BaseController {
 				ids.add(id);
 				this.genericService.delete(this.getClass(entity), ids);
 				return new GenericResponse("SUCCESS");
-			} catch(Exception e) {
-				return new GenericResponse("FAILURE");
+			} catch (Exception e) {
+				if (e.getMessage().contains("foreign key") || e.getMessage().contains("ConstraintViolationException")) {
+					return new GenericResponse("FOREIGN_KEY_FAILURE", e.getMessage());
+				} else {
+					return new GenericResponse("GENERIC_FAILURE", e.getMessage());
+				}
 			}
 		}
 		

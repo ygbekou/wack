@@ -77,8 +77,7 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
 	        if (!isUserExisting && passwordField != null) {
 	        	if (generatedPassword != null) {
 	        		this.sendPassword(user, generatedPassword);
-	        	}
-				passwordField.set(user, "");	
+	        	} 
 			}
 	        
 	       

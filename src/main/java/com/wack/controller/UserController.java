@@ -1,11 +1,16 @@
 package com.wack.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,24 +45,36 @@ public class UserController extends BaseController {
 		@Qualifier("userService")
 		UserService userService;
 		
+		@Autowired
+		private ApplicationContext context;
 				
 		@RequestMapping(value="/save",method = RequestMethod.POST)
 		public BaseEntity save(@PathVariable("entity") String entity, 
 				@RequestPart("file") MultipartFile file, @RequestPart GenericDto dto) throws JsonParseException, 
 		JsonMappingException, IOException, ClassNotFoundException {
-			BaseEntity obj = null;
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
+					.replaceAll("/", "\\/").replaceAll("&#039;", "'"),
+					Class.forName(Constants.PACKAGE_NAME + entity));
+			
+			
+			Pair<Boolean, List<String>> results = Pair.with(true, new ArrayList());
 			try {
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-				mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-				obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
-						.replaceAll("/", "\\/").replaceAll("&#039;", "'"),
-						Class.forName(Constants.PACKAGE_NAME + entity));
-				userService.save(obj, file);
+				Class validator = this.getClass(Constants.VALIDATOR_PACKAGE_NAME + entity + "CustomValidator"); 
+				Method aMethod = validator.getMethod("validate", BaseEntity.class);
+				results = (Pair<Boolean, List<String>>) aMethod.invoke(context.getBean(validator), obj);
 			}
-			catch(Exception e) {
-				e.printStackTrace();
-				obj.setErrors(Arrays.asList(e.getMessage()));
+			catch (Exception ex) {
+				obj.setErrors(Arrays.asList("Exception happened."));
+			}
+				
+			if (results.getValue0()) {
+				this.userService.save(obj, file);
+			}
+			else {
+				obj.setErrors(results.getValue1());
 			}
 			return obj;
 		}
@@ -66,19 +83,30 @@ public class UserController extends BaseController {
 		public BaseEntity saveWithoutPicture(@PathVariable("entity") String entity,
 				@RequestBody GenericDto dto) throws JsonParseException, 
 		JsonMappingException, IOException, ClassNotFoundException {
-			BaseEntity obj = null;
+			
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+			BaseEntity obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
+					.replaceAll("/", "\\/").replaceAll("&#039;", "'"),
+					Class.forName(Constants.PACKAGE_NAME + entity));
+			
+			
+			Pair<Boolean, List<String>> results = Pair.with(true, new ArrayList());
 			try {
-				ObjectMapper mapper = new ObjectMapper();
-				mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-				mapper.configure(Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-				obj = (BaseEntity) mapper.readValue(dto.getJson().replaceAll("'", "\"")
-						.replaceAll("/", "\\/").replaceAll("&#039;", "'"),
-						Class.forName(Constants.PACKAGE_NAME + entity));
-				userService.save(obj, null);
+				Class validator = this.getClass(Constants.VALIDATOR_PACKAGE_NAME + entity + "CustomValidator"); 
+				Method aMethod = validator.getMethod("validate", BaseEntity.class);
+				results = (Pair<Boolean, List<String>>) aMethod.invoke(context.getBean(validator), obj);
 			}
-			catch(Exception e) {
-				e.printStackTrace();
-				obj.setErrors(Arrays.asList(e.getMessage()));
+			catch (Exception ex) {
+				obj.setErrors(Arrays.asList("Exception happened."));
+			}
+				
+			if (results.getValue0()) {
+				this.userService.save(obj, null);
+			}
+			else {
+				obj.setErrors(results.getValue1());
 			}
 			return obj;
 		}
