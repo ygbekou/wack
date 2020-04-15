@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wack.domain.GenericDto;
 import com.wack.domain.GenericResponse;
+import com.wack.domain.GenericVO;
 import com.wack.model.BaseEntity;
 import com.wack.service.GenericService;
 import com.wack.util.Constants;
@@ -49,6 +50,12 @@ public class GenericEntityController extends BaseController {
 		@RequestMapping(value="/{id}",method = RequestMethod.GET)
 		public BaseEntity get(@PathVariable("entity") String entity, @PathVariable("id") Long id) throws ClassNotFoundException{
 			BaseEntity result = genericService.find(this.getClass(this.convertEntity(entity)), id);
+			return result;
+		}
+		
+		@RequestMapping(value="withfiles/{id}",method = RequestMethod.GET)
+		public BaseEntity getWithFiles(@PathVariable("entity") String entity, @PathVariable("id") Long id) throws ClassNotFoundException{
+			BaseEntity result = genericService.findWithFiles(this.getClass(this.convertEntity(entity)), id);
 			return result;
 		}
 		
@@ -161,6 +168,23 @@ public class GenericEntityController extends BaseController {
 				List<Long> ids = new ArrayList<>();
 				ids.add(id);
 				this.genericService.delete(this.getClass(entity), ids);
+				return new GenericResponse("SUCCESS");
+			} catch (Exception e) {
+				if (e.getMessage().contains("foreign key") || e.getMessage().contains("ConstraintViolationException")) {
+					return new GenericResponse("FOREIGN_KEY_FAILURE", e.getMessage());
+				} else {
+					return new GenericResponse("GENERIC_FAILURE", e.getMessage());
+				}
+			}
+		}
+		
+		@RequestMapping(value="/deletefile", method = RequestMethod.POST, produces = "application/json")
+		public GenericResponse deleteFile(@PathVariable("entity") String entity, @RequestBody GenericVO vo) throws JsonParseException, 
+				JsonMappingException, IOException, ClassNotFoundException {
+			try {
+				List<Long> ids = new ArrayList<>();
+				ids.add(vo.getId());
+				this.genericService.deleteFile(this.getClass(entity), ids, vo.getName());
 				return new GenericResponse("SUCCESS");
 			} catch (Exception e) {
 				if (e.getMessage().contains("foreign key") || e.getMessage().contains("ConstraintViolationException")) {

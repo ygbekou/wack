@@ -24,6 +24,8 @@ public abstract class BaseEntity {
 	private List<String> errors;
 	@Transient
 	public String customValidator = "";
+	@Transient
+	private List<String> fileNames;
 	
 	public abstract Long getId() ;
 
@@ -66,6 +68,14 @@ public abstract class BaseEntity {
 
 	public void setCustomValidator(String customValidator) {
 		this.customValidator = customValidator;
+	}
+
+	public List<String> getFileNames() {
+		return fileNames;
+	}
+
+	public void setFileNames(List<String> fileNames) {
+		this.fileNames = fileNames;
 	}
 
 	@Override

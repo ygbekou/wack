@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,6 +25,9 @@ public class Employee extends BaseEntity {
 	private int managing;
 	private int status;
 	
+	@ManyToOne
+	@JoinColumn(name = "MOD_BY", referencedColumnName = "USER_ID", insertable=false, updatable=false)
+	private User modifier;
 	
 	public Employee() {}
 	
@@ -104,6 +108,15 @@ public class Employee extends BaseEntity {
 			return this.user.getUserGroup().getName();
 		}
 		
+
+		public String getModifierName() {
+			return this.modifier != null ? this.modifier.getName() : "";
+		}
+		
+		public String getStatusDesc() {
+			return this.status == 0 ? "Actif" : "Inactif";
+		}
+		
 		// Overriding equals() to compare two Complex objects
 	    @Override
 	    public boolean equals(Object o) {
@@ -125,4 +138,6 @@ public class Employee extends BaseEntity {
 	        // Compare the data members and return accordingly 
 	        return Long.compare(id, e.id) == 0;
 	    }
+	    
+	    
 }

@@ -60,12 +60,17 @@ public class GenericServiceImpl implements GenericService {
 				String originalFileExtension = file.getOriginalFilename()
 						.substring(file.getOriginalFilename().lastIndexOf("."));
 				
-				String fileName = saveFile(file, entity.getClass().getSimpleName(), 
+				String fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), 
 						useId ? entity.getId() + originalFileExtension : file.getOriginalFilename());
 				
 				String fieldName = useId ? attributeNames.get(i) : file.getOriginalFilename().split("\\.")[0];
+				Field field = null;
+				try {
+					field = entity.getClass().getDeclaredField(fieldName);
+				} catch(Exception ex) {
+					continue;
+				}
 				
-				Field field = entity.getClass().getDeclaredField(fieldName);
 				field.setAccessible(true);
 		        field.set(entity, fileName);
 		        this.save(entity);
@@ -97,9 +102,25 @@ public class GenericServiceImpl implements GenericService {
 	public void delete(Class cl, List<Long> ids) {
 		this.genericDao.delete(cl, ids);
 	}
+	
+	@Transactional
+	public void deleteFile(Class cl, List<Long> ids, String fileName) {
+		for (Long id: ids) {
+			this.deleteFile(cl.getSimpleName(), id, fileName);
+		}
+	}
 
 	public BaseEntity find(Class cl, Long key) {
 		return (BaseEntity) this.genericDao.find(cl, key);
+	}
+	
+	public BaseEntity findWithFiles(Class cl, Long key) {
+		BaseEntity entity = (BaseEntity) this.genericDao.find(cl, key);
+		if (entity.getId() != null) {
+			entity.setFileNames(this.getFiles(entity.getId(), entity.getClass().getSimpleName()));
+		}
+		
+		return entity;
 	}
 
 	public List<BaseEntity> getAll(Class cl) {
@@ -124,14 +145,14 @@ public class GenericServiceImpl implements GenericService {
 		return this.genericDao.getConnection();
 	}
 	
-	private String saveFile(MultipartFile file, String entityName, String fileName) {
+	private String saveFile(MultipartFile file, Long entityId, String entityName, String fileName) {
 		if (!file.isEmpty()) {
 			try {
 	
 				// transfer to upload folder
 				String storageDirectory = null;
 				if (entityName != null) {					
-					storageDirectory = Constants.DOC_FOLDER	+ entityName + File.separator;
+					storageDirectory = Constants.DOC_FOLDER	+ entityName + File.separator + entityId + File.separator;
 					File dir = new File(storageDirectory);
 					if (!dir.exists()) {
 						dir.mkdirs();
@@ -153,6 +174,56 @@ public class GenericServiceImpl implements GenericService {
 		}
 		
 		return null;
+	}
+	
+	private List<String> getFiles(Long entityId, String entityName) {
+		List<String> fileNames = new ArrayList<>();
+		try {
+	
+				// transfer to upload folder
+			String storageDirectory = null;
+			if (entityName != null) {					
+				storageDirectory = Constants.DOC_FOLDER	+ entityName + File.separator + entityId + File.separator;
+				File dir = new File(storageDirectory);
+				if (dir.exists()) {
+					File[] files = dir.listFiles();
+					for (File file: files) {
+						fileNames.add(file.getName());
+					}
+				}
+
+			} 
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return fileNames;
+	    
+	}
+	
+	
+	private void deleteFile(String entityName, Long entityId, String fileName) {
+	
+		try {
+
+			String storageDirectory = null;
+			if (entityName != null) {					
+				storageDirectory = Constants.DOC_FOLDER	+ entityName + File.separator + entityId + File.separator;
+				File dir = new File(storageDirectory);
+				if (dir.exists()) {
+					File file = new File(storageDirectory + "/" + fileName);
+					if (file.exists()) {
+						file.delete();
+					}
+				}
+
+			} else {
+				throw new Exception("Unknown");
+			}
+	        
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
