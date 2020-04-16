@@ -29,7 +29,7 @@ public class PaymentServiceImpl  implements PaymentService {
 		
 		Payment pymt = (Payment) genericService.save(payment);
 		
-		if (isNew) {
+		if (isNew && payment.getContractLabor() != null) {
 			ContractLabor contractLabor = (ContractLabor) genericService.find(ContractLabor.class, payment.getContractLabor().getId());
 			
 			if (contractLabor.getBalance() < pymt.getAmount()) {

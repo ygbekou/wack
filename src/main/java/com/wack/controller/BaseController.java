@@ -12,4 +12,17 @@ public class BaseController {
 		return entity.replaceAll("_", ".");
 	}
 
+	protected String getExtraWhereClause(String entity) {
+		String extraWhereClause = "";
+		
+		if (entity.contains("Category c, Product")) {
+			extraWhereClause = " AND c = e.category ";
+		}
+		
+		if (entity.contains("PatientSale ps, PatientSaleProduct")) {
+			extraWhereClause = " AND ps = e.patientSale ";
+		}
+		
+		return extraWhereClause;
+	}
 }

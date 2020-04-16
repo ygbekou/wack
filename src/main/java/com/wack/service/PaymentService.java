@@ -3,7 +3,6 @@ package com.wack.service;
 import org.springframework.stereotype.Service;
 
 import com.wack.model.BaseEntity;
-import com.wack.model.ContactUsMessage;
 import com.wack.model.stock.Payment;
 
 @Service(value="paymentService")

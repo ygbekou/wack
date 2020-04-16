@@ -44,6 +44,13 @@ public class Payment extends BaseEntity {
 	@Column(name ="PAYMENT_DATE")
 	private Date paymentDate;
 	
+	@Column(name ="SALARY_YEAR")
+	private Integer salaryYear;
+	
+	@ManyToOne
+	@JoinColumn(name = "SALARY_MONTH")
+	private Month salaryMonth;
+	
 	private Double amount;
 	
 	private String description;
@@ -119,7 +126,7 @@ public class Payment extends BaseEntity {
 	}
 	
 	public String getPaymentTypeName() {
-		return this.getPaymentType().getName();
+		return this.getPaymentType() != null ? this.getPaymentType().getName() : "";
 	}
 	
 	public String getPayerName() {
@@ -131,7 +138,7 @@ public class Payment extends BaseEntity {
 	}
 	
 	public String getContractLaborLabel() {
-		return this.getContractLabor().getLabel();
+		return this.getContractLabor() != null ? this.getContractLabor().getLabel() : "";
 	}
 	
 	public int getStatus() {
@@ -142,6 +149,31 @@ public class Payment extends BaseEntity {
 		this.status = status;
 	}
 	
+
+	public Integer getSalaryYear() {
+		return salaryYear;
+	}
+
+	public void setSalaryYear(Integer salaryYear) {
+		this.salaryYear = salaryYear;
+	}
+	
+	public Month getSalaryMonth() {
+		return salaryMonth;
+	}
+
+	public void setSalaryMonth(Month salaryMonth) {
+		this.salaryMonth = salaryMonth;
+	}
+
+	public User getModifier() {
+		return modifier;
+	}
+
+	public void setModifier(User modifier) {
+		this.modifier = modifier;
+	}
+
 	public String getModifierName() {
 		return this.modifier != null ? this.modifier.getName() : "";
 	}

@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wack.domain.GenericDto;
 import com.wack.domain.GenericResponse;
 import com.wack.domain.GenericVO;
+import com.wack.domain.SearchAttribute;
 import com.wack.model.BaseEntity;
 import com.wack.service.GenericService;
 import com.wack.util.Constants;
@@ -33,6 +34,7 @@ import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 
 @RestController
@@ -82,6 +84,22 @@ public class GenericEntityController extends BaseController {
 			return entities;
 		}		
 
+		@RequestMapping(value = "/allByCriteriaAndOrderBy", method = RequestMethod.POST)
+		public List<BaseEntity> getAllByCriteriaAndOrderBy(@PathVariable("entity") String entity,
+				@RequestBody SearchAttribute searchAttribute) throws ClassNotFoundException {
+
+			List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+			for (String parameter : searchAttribute.getParameters()) {
+				String[] paramSplit = parameter.split("\\|");
+				paramTupleList.add(Quartet.with(paramSplit[0], paramSplit[1], paramSplit[2], paramSplit[3]));
+			}
+			String convertedEntity = this.convertEntity(entity);
+			String queryStr = "SELECT e FROM " + convertedEntity + " e WHERE 1 = 1 " + getExtraWhereClause(convertedEntity);
+			List<BaseEntity> entities = genericService.getByCriteria(queryStr, paramTupleList,
+					searchAttribute.getOrderBy());
+
+			return entities;
+		}
 		
 		@RequestMapping(value="/save",method = RequestMethod.POST)
 		public BaseEntity save(@PathVariable("entity") String entity, @RequestBody GenericDto dto) throws JsonParseException, 
