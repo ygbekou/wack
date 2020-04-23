@@ -29,6 +29,10 @@ public class ContractLabor extends BaseEntity {
 	@JoinColumn(name = "CONTRACTOR_ID")
 	private Employee contractor;
 	
+	@ManyToOne
+	@JoinColumn(name = "QUOTE_ID")
+	private Quote quote;
+	
 	@Column(name = "CONTRACT_DATE")
 	private Date contractDate;
 	
@@ -72,6 +76,14 @@ public class ContractLabor extends BaseEntity {
 
 	public void setContractor(Employee contractor) {
 		this.contractor = contractor;
+	}
+
+	public Quote getQuote() {
+		return quote;
+	}
+
+	public void setQuote(Quote quote) {
+		this.quote = quote;
 	}
 
 	public Date getContractDate() {
@@ -136,6 +148,10 @@ public class ContractLabor extends BaseEntity {
 	
 	public String getContractorName() {
 		return this.getContractor().getName();
+	}
+	
+	public String getQuoteName() {
+		return this.getQuote().getName();
 	}
 
 	public User getModifier() {

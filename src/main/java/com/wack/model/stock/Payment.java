@@ -178,6 +178,10 @@ public class Payment extends BaseEntity {
 		return this.modifier != null ? this.modifier.getName() : "";
 	}
 	
+	public String getSalaryMonthName() {
+		return this.salaryMonth != null ? this.salaryMonth.getName() : "";
+	}
+	
 	public String getStatusDesc() {
 		return this.status == 0 ? "Actif" : "Inactif";
 	}

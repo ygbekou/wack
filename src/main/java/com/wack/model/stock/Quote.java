@@ -33,8 +33,12 @@ public class Quote extends BaseEntity {
 	@Column(name = "QUOTE_DATE")
 	private Date quoteDate;
 	
+	@Column(name = "TOTAL_AMOUNT")
+	private Double totalAmount;
+	
 	private String description;
 
+	private int status;
 	
 	public Long getId() {
 		return id;
@@ -78,5 +82,25 @@ public class Quote extends BaseEntity {
 	
 	public String getQuoterName() {
 		return this.getQuoter().getName();
+	}
+
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	public String getStatusDesc() {
+		return this.status == 0 ? "Actif" : "Inactif";
 	}
 }
