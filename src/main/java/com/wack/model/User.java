@@ -42,6 +42,13 @@ public class User extends BaseEntity {
 	private String zipCode;
 	@Column(name="FIRST_TIME_LOGIN")
 	private String firstTimeLogin;
+	@Column(name="COMPANY_NAME")
+	private String companyName;
+	private String facebook;
+	private String twitter;
+	private String linkedin;
+	private String instagram;
+	private String website;
 	private int status;
 	
 	public User() {}
@@ -152,6 +159,42 @@ public class User extends BaseEntity {
 	}
 	public void setFirstTimeLogin(String firstTimeLogin) {
 		this.firstTimeLogin = firstTimeLogin;
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+	public String getFacebook() {
+		return facebook;
+	}
+	public void setFacebook(String facebook) {
+		this.facebook = facebook;
+	}
+	public String getTwitter() {
+		return twitter;
+	}
+	public void setTwitter(String twitter) {
+		this.twitter = twitter;
+	}
+	public String getLinkedin() {
+		return linkedin;
+	}
+	public void setLinkedin(String linkedin) {
+		this.linkedin = linkedin;
+	}
+	public String getInstagram() {
+		return instagram;
+	}
+	public void setInstagram(String instagram) {
+		this.instagram = instagram;
+	}
+	public String getWebsite() {
+		return website;
+	}
+	public void setWebsite(String website) {
+		this.website = website;
 	}
 	public int getStatus() {
 		return status;

@@ -58,6 +58,12 @@ public class Company extends BaseEntity {
 	private String fromEmail;
 	@Column(name = "TO_EMAIL")
 	private String toEmail;
+	@Column(name = "HOURS_OF_OPERATION")
+	private String hoursOfOperation;
+	private Double longitude;
+	private Double latitude;
+	@Column(name = "HOME_IMAGE")
+	private String homeImage;
 	private int status;
 	
 	
@@ -228,6 +234,30 @@ public class Company extends BaseEntity {
 	}
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+	public String getHoursOfOperation() {
+		return hoursOfOperation;
+	}
+	public void setHoursOfOperation(String hoursOfOperation) {
+		this.hoursOfOperation = hoursOfOperation;
+	}
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	public String getHomeImage() {
+		return homeImage;
+	}
+	public void setHomeImage(String homeImage) {
+		this.homeImage = homeImage;
 	}
 	
 }

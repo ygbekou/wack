@@ -23,6 +23,12 @@ public class Employee extends BaseEntity {
 	private String designation;
 	private String resume;
 	private int managing;
+	@Column(name = "SHOW_ON_SITE")
+	private int showOnSite;
+	@Column(name = "SITE_RANK")
+	private int siteRank;
+	@Column(name = "SHORT_RESUME")
+	private String shortResume;
 	private int status;
 	
 	@ManyToOne
@@ -68,6 +74,30 @@ public class Employee extends BaseEntity {
 
 	public void setManaging(int managing) {
 		this.managing = managing;
+	}
+
+	public int getShowOnSite() {
+		return showOnSite;
+	}
+
+	public void setShowOnSite(int showOnSite) {
+		this.showOnSite = showOnSite;
+	}
+
+	public int getSiteRank() {
+		return siteRank;
+	}
+
+	public void setSiteRank(int siteRank) {
+		this.siteRank = siteRank;
+	}
+
+	public String getShortResume() {
+		return shortResume;
+	}
+
+	public void setShortResume(String shortResume) {
+		this.shortResume = shortResume;
 	}
 
 	public int getStatus() {
