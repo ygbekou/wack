@@ -12,18 +12,20 @@ import javax.persistence.Table;
 import com.wack.model.BaseEntity;
  
 @Entity
-@Table(name="FEEDBACK")
-public class Feedback extends BaseEntity {
+@Table(name="COMMENT")
+public class Comment extends BaseEntity {
 	
 	@Id
-	@Column(name ="FEEDBACK_ID")
+	@Column(name ="COMMENT_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "NEWS_ID")
 	private News news;
-	private String email;
+	private int rating;
 	private String message;
+	private String author;
+	private String authorEmail;
 	private int status;
 	
 	
@@ -40,11 +42,23 @@ public class Feedback extends BaseEntity {
 	public void setNews(News news) {
 		this.news = news;
 	}
-	public String getEmail() {
-		return email;
+	public int getRating() {
+		return rating;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	public String getAuthorEmail() {
+		return authorEmail;
+	}
+	public void setAuthorEmail(String authorEmail) {
+		this.authorEmail = authorEmail;
 	}
 	public String getMessage() {
 		return message;
