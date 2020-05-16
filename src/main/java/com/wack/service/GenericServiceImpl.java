@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wack.dao.GenericDao;
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
+import com.wack.model.User;
+import com.wack.model.authorization.UserRole;
 import com.wack.util.Constants;
 
 @Service(value="genericService")
@@ -240,5 +242,22 @@ public class GenericServiceImpl implements GenericService {
 		
 		return null;
 		
+	}
+	
+
+	public Integer deleteNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters) {
+		return this.genericDao.deleteNativeByCriteria(queryStr, parameters);
+	}
+	
+	public String getHomePage(User user) {
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+
+		String queryStr = "SELECT c FROM UserRole c WHERE c.user.id=" + user.getId();
+		List<UserRole> userRoles = (List) this.getByCriteria(queryStr, paramTupleList, null);
+		if (userRoles != null && userRoles.size() > 0) {
+			UserRole ur = (UserRole) userRoles.get(0);
+			return ur.getRole().getHomePage() == null ? "/" : ur.getRole().getHomePage().getUrlPath();
+		}
+		return "/admin/dashboard";
 	}
 }

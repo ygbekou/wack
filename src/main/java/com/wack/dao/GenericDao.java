@@ -17,5 +17,6 @@ public interface GenericDao<E,K> {
 			String orderBy, String groupBy);
 	public Integer deleteByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
 	public Session getConnection();
-	
+	public Integer deleteNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
+
 }

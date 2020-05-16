@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
+import com.wack.model.User;
 
 @Service(value="genericService")
 public interface GenericService {
@@ -29,4 +30,6 @@ public interface GenericService {
 	public Integer deleteByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
 	public Session getConnection();
 	public Company getCompany(String language);
+	public Integer deleteNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
+	public String getHomePage(User user);
 }
