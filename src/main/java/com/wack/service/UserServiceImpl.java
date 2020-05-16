@@ -139,7 +139,7 @@ public class UserServiceImpl  extends GenericServiceImpl implements UserService,
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = userDao.getUser(null, userName, null);
+		User user = userDao.getUser(userName, userName, null);
 		if(user == null){
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}

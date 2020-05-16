@@ -165,12 +165,12 @@ public class UserController extends BaseController {
 	public ResponseEntity<?> saveUserAndLogin(@PathVariable("entity") String entity, @RequestBody User user) {
 		LOGGER.info("User Login :" + user);
 		try {
+			user.setUserName(user.getUserName()==null?user.getEmail():user.getUserName());
 			LoginUser lu = new LoginUser();
 			lu.setPassword(user.getPassword());
-			lu.setUserName(user.getEmail());
+			lu.setUserName(user.getUserName());
 			user.setPassword(encoder.encode(user.getPassword()));
 			user.setFirstTimeLogin("N");
-			user.setUserName(user.getEmail());
 			userService.save(user);
 			UserRole ur = new UserRole();
 			ur.setUser(user);
@@ -195,7 +195,7 @@ public class UserController extends BaseController {
 		final Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		final User user = userService.getUser(null, loginUser.getUserName(), null);
+		final User user = userService.getUser(loginUser.getUserName(), loginUser.getUserName(), null);
 		final String token = jwtTokenUtil.generateToken(user);
 
 		Pair<List<MenuVO>, List<PermissionVO>> resources = this.authorizationService.getUserResources(user.getId(),
