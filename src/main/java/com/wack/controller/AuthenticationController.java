@@ -54,7 +54,7 @@ public class AuthenticationController {
 			final Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword()));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			final User user = userService.getUser(null, loginUser.getUserName(), null);
+			final User user = userService.getUser(loginUser.getUserName(), loginUser.getUserName(), null);
 			final String token = jwtTokenUtil.generateToken(user);
 
 			Pair<List<MenuVO>, List<PermissionVO>> resources = this.authorizationService.getUserResources(user.getId(),
