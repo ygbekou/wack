@@ -169,4 +169,8 @@ public class ContractLabor extends BaseEntity {
 	public String getStatusDesc() {
 		return this.status == 0 ? "Actif" : "Inactif";
 	}
+	
+	public boolean isActive() {
+		return this.status == 0;
+	}
 }
