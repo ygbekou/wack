@@ -2,6 +2,7 @@ package com.wack.service;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,11 +10,13 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.RandomStringGenerator;
+import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.wack.service.GenericServiceImpl;
 import com.wack.dao.UserDao;
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
@@ -29,7 +32,7 @@ import static org.apache.commons.text.CharacterPredicates.DIGITS;
 import static org.apache.commons.text.CharacterPredicates.LETTERS;
 
 @Service(value="userService")
-public class UserServiceImpl  implements UserService, UserDetailsService {
+public class UserServiceImpl  extends GenericServiceImpl implements UserService, UserDetailsService {
 	
 	@Autowired
 	GenericService genericService;
@@ -188,7 +191,8 @@ public class UserServiceImpl  implements UserService, UserDetailsService {
 			return "Failure";
 		}
 		
-		return "Success";
-		
+		return "Success";		
 	}
+	
+
 }

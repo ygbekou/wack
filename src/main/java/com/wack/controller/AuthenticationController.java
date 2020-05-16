@@ -1,5 +1,8 @@
 package com.wack.controller;
 
+import com.wack.domain.MenuVO;
+import com.wack.domain.PermissionVO;
+import com.wack.service.AuthorizationService;
 import com.wack.config.JwtTokenUtil;
 import com.wack.domain.AuthToken;
 import com.wack.domain.LoginUser;
@@ -7,7 +10,9 @@ import com.wack.model.User;
 import com.wack.service.UserService;
 
 import java.util.Arrays;
+import java.util.List;
 
+import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,34 +32,45 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UserService userService;
-    
-    @Autowired
-    BCryptPasswordEncoder encoder;
+	@Autowired
+	private UserService userService;
 
-    @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
-    public ResponseEntity<?> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
+	@Autowired
+	private AuthorizationService authorizationService;
 
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginUser.getUserName(),
-                        loginUser.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final User user = userService.getUser(null,loginUser.getUserName(), null);
-        final String token = jwtTokenUtil.generateToken(user);
-        return ResponseEntity.ok(new AuthToken(token, loginUser.getUserName(), loginUser.getPassword(), 
-        		user.getFirstName(), user.getLastName(), user.getUserGroup().getName(), user.getPicture(), 
-        		user.getFirstTimeLogin(), Arrays.asList(new Long[]{user.getUserGroup().getId()})));
-        
-    }
+	@Autowired
+	BCryptPasswordEncoder encoder;
+
+	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+	public ResponseEntity<?> authenticate(@RequestBody LoginUser loginUser) throws AuthenticationException {
+		System.out.println("Authenticating user :"+loginUser);
+		try {
+			final Authentication authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword()));
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			final User user = userService.getUser(null, loginUser.getUserName(), null);
+			final String token = jwtTokenUtil.generateToken(user);
+
+			Pair<List<MenuVO>, List<PermissionVO>> resources = this.authorizationService.getUserResources(user.getId(),
+					loginUser.getLang());
+
+			return ResponseEntity.ok(new AuthToken(token, loginUser.getUserName(), loginUser.getPassword(),
+					user.getFirstName(), user.getLastName(), user.getUserGroup().getName(), user.getPicture(),
+					user.getFirstTimeLogin(), Arrays.asList(new Long[] { user.getUserGroup().getId() }),
+					resources.getValue0(), resources.getValue1(),user.getId(), userService.getHomePage(user)));
+			
+		} catch (Exception b) {
+			b.printStackTrace();
+			return ResponseEntity.ok(new AuthToken("", loginUser.getUserName(), loginUser.getPassword(),
+					null, null, null, null,null, null,null, null,null,null));
+		}
+
+	}
 
 }

@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/index.html", "/assets/*", "/static/index.html", "/home", "/about").permitAll()
                 .antMatchers("/css/**", "/js/**","/images/**").permitAll()
                 .antMatchers("/service/token/*").permitAll()
-                .antMatchers("/service/user/forgot/*").permitAll()
+                .antMatchers("/service/user/forgot/*").permitAll() 
                 .antMatchers("/service/com.wack.model.website.SectionItem/allByCriteria").permitAll()
                 .antMatchers("/service/com.wack.model.website.Section/allByCriteria").permitAll()
                 .antMatchers("/service/com.wack.model.website.Slider/allByCriteria").permitAll()
