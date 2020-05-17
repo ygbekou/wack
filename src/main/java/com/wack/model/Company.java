@@ -66,10 +66,20 @@ public class Company extends BaseEntity {
 	private String homeImage;
 	private int status;
 	//site themes
+	
+	@Column(name = "FIXED_MENU")
 	private int fixedMenu;
+	
+	@Column(name = "LEFT_TO_RIGHT")
 	private int leftToRight;
+	
+	@Column(name = "HEADER_TEXT_POSITION")
 	private int headerTextPosition;
+	
+	@Column(name = "HEADER_IMAGE_TYPE")
 	private String headerImageType;
+	
+	@Column(name = "THEME_COLOR")
 	private String themeColor;
 	
 	
