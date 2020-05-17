@@ -68,10 +68,9 @@ public class QuoteServiceImpl  implements QuoteService {
 	@Transactional
 	public BaseEntity save(ContractLabor contractLabor, List<MultipartFile> files) throws Exception {		
 		ContractLabor cl = null;
-		Double amountToAdd = contractLabor.getAmount();
+		Double amountToAdd = contractLabor.isActive() ? contractLabor.getAmount() : -1 * contractLabor.getAmount();
 						
-
-		if (contractLabor.getId() != null) {
+		if (contractLabor.getId() != null && contractLabor.isActive()) {
 			cl = (ContractLabor) genericService.find(ContractLabor.class, contractLabor.getId());
 			amountToAdd -= cl.getAmount();
 		}
