@@ -65,8 +65,44 @@ public class Company extends BaseEntity {
 	@Column(name = "HOME_IMAGE")
 	private String homeImage;
 	private int status;
+	//site themes
+	private int fixedMenu;
+	private int leftToRight;
+	private int headerTextPosition;
+	private String headerImageType;
+	private String themeColor;
 	
 	
+	public int getFixedMenu() {
+		return fixedMenu;
+	}
+	public void setFixedMenu(int fixedMenu) {
+		this.fixedMenu = fixedMenu;
+	}
+	public int getLeftToRight() {
+		return leftToRight;
+	}
+	public void setLeftToRight(int leftToRight) {
+		this.leftToRight = leftToRight;
+	}
+	public int getHeaderTextPosition() {
+		return headerTextPosition;
+	}
+	public void setHeaderTextPosition(int headerTextPosition) {
+		this.headerTextPosition = headerTextPosition;
+	}
+	public String getHeaderImageType() {
+		return headerImageType;
+	}
+	public void setHeaderImageType(String headerImageType) {
+		this.headerImageType = headerImageType;
+	}
+	public String getThemeColor() {
+		return themeColor;
+	}
+	public void setThemeColor(String themeColor) {
+		this.themeColor = themeColor;
+	}
 	public Long getId() {
 		return id;
 	}
