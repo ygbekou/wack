@@ -6,20 +6,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
- 
+
 @Entity
-@Table(name="COMPANY")
+@Table(name = "COMPANY")
 public class Company extends BaseEntity {
-	
+
 	@Id
-	@Column(name ="COMPANY_ID")
+	@Column(name = "COMPANY_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private String description;
-	@Column(name ="META_KEYWORD")
+	@Column(name = "META_KEYWORD")
 	private String metaKeyword;
-	@Column(name ="META_DESCRIPTION")
+	@Column(name = "META_DESCRIPTION")
 	private String metaDescription;
 	private String address;
 	@Column(name = "EMAIL")
@@ -65,245 +65,316 @@ public class Company extends BaseEntity {
 	@Column(name = "HOME_IMAGE")
 	private String homeImage;
 	private int status;
-	//site themes
-	
+	// site themes
+
 	@Column(name = "FIXED_MENU")
 	private int fixedMenu;
-	
+
 	@Column(name = "LEFT_TO_RIGHT")
 	private int leftToRight;
-	
+
 	@Column(name = "HEADER_TEXT_POSITION")
 	private int headerTextPosition;
-	
+
 	@Column(name = "HEADER_IMAGE_TYPE")
 	private String headerImageType;
-	
+
 	@Column(name = "THEME_COLOR")
 	private String themeColor;
-	
-	
+
 	public int getFixedMenu() {
 		return fixedMenu;
 	}
+
 	public void setFixedMenu(int fixedMenu) {
 		this.fixedMenu = fixedMenu;
 	}
 	public int getLeftToRight() {
 		return leftToRight;
 	}
+
 	public void setLeftToRight(int leftToRight) {
 		this.leftToRight = leftToRight;
 	}
+
 	public int getHeaderTextPosition() {
 		return headerTextPosition;
 	}
+
 	public void setHeaderTextPosition(int headerTextPosition) {
 		this.headerTextPosition = headerTextPosition;
 	}
+
 	public String getHeaderImageType() {
 		return headerImageType;
 	}
+
 	public void setHeaderImageType(String headerImageType) {
 		this.headerImageType = headerImageType;
 	}
+
 	public String getThemeColor() {
 		return themeColor;
 	}
+
 	public void setThemeColor(String themeColor) {
 		this.themeColor = themeColor;
 	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getDescription() {
 		return description;
 	}
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public String getMetaKeyword() {
 		return metaKeyword;
 	}
+
 	public void setMetaKeyword(String metaKeyword) {
 		this.metaKeyword = metaKeyword;
 	}
+
 	public String getMetaDescription() {
 		return metaDescription;
 	}
+
 	public void setMetaDescription(String metaDescription) {
 		this.metaDescription = metaDescription;
 	}
+
 	public String getAddress() {
 		return address;
 	}
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getPhone() {
 		return phone;
 	}
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
 	public String getPhone2() {
 		return phone2;
 	}
+
 	public void setPhone2(String phone2) {
 		this.phone2 = phone2;
 	}
+
 	public String getFax() {
 		return fax;
 	}
+
 	public void setFax(String fax) {
 		this.fax = fax;
 	}
+
 	public String getLogo() {
 		return logo;
 	}
+
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
+
 	public String getFavicon() {
 		return favicon;
 	}
+
 	public void setFavicon(String favicon) {
 		this.favicon = favicon;
 	}
+
 	public String getBackgroundSlider() {
 		return backgroundSlider;
 	}
+
 	public void setBackgroundSlider(String backgroundSlider) {
 		this.backgroundSlider = backgroundSlider;
 	}
+
 	public String getBannerContentHeader() {
 		return bannerContentHeader;
 	}
+
 	public void setBannerContentHeader(String bannerContentHeader) {
 		this.bannerContentHeader = bannerContentHeader;
 	}
+
 	public String getBannerContentParagraph() {
 		return bannerContentParagraph;
 	}
+
 	public void setBannerContentParagraph(String bannerContentParagraph) {
 		this.bannerContentParagraph = bannerContentParagraph;
 	}
+
 	public String getCopyright() {
 		return copyright;
 	}
+
 	public void setCopyright(String copyright) {
 		this.copyright = copyright;
 	}
+
 	public String getTwitterApi() {
 		return twitterApi;
 	}
+
 	public void setTwitterApi(String twitterApi) {
 		this.twitterApi = twitterApi;
 	}
+
 	public String getGoogleMap() {
 		return googleMap;
 	}
+
 	public void setGoogleMap(String googleMap) {
 		this.googleMap = googleMap;
 	}
+
 	public String getFacebookUrl() {
 		return facebookUrl;
 	}
+
 	public void setFacebookUrl(String facebookUrl) {
 		this.facebookUrl = facebookUrl;
 	}
+
 	public String getTwitterUrl() {
 		return twitterUrl;
 	}
+
 	public void setTwitterUrl(String twitterUrl) {
 		this.twitterUrl = twitterUrl;
 	}
+
 	public String getInstagramUrl() {
 		return instagramUrl;
 	}
+
 	public void setInstagramUrl(String instagramUrl) {
 		this.instagramUrl = instagramUrl;
 	}
+
 	public String getFooterParagraph1() {
 		return footerParagraph1;
 	}
+
 	public void setFooterParagraph1(String footerParagraph1) {
 		this.footerParagraph1 = footerParagraph1;
 	}
+
 	public String getFooterParagraph2() {
 		return footerParagraph2;
 	}
+
 	public void setFooterParagraph2(String footerParagraph2) {
 		this.footerParagraph2 = footerParagraph2;
 	}
+
 	public String getFooterParagraph3() {
 		return footerParagraph3;
 	}
+
 	public void setFooterParagraph3(String footerParagraph3) {
 		this.footerParagraph3 = footerParagraph3;
 	}
+
 	public String getFromEmail() {
 		return fromEmail;
 	}
+
 	public void setFromEmail(String fromEmail) {
 		this.fromEmail = fromEmail;
 	}
+
 	public String getToEmail() {
 		return toEmail;
 	}
+
 	public void setToEmail(String toEmail) {
 		this.toEmail = toEmail;
 	}
+
 	public int getStatus() {
 		return status;
 	}
+
 	public void setStatus(int status) {
 		this.status = status;
 	}
+
 	public String getLanguage() {
 		return language;
 	}
+
 	public void setLanguage(String language) {
 		this.language = language;
 	}
+
 	public String getHoursOfOperation() {
 		return hoursOfOperation;
 	}
+
 	public void setHoursOfOperation(String hoursOfOperation) {
 		this.hoursOfOperation = hoursOfOperation;
 	}
+
 	public Double getLongitude() {
 		return longitude;
 	}
+
 	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
+
 	public Double getLatitude() {
 		return latitude;
 	}
+
 	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
+
 	public String getHomeImage() {
 		return homeImage;
 	}
+
 	public void setHomeImage(String homeImage) {
 		this.homeImage = homeImage;
 	}
-	
+
 }
