@@ -19,6 +19,7 @@ public class Feedback extends BaseEntity {
 	@Column(name ="FEEDBACK_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@ManyToOne
 	@JoinColumn(name = "NEWS_ID")
 	private News news;
