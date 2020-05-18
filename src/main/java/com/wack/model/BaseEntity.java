@@ -1,28 +1,9 @@
 package com.wack.model;
 
-import java.util.Date;
-import java.util.List;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.wack.model.authorization.MenuItem;
-import com.wack.model.authorization.Permission;
-import com.wack.model.authorization.Resource;
-import com.wack.model.authorization.UserRole;
-import com.wack.model.website.Category;
-import com.wack.model.website.CategoryNews;
-import com.wack.model.website.Client;
-import com.wack.model.website.Comment;
-import com.wack.model.website.Faq;
-import com.wack.model.website.Feedback;
-import com.wack.model.website.MailingList;
-import com.wack.model.website.News;
-import com.wack.model.website.NewsVideo;
-import com.wack.model.website.Section;
-import com.wack.model.website.SectionItem;
-import com.wack.model.website.Setting;
-import com.wack.model.website.Slider;
-import com.wack.model.website.SliderText;
-import com.wack.model.website.Testimony;
+import java.util.*;
+import com.fasterxml.jackson.annotation.*;
+import com.wack.model.authorization.*;
+import com.wack.model.website.*;
 
 import javax.persistence.*;
 
