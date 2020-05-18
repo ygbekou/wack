@@ -19,6 +19,7 @@ public class NewsVideo extends BaseEntity {
 	@Column(name ="NEWS_VIDEO_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@ManyToOne
 	@JoinColumn(name = "NEWS_ID")
 	private News news;
