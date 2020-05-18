@@ -63,9 +63,17 @@ public class GenericServiceImpl implements GenericService {
 						.substring(file.getOriginalFilename().lastIndexOf("."));
 				
 				String fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), 
-						useId ? entity.getId() + originalFileExtension : file.getOriginalFilename());
+						(useId && !file.getOriginalFilename().startsWith("picture.")) 
+						? entity.getId() + originalFileExtension : file.getOriginalFilename());
 				
-				String fieldName = useId ? attributeNames.get(i) : file.getOriginalFilename().split("\\.")[0];
+				String fieldName = null;
+				if (file.getOriginalFilename().startsWith("picture.")) {
+					fieldName = "picture";
+				} else {
+						
+					fieldName = useId ? attributeNames.get(i) : file.getOriginalFilename().split("\\.")[0];
+				}
+				
 				Field field = null;
 				try {
 					field = entity.getClass().getDeclaredField(fieldName);

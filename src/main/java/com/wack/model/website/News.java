@@ -1,6 +1,7 @@
 package com.wack.model.website;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,12 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.wack.model.BaseEntity;
 import com.wack.model.User;
  
 @Entity
-@Table(name="FAQ")
+@Table(name="NEWS")
 public class News extends BaseEntity {
 	
 	@Id
@@ -33,10 +35,11 @@ public class News extends BaseEntity {
 	@Column(name ="VIEW_COUNT")
 	private int viewCount;
 	private int rating;
-	private String picture;
+	private String picture = "default.jpeg";
 	private int status;
 	
-	
+	@Transient
+	List<NewsVideo> videos;
 	
 	public Long getId() {
 		return id;
@@ -98,4 +101,14 @@ public class News extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	
+	
+	public List<NewsVideo> getVideos() {
+		return videos;
+	}
+	public void setVideos(List<NewsVideo> videos) {
+		this.videos = videos;
+	}
+	
+	
 }

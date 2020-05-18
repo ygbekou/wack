@@ -132,7 +132,8 @@ public class GenericEntityController extends BaseController {
 		
 		@RequestMapping(value="/saveWithFile",method = RequestMethod.POST)
 		public BaseEntity saveWithFile(@PathVariable("entity") String entity, 
-				@RequestPart("file") MultipartFile file, @RequestPart("dto") GenericDto dto) throws JsonParseException, 
+				@RequestPart("file[]") MultipartFile[] files, 
+				@RequestPart("dto") GenericDto dto) throws JsonParseException, 
 		JsonMappingException, IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, BeansException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -152,7 +153,7 @@ public class GenericEntityController extends BaseController {
 			}
 				
 			if (results.getValue0()) {
-				this.genericService.saveWithFiles(obj, Arrays.asList(file), true, Arrays.asList("fileLocation"));
+				this.genericService.saveWithFiles(obj, Arrays.asList(files), true, Arrays.asList("fileLocation"));
 			}
 			else {
 				obj.setErrors(results.getValue1());
