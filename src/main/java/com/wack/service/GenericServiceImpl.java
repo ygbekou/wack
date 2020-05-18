@@ -39,16 +39,13 @@ public class GenericServiceImpl implements GenericService {
 	
 	@Transactional
 	public BaseEntity save(BaseEntity entity) {	
-
-		entity.setModDate(new Date());                    
-		entity.setModifiedBy(1L);    
+		entity.setModDate(new Date());   
 		if (entity.getId() == null) {
 			entity.setCreateDate(new Date());                  
 			return this.genericDao.persist(entity);
 		} else {	
 			return this.genericDao.merge(entity);
-		}
-				             
+		}				             
 	}
 	
 	@Transactional

@@ -26,12 +26,6 @@ public class CrudEntityController extends BaseController {
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public BaseEntity save(@PathVariable("entity") String entity, @RequestBody BaseEntity be) {
-		if (be.getId() == null) {
-			be.setCreateDate(new Date());
-			be.setModDate(new Date());
-		} else {
-			be.setModDate(new Date());
-		}
 		genericService.save(be);
 		return be;
 	}
