@@ -52,8 +52,26 @@ public class GenericServiceImpl implements GenericService {
 	}
 	
 	@Transactional
-	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, 
+	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, List<String> childEntities, 
 			boolean useId, List<String> attributeNames) {
+		
+		Field field1, field2 = null;
+		try {
+			for (String childEntity: childEntities) {
+				field1 = entity.getClass().getDeclaredField(childEntity);
+				List<BaseEntity> childs = (List<BaseEntity>) entity.getClass().getMethod("getVideos").invoke(entity);
+				for (BaseEntity child : childs) {
+					field2 = child.getClass().getDeclaredField("news");
+					field2.setAccessible(true);
+					field2.set(child, entity);
+				}
+			}
+			
+		} catch(Exception ex) {
+			
+		}
+		
+		
 		this.save(entity);
 		
 		try {

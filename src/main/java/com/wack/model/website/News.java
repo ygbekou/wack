@@ -3,6 +3,7 @@ package com.wack.model.website;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -38,8 +40,9 @@ public class News extends BaseEntity {
 	private String picture = "default.jpeg";
 	private int status;
 	
-	@Transient
-	List<NewsVideo> videos;
+	@OneToMany(mappedBy = "news",
+	        cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<NewsVideo> videos;
 	
 	public Long getId() {
 		return id;

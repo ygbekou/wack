@@ -1,6 +1,7 @@
 package com.wack.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -153,10 +154,25 @@ public class GenericEntityController extends BaseController {
 			}
 				
 			if (results.getValue0()) {
-				this.genericService.saveWithFiles(obj, Arrays.asList(files), true, Arrays.asList("fileLocation"));
+				this.genericService.saveWithFiles(obj, Arrays.asList(files), Arrays.asList("videos"), true, Arrays.asList("fileLocation"));
 			}
 			else {
 				obj.setErrors(results.getValue1());
+			}
+			
+			Field field1, field2 = null;
+			try {
+				for (String childEntity: Arrays.asList("videos")) {
+					List<BaseEntity> childs = (List<BaseEntity>) obj.getClass().getMethod("getVideos").invoke(obj);
+					for (BaseEntity child : childs) {
+						field2 = child.getClass().getDeclaredField("news");
+						field2.setAccessible(true);
+						field2.set(child, null);
+					}
+				}
+				
+			} catch(Exception ex) {
+				
 			}
 			return obj;
 		}
@@ -173,7 +189,7 @@ public class GenericEntityController extends BaseController {
 					.replaceAll("/", "\\/").replaceAll("&#039;", "'"), 
 					this.getClass(entity));
 
-			this.genericService.saveWithFiles(obj, Arrays.asList(files), false, null);
+			this.genericService.saveWithFiles(obj, Arrays.asList(files), null, false, null);
 			
 			return obj;
 		}

@@ -20,7 +20,7 @@ public class NewsVideo extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
-	@JoinColumn(name = "NEWS_VIDEO_ID")
+	@JoinColumn(name = "NEWS_ID")
 	private News news;
 	private String name;
 	private String link;

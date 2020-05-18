@@ -1,5 +1,6 @@
 package com.wack.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -15,7 +16,7 @@ import com.wack.model.User;
 public interface GenericService {
 	
 	public BaseEntity save(BaseEntity entity);
-	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, 
+	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, List<String> childEntities,
 			boolean useId, List<String> attributeNames);
 	public void delete(BaseEntity entity);
 	public void delete(Class cl, List<Long> ids);
