@@ -25,7 +25,7 @@ public class Section extends BaseEntity {
 	private String description;
 	
 	@Column(name ="PICTURE")
-	private String fileLocation;
+	private String picture;
 	
 	private Integer status;
 	
@@ -68,12 +68,14 @@ public class Section extends BaseEntity {
 		this.description = description;
 	}
 
-	public String getFileLocation() {
-		return fileLocation;
+ 
+
+	public String getPicture() {
+		return picture;
 	}
 
-	public void setFileLocation(String fileLocation) {
-		this.fileLocation = fileLocation;
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 
 	public Integer getStatus() {
