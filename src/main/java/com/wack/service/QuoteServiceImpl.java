@@ -75,7 +75,7 @@ public class QuoteServiceImpl  implements QuoteService {
 			amountToAdd -= cl.getAmount();
 		}
 		
-		cl = (ContractLabor) genericService.saveWithFiles(contractLabor, files, null, false, null);
+		cl = (ContractLabor) genericService.saveWithFiles(contractLabor, files, false, null);
 		Quote quote = (Quote) genericService.find(Quote.class, contractLabor.getQuote().getId());
 		quote.setTotalAmount(quote.getTotalAmount() + amountToAdd);
 		genericService.save(quote);

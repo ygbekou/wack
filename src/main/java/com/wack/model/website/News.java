@@ -1,6 +1,7 @@
 package com.wack.model.website;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -113,5 +114,8 @@ public class News extends BaseEntity {
 		this.videos = videos;
 	}
 	
+	public List<String> getChildEntities() {
+		return Arrays.asList("videos");
+	}
 	
 }
