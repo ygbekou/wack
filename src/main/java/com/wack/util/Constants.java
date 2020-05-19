@@ -6,10 +6,10 @@ public class Constants {
 	public final static String PACKAGE_NAME = "com.wack.model.";
 	public final static String VALIDATOR_PACKAGE_NAME = "com.wack.validator.";
 	
-	public static String DOC_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\docs\\";
-	public static String IMAGE_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\images\\";
-	public static String REPORT_RESULT_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\reports\\";  
-	public static String PIC_FOLDER="C:\\Development\\batandbelui\\src";
+	public static String DOC_FOLDER = "C:\\My Projects\\batandbelui\\src\\assets\\docs\\";
+	public static String IMAGE_FOLDER = "C:\\My Projects\\batandbel\\src\\assets\\images\\";
+	public static String REPORT_RESULT_FOLDER = "C:\\My Projects\\batandbelui\\src\\assets\\reports\\";  
+	public static String PIC_FOLDER="C:\\My Projects\\batandbelui\\src";
 	
 	
 //	public static String DOC_FOLDER = "C:\\Development\\wackUI\\src\\assets\\docs\\";

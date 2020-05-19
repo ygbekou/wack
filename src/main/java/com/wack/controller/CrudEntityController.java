@@ -45,7 +45,7 @@ public class CrudEntityController extends BaseController {
 		}
 
 		if (results.getValue0()) {
-			this.genericService.saveWithFiles(be, Arrays.asList(files), true, Arrays.asList("fileLocation"));
+			this.genericService.saveWithFiles(be, Arrays.asList(files), null,true, Arrays.asList("fileLocation"));
 		} else {
 			be.setErrors(results.getValue1());
 		}
