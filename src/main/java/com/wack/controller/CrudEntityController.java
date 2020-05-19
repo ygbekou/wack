@@ -1,4 +1,5 @@
 package com.wack.controller;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -45,11 +46,34 @@ public class CrudEntityController extends BaseController {
 		}
 
 		if (results.getValue0()) {
-			this.genericService.saveWithFiles(be, Arrays.asList(files), null,true, Arrays.asList("fileLocation"));
+			this.cascadingEntities(be, be);
+			this.genericService.saveWithFiles(be, Arrays.asList(files), true, Arrays.asList("fileLocation"));
 		} else {
 			be.setErrors(results.getValue1());
 		}
+		
+		this.cascadingEntities(be, null);
+		
 		return be;
+	}
+	
+	
+	private void cascadingEntities(BaseEntity entity, BaseEntity value) {
+		Field field = null;
+		try {
+			for (String childEntity: entity.getChildEntities()) {
+				List<BaseEntity> childs = (List<BaseEntity>) entity.getClass().getMethod("get"
+						+ childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1)).invoke(entity);
+				for (BaseEntity child : childs) {
+					field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().toLowerCase());
+					field.setAccessible(true);
+					field.set(child, value);
+				}
+			}
+			
+		} catch(Exception ex) {
+			
+		}
 	}
 
 }
