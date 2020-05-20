@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,8 +42,7 @@ public class News extends BaseEntity {
 	private String picture = "default.jpeg";
 	private int status;
 	
-	@OneToMany(mappedBy = "news",
-	        cascade = CascadeType.ALL, orphanRemoval = true)
+	@Transient
 	private List<NewsVideo> videos;
 	
 	public Long getId() {

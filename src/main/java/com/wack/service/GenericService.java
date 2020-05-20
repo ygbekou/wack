@@ -32,4 +32,5 @@ public interface GenericService {
 	public Company getCompany(String language);
 	public Integer deleteNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
 	public String getHomePage(User user);
+	public void cascadingEntities(BaseEntity entity, BaseEntity value);
 }
