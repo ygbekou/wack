@@ -2,6 +2,7 @@ package com.wack.model.website;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +20,6 @@ public class NewsVideo extends BaseEntity {
 	@Column(name ="NEWS_VIDEO_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
 	@ManyToOne
 	@JoinColumn(name = "NEWS_ID")
 	private News news;

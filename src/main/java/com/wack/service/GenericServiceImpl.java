@@ -53,6 +53,8 @@ public class GenericServiceImpl implements GenericService {
 			boolean useId, List<String> attributeNames) {
 	
 		this.save(entity);
+		
+		this.cascadingEntities(entity, entity);
 
 		try {
 			int i = 0;
@@ -299,5 +301,26 @@ public class GenericServiceImpl implements GenericService {
 			return ur.getRole().getHomePage() == null ? "/" : ur.getRole().getHomePage().getUrlPath();
 		}
 		return "/admin/dashboard";
+	}
+	
+	public void cascadingEntities(BaseEntity entity, BaseEntity value) {
+		Field field = null;
+		try {
+			for (String childEntity: entity.getChildEntities()) {
+				List<BaseEntity> childs = (List<BaseEntity>) entity.getClass().getMethod("get"
+						+ childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1)).invoke(entity);
+				for (BaseEntity child : childs) {
+					field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().toLowerCase());
+					field.setAccessible(true);
+					field.set(child, value);
+					if (value != null) {
+						this.save(child);
+					}
+				}
+			}
+			
+		} catch(Exception ex) {
+			
+		}
 	}
 }
