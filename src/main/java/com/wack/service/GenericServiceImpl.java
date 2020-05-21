@@ -140,6 +140,14 @@ public class GenericServiceImpl implements GenericService {
 
 		return entity;
 	}
+	
+	public BaseEntity addFiles(BaseEntity entity) {
+		if (entity.getId() != null) {
+			entity.setFileNames(this.getFiles(entity.getId(), entity.getClass().getSimpleName()));
+		}
+
+		return entity;
+	}
 
 	public List<BaseEntity> getAll(Class cl) {
 		return this.genericDao.getAll(cl);

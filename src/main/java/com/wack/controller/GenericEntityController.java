@@ -98,6 +98,21 @@ public class GenericEntityController extends BaseController {
 			String queryStr = "SELECT e FROM " + convertedEntity + " e WHERE 1 = 1 " + getExtraWhereClause(convertedEntity);
 			List<BaseEntity> entities = genericService.getByCriteria(queryStr, paramTupleList,
 					searchAttribute.getOrderBy());
+			
+			
+
+			return entities;
+		}
+		
+		@RequestMapping(value = "/allByCriteriaAndOrderByAndFiles", method = RequestMethod.POST)
+		public List<BaseEntity> getAllByCriteriaAndOrderByAnfFiles(@PathVariable("entity") String entity,
+				@RequestBody SearchAttribute searchAttribute) throws ClassNotFoundException {
+
+			List<BaseEntity>  entities =getAllByCriteriaAndOrderBy(entity, searchAttribute);
+			
+			for (BaseEntity en : entities) {
+				genericService.addFiles(en);
+			}
 
 			return entities;
 		}
