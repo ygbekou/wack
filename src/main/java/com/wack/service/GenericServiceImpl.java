@@ -40,6 +40,9 @@ public class GenericServiceImpl implements GenericService {
 	@Transactional
 	public BaseEntity save(BaseEntity entity) {
 		entity.setModDate(new Date());
+		if(entity.getModifiedBy()==null) {
+			entity.setModifiedBy(1L);
+		}
 		if (entity.getId() == null) {
 			entity.setCreateDate(new Date());
 			return this.genericDao.persist(entity);
@@ -70,9 +73,8 @@ public class GenericServiceImpl implements GenericService {
 				} else {
 
 					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(),
-							(useId && !file.getOriginalFilename().startsWith("picture."))
-									? entity.getId() + originalFileExtension
-									: file.getOriginalFilename());
+							entity.getClass().getSimpleName().toLowerCase()+"_"
+					+ entity.getId() + originalFileExtension);
 				}
 				String fieldName = null;
 				if (file.getOriginalFilename().startsWith("picture.")) {
@@ -178,8 +180,14 @@ public class GenericServiceImpl implements GenericService {
 				// transfer to upload folder
 				String storageDirectory = null;
 				if (entityName != null) {
-					storageDirectory = Constants.DOC_FOLDER + entityName + File.separator + entityId + File.separator;
-					File dir = new File(storageDirectory);
+					if(file.getOriginalFilename().startsWith("picture.")) {
+						storageDirectory = Constants.IMAGE_FOLDER + entityName.toLowerCase() +"s" + File.separator + entityId + File.separator;
+						
+					}else {
+						storageDirectory = Constants.DOC_FOLDER + entityName.toLowerCase()+"s" + File.separator + entityId + File.separator;
+						
+					}
+						File dir = new File(storageDirectory);
 					if (!dir.exists()) {
 						dir.mkdirs();
 					}

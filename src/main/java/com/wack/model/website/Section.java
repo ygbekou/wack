@@ -30,7 +30,7 @@ public class Section extends BaseEntity {
 	private Integer status;
 	
 	@Column(name="SHOW_IN_MENU")
-	private String showInMenu;
+	private Integer showInMenu;
 	
 	private String language;
 
@@ -86,11 +86,11 @@ public class Section extends BaseEntity {
 		this.status = status;
 	}
 
-	public String getShowInMenu() {
+	public Integer getShowInMenu() {
 		return showInMenu;
 	}
 
-	public void setShowInMenu(String showInMenu) {
+	public void setShowInMenu(Integer showInMenu) {
 		this.showInMenu = showInMenu;
 	}
 
