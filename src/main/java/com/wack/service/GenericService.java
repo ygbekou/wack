@@ -21,7 +21,9 @@ public interface GenericService {
 	public void delete(Class cl, List<Long> ids);
 	public void deleteFile(Class cl, List<Long> ids, String fileName);
 	public BaseEntity find(Class cl, Long key);
+	public BaseEntity findWithChilds(Class cl, Long key);
 	public BaseEntity findWithFiles(Class cl, Long key);
+	public BaseEntity findWithChildsAndFiles(Class cl, Long key);
 	public BaseEntity addFiles(BaseEntity entity);
 	public List<BaseEntity> getAll(Class cl);
 	public List<BaseEntity> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters, 

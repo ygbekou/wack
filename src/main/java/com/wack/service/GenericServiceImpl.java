@@ -2,6 +2,7 @@ package com.wack.service;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -74,7 +75,7 @@ public class GenericServiceImpl implements GenericService {
 
 					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(),
 							entity.getClass().getSimpleName().toLowerCase()+"_"
-					+ entity.getId() + originalFileExtension);
+					+ entity.getId() + "_" + (i + 1) + originalFileExtension);
 				}
 				String fieldName = null;
 				if (file.getOriginalFilename().startsWith("picture.")) {
@@ -131,7 +132,15 @@ public class GenericServiceImpl implements GenericService {
 	}
 
 	public BaseEntity find(Class cl, Long key) {
-		return (BaseEntity) this.genericDao.find(cl, key);
+		BaseEntity entity = (BaseEntity) this.genericDao.find(cl, key);
+		
+		return entity;
+	}
+	
+	public BaseEntity findWithChilds(Class cl, Long key) {
+		BaseEntity entity = (BaseEntity) this.genericDao.find(cl, key);
+		this.getChilds(entity);
+		return entity;
 	}
 
 	public BaseEntity findWithFiles(Class cl, Long key) {
@@ -141,6 +150,36 @@ public class GenericServiceImpl implements GenericService {
 		}
 
 		return entity;
+	}
+	
+	public BaseEntity findWithChildsAndFiles(Class cl, Long key) {
+		BaseEntity entity = this.findWithFiles(cl, key);
+		this.getChilds(entity);
+		return entity;
+	}
+	
+	private void getChilds(BaseEntity entity) {
+		try {
+			for (String childEntity: entity.getChildEntities()) {
+				String childClassName = childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1, 
+						childEntity.length() - 1);
+				Class childClass = Class.forName(entity.getClass().getPackage().getName() + "." + childClassName);
+				
+				String queryStr = "SELECT e FROM " + childClassName + " e WHERE 1 = 1";
+				
+				List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+				String entityClassName = entity.getClass().getSimpleName();
+				String entityName = entityClassName.substring(0, 1).toLowerCase() + entityClassName.substring(1);
+				paramTupleList.add(Quartet.with("e." + entityName + ".id = ", "parentId", entity.getId() + "", "Long"));
+				List<BaseEntity> childs = this.getByCriteria(queryStr, paramTupleList, null);
+				
+				Field field = entity.getClass().getDeclaredField(childEntity);
+				field.setAccessible(true);
+				field.set(entity, childs);
+			}
+		} catch(Exception e) {
+			
+		}
 	}
 	
 	public BaseEntity addFiles(BaseEntity entity) {
@@ -180,14 +219,8 @@ public class GenericServiceImpl implements GenericService {
 				// transfer to upload folder
 				String storageDirectory = null;
 				if (entityName != null) {
-					if(file.getOriginalFilename().startsWith("picture.")) {
-						storageDirectory = Constants.IMAGE_FOLDER + entityName.toLowerCase() +"s" + File.separator + entityId + File.separator;
-						
-					}else {
-						storageDirectory = Constants.DOC_FOLDER + entityName.toLowerCase()+"s" + File.separator + entityId + File.separator;
-						
-					}
-						File dir = new File(storageDirectory);
+					storageDirectory = Constants.DOC_FOLDER + entityName.toLowerCase() + File.separator + entityId + File.separator;
+					File dir = new File(storageDirectory);
 					if (!dir.exists()) {
 						dir.mkdirs();
 					}
@@ -251,7 +284,10 @@ public class GenericServiceImpl implements GenericService {
 				if (dir.exists()) {
 					File[] files = dir.listFiles();
 					for (File file : files) {
-						fileNames.add(file.getName());
+						String absoluteFilePath = file.getAbsolutePath();
+						int index = absoluteFilePath.indexOf(File.separator + "assets");
+						fileNames.add(absoluteFilePath.substring(index + 1).replaceAll(File.separator.toString() 
+								+ File.separator.toString(), "/"));
 					}
 				}
 

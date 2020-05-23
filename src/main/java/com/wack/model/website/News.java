@@ -40,7 +40,7 @@ public class News extends BaseEntity {
 	private int status;
 	
 	@Transient
-	private List<NewsVideo> videos;
+	private List<NewsVideo> newsVideos;
 	
 	public Long getId() {
 		return id;
@@ -103,15 +103,14 @@ public class News extends BaseEntity {
 		this.status = status;
 	}
 	
-	
-	public List<NewsVideo> getVideos() {
-		return videos;
+	public List<NewsVideo> getNewsVideos() {
+		return newsVideos;
 	}
-	public void setVideos(List<NewsVideo> videos) {
-		this.videos = videos;
+	public void setNewsVideos(List<NewsVideo> newsVideos) {
+		this.newsVideos = newsVideos;
 	}
 	
 	public List<String> getChildEntities() {
-		return Arrays.asList("videos");
+		return Arrays.asList("newsVideos");
 	}
 }
