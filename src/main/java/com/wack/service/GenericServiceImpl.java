@@ -73,7 +73,7 @@ public class GenericServiceImpl implements GenericService {
 				} else {
 
 					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(),
-							entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId()
+							entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId() + "_" + i
 									+ originalFileExtension);
 				}
 				String fieldName = null;
@@ -181,13 +181,12 @@ public class GenericServiceImpl implements GenericService {
 				String storageDirectory = null;
 				if (entityName != null) {
 					if (file.getOriginalFilename().startsWith("picture.")) {
-						storageDirectory = Constants.PIC_FOLDER + File.separator+ entityName.toLowerCase() + "s" + File.separator
-								+ entityId;
+						storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase()
+								+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
 
 					} else {
-						storageDirectory = Constants.DOC_FOLDER + File.separator+ entityName.toLowerCase() + "s" + File.separator
-								+ entityId;
-
+						storageDirectory = Constants.DOC_FOLDER + File.separator + entityName.toLowerCase()
+								+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
 					}
 					File dir = new File(storageDirectory);
 					if (!dir.exists()) {
@@ -218,8 +217,8 @@ public class GenericServiceImpl implements GenericService {
 				// transfer to upload folder
 				String storageDirectory = null;
 				if (entityName != null) {
-					storageDirectory = Constants.PIC_FOLDER + File.separator 
-							+ entityName.toLowerCase() + "s"+ File.separator;
+					storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase() + "s"
+							+ File.separator;
 					File dir = new File(storageDirectory);
 					if (!dir.exists()) {
 						dir.mkdirs();
@@ -249,7 +248,8 @@ public class GenericServiceImpl implements GenericService {
 			// transfer to upload folder
 			String storageDirectory = null;
 			if (entityName != null) {
-				storageDirectory = Constants.DOC_FOLDER  + File.separator+ entityName.toLowerCase() + "s"+ File.separator + entityId + File.separator;
+				storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase()
+				+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
 				File dir = new File(storageDirectory);
 				if (dir.exists()) {
 					File[] files = dir.listFiles();
@@ -273,7 +273,8 @@ public class GenericServiceImpl implements GenericService {
 
 			String storageDirectory = null;
 			if (entityName != null) {
-				storageDirectory = Constants.DOC_FOLDER + File.separator+ entityName.toLowerCase() + "s" + File.separator + entityId ;
+				storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase()
+				+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
 				File dir = new File(storageDirectory);
 				if (dir.exists()) {
 					File file = new File(storageDirectory + "/" + fileName);
@@ -349,33 +350,34 @@ public class GenericServiceImpl implements GenericService {
 		this.getChilds(entity);
 		return entity;
 	}
+
 	public BaseEntity findWithChildsAndFiles(Class cl, Long key) {
 		BaseEntity entity = this.findWithFiles(cl, key);
 		this.getChilds(entity);
 		return entity;
 	}
-	
+
 	private void getChilds(BaseEntity entity) {
 		try {
-			for (String childEntity: entity.getChildEntities()) {
-				String childClassName = childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1, 
-						childEntity.length() - 1);
+			for (String childEntity : entity.getChildEntities()) {
+				String childClassName = childEntity.substring(0, 1).toUpperCase()
+						+ childEntity.substring(1, childEntity.length() - 1);
 				Class childClass = Class.forName(entity.getClass().getPackage().getName() + "." + childClassName);
-				
+
 				String queryStr = "SELECT e FROM " + childClassName + " e WHERE 1 = 1";
-				
+
 				List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
 				String entityClassName = entity.getClass().getSimpleName();
 				String entityName = entityClassName.substring(0, 1).toLowerCase() + entityClassName.substring(1);
 				paramTupleList.add(Quartet.with("e." + entityName + ".id = ", "parentId", entity.getId() + "", "Long"));
 				List<BaseEntity> childs = this.getByCriteria(queryStr, paramTupleList, null);
-				
+
 				Field field = entity.getClass().getDeclaredField(childEntity);
 				field.setAccessible(true);
 				field.set(entity, childs);
 			}
-		} catch(Exception e) {
-			
+		} catch (Exception e) {
+
 		}
 	}
 }
