@@ -2,7 +2,6 @@ package com.wack.service;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -279,7 +278,7 @@ public class GenericServiceImpl implements GenericService {
 			// transfer to upload folder
 			String storageDirectory = null;
 			if (entityName != null) {
-				storageDirectory = Constants.DOC_FOLDER + entityName + File.separator + entityId + File.separator;
+				storageDirectory = Constants.DOC_FOLDER + entityName.toLowerCase() + File.separator + entityId + File.separator;
 				File dir = new File(storageDirectory);
 				if (dir.exists()) {
 					File[] files = dir.listFiles();

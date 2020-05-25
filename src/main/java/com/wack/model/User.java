@@ -1,5 +1,6 @@
 package com.wack.model;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.wack.model.authorization.Role;
+
 
 @Entity
 @Table(name = "USERS")
@@ -68,6 +70,8 @@ public class User extends BaseEntity {
 	// Transient
 	@Transient
 	private List<Role> roles;
+	@Transient
+	private List<Employee> employees;
 	
 	public String getFirstTimeLogin() {
 		return firstTimeLogin;
@@ -296,6 +300,18 @@ public class User extends BaseEntity {
 
 	public void setReceiveNewsletter(boolean receiveNewsletter) {
 		this.receiveNewsletter = receiveNewsletter;
+	}
+
+	public List<Employee> getEmployees() {
+		return employees;
+	}
+
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+	
+	public List<String> getChildEntities() {
+		return Arrays.asList("employees");
 	}
 
 }

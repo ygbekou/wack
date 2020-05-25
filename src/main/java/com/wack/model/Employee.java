@@ -111,30 +111,54 @@ public class Employee extends BaseEntity {
 	// TRansient fields for UI
 	
 		public String getFirstName() {
+			if (this.user == null) {
+				return "";
+			}
 			return this.user.getFirstName();
 		}
 		public String getLastName() {
+			if (this.user == null) {
+				return "";
+			}
 			return this.user.getLastName();
 		}
 		public String getMiddleName() {
+			if (this.user == null) {
+				return "";
+			}
 			return this.user.getMiddleName();
 		}
 		public String getEmail() {
+			if (this.user == null) {
+				return "";
+			}
 			return this.user.getEmail();
 		}
 		public String getPhone() {
+			if (this.user == null) {
+				return "";
+			}
 			return this.user.getHomePhone();
 		}
 		public String getAddress() {
-			return this.user.getAddress();
+			return this.user != null ? this.user.getAddress() : "";
 		}
 		public String getSex() {
+			if (this.user == null) {
+				return "";
+			}
 			return this.user.getSex();
 		}
 		public String getName() {
+			if (this.user == null) {
+				return "";
+			}
 			return this.user.getFirstName() + " " + this.user.getLastName();
 		}
 		public String getGroupName() {
+			if (this.user == null) {
+				return "";
+			}
 			return this.user.getUserGroup().getName();
 		}
 		
