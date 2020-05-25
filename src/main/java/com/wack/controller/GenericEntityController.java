@@ -62,6 +62,13 @@ public class GenericEntityController extends BaseController {
 			return result;
 		}
 		
+		@RequestMapping(value="withChildsAndFiles/{id}",method = RequestMethod.GET)
+		public BaseEntity getWithEntitiesAndFiles(@PathVariable("entity") String entity, @PathVariable("id") Long id) throws ClassNotFoundException{
+			BaseEntity result = genericService.findWithChildsAndFiles(this.getClass(this.convertEntity(entity)), id);
+			this.genericService.cascadingEntities(result, null);
+			return result;
+		}
+		
 		@RequestMapping(value="/all",method = RequestMethod.GET)
 		public List<BaseEntity> getAll(@PathVariable("entity") String entity) throws ClassNotFoundException{
 			 List<BaseEntity> entities = genericService.getAll(this.getClass(this.convertEntity(entity)));
