@@ -40,7 +40,7 @@ public class GenericServiceImpl implements GenericService {
 	@Transactional
 	public BaseEntity save(BaseEntity entity) {
 		entity.setModDate(new Date());
-		if(entity.getModifiedBy()==null) {
+		if (entity.getModifiedBy() == null) {
 			entity.setModifiedBy(1L);
 		}
 		if (entity.getId() == null) {
@@ -52,11 +52,11 @@ public class GenericServiceImpl implements GenericService {
 	}
 
 	@Transactional
-	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files,
-			boolean useId, List<String> attributeNames) {
-	
+	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, boolean useId,
+			List<String> attributeNames) {
+
 		this.save(entity);
-		
+
 		this.cascadingEntities(entity, entity);
 
 		try {
@@ -67,14 +67,14 @@ public class GenericServiceImpl implements GenericService {
 
 				String fileName = null;
 				if (entity.getClass().getSimpleName().equalsIgnoreCase("company")) {
-				
+
 					fileName = saveImage(file, "company", file.getOriginalFilename());
 
 				} else {
 
 					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(),
-							entity.getClass().getSimpleName().toLowerCase()+"_"
-					+ entity.getId() + originalFileExtension);
+							entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId()
+									+ originalFileExtension);
 				}
 				String fieldName = null;
 				if (file.getOriginalFilename().startsWith("picture.")) {
@@ -142,7 +142,7 @@ public class GenericServiceImpl implements GenericService {
 
 		return entity;
 	}
-	
+
 	public BaseEntity addFiles(BaseEntity entity) {
 		if (entity.getId() != null) {
 			entity.setFileNames(this.getFiles(entity.getId(), entity.getClass().getSimpleName()));
@@ -180,14 +180,16 @@ public class GenericServiceImpl implements GenericService {
 				// transfer to upload folder
 				String storageDirectory = null;
 				if (entityName != null) {
-					if(file.getOriginalFilename().startsWith("picture.")) {
-						storageDirectory = Constants.IMAGE_FOLDER + entityName.toLowerCase() +"s" + File.separator + entityId + File.separator;
-						
-					}else {
-						storageDirectory = Constants.DOC_FOLDER + entityName.toLowerCase()+"s" + File.separator + entityId + File.separator;
-						
+					if (file.getOriginalFilename().startsWith("picture.")) {
+						storageDirectory = Constants.PIC_FOLDER + File.separator+ entityName.toLowerCase() + "s" + File.separator
+								+ entityId;
+
+					} else {
+						storageDirectory = Constants.DOC_FOLDER + File.separator+ entityName.toLowerCase() + "s" + File.separator
+								+ entityId;
+
 					}
-						File dir = new File(storageDirectory);
+					File dir = new File(storageDirectory);
 					if (!dir.exists()) {
 						dir.mkdirs();
 					}
@@ -216,7 +218,8 @@ public class GenericServiceImpl implements GenericService {
 				// transfer to upload folder
 				String storageDirectory = null;
 				if (entityName != null) {
-					storageDirectory = Constants.IMAGE_FOLDER + entityName.toLowerCase() + File.separator;
+					storageDirectory = Constants.PIC_FOLDER + File.separator 
+							+ entityName.toLowerCase() + "s"+ File.separator;
 					File dir = new File(storageDirectory);
 					if (!dir.exists()) {
 						dir.mkdirs();
@@ -246,7 +249,7 @@ public class GenericServiceImpl implements GenericService {
 			// transfer to upload folder
 			String storageDirectory = null;
 			if (entityName != null) {
-				storageDirectory = Constants.DOC_FOLDER + entityName + File.separator + entityId + File.separator;
+				storageDirectory = Constants.DOC_FOLDER  + File.separator+ entityName.toLowerCase() + "s"+ File.separator + entityId + File.separator;
 				File dir = new File(storageDirectory);
 				if (dir.exists()) {
 					File[] files = dir.listFiles();
@@ -270,7 +273,7 @@ public class GenericServiceImpl implements GenericService {
 
 			String storageDirectory = null;
 			if (entityName != null) {
-				storageDirectory = Constants.DOC_FOLDER + entityName + File.separator + entityId + File.separator;
+				storageDirectory = Constants.DOC_FOLDER + File.separator+ entityName.toLowerCase() + "s" + File.separator + entityId ;
 				File dir = new File(storageDirectory);
 				if (dir.exists()) {
 					File file = new File(storageDirectory + "/" + fileName);
@@ -318,13 +321,14 @@ public class GenericServiceImpl implements GenericService {
 		}
 		return "/admin/dashboard";
 	}
-	
+
 	public void cascadingEntities(BaseEntity entity, BaseEntity value) {
 		Field field = null;
 		try {
-			for (String childEntity: entity.getChildEntities()) {
-				List<BaseEntity> childs = (List<BaseEntity>) entity.getClass().getMethod("get"
-						+ childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1)).invoke(entity);
+			for (String childEntity : entity.getChildEntities()) {
+				List<BaseEntity> childs = (List<BaseEntity>) entity.getClass()
+						.getMethod("get" + childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1))
+						.invoke(entity);
 				for (BaseEntity child : childs) {
 					field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().toLowerCase());
 					field.setAccessible(true);
@@ -334,9 +338,9 @@ public class GenericServiceImpl implements GenericService {
 					}
 				}
 			}
-			
-		} catch(Exception ex) {
-			
+
+		} catch (Exception ex) {
+
 		}
 	}
 }

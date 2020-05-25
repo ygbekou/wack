@@ -94,7 +94,7 @@ public class UserServiceImpl  extends GenericServiceImpl implements UserService,
 						// transfer to upload folder
 						String storageDirectory = null;
 						if (entity != null) {					
-							storageDirectory = Constants.IMAGE_FOLDER	+ "User" + File.separator;
+							storageDirectory = Constants.PIC_FOLDER	+ File.separator+ "users" ;
 							File dir = new File(storageDirectory);
 							if (!dir.exists()) {
 								dir.mkdirs();

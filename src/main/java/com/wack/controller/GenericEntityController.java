@@ -98,8 +98,6 @@ public class GenericEntityController extends BaseController {
 			String queryStr = "SELECT e FROM " + convertedEntity + " e WHERE 1 = 1 " + getExtraWhereClause(convertedEntity);
 			List<BaseEntity> entities = genericService.getByCriteria(queryStr, paramTupleList,
 					searchAttribute.getOrderBy());
-			
-			
 
 			return entities;
 		}
