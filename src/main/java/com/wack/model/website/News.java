@@ -35,6 +35,8 @@ public class News extends BaseEntity {
 	private Timestamp publicationDatetime;
 	@Column(name ="VIEW_COUNT")
 	private int viewCount;
+	@Column(name ="RATING_COUNT")
+	private int ratingCount;
 	private int rating;
 	private String picture = "default.jpeg";
 	private int status;
@@ -42,6 +44,12 @@ public class News extends BaseEntity {
 	@Transient
 	private List<NewsVideo> newsVideos;
 	
+	public int getRatingCount() {
+		return ratingCount;
+	}
+	public void setRatingCount(int ratingCount) {
+		this.ratingCount = ratingCount;
+	}
 	public Long getId() {
 		return id;
 	}
