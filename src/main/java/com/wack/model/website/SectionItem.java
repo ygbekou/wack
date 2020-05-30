@@ -8,8 +8,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.wack.model.BaseEntity;
+import com.wack.util.Utils;
 
 
 @Entity
@@ -122,4 +124,13 @@ public class SectionItem extends BaseEntity {
 		return texts.length > 2 ? texts[2] : "" ;
 	}
 
+	@Transient
+	public String getShortMessage() {
+		return description != null && description.length() > 100 ? Utils.truncateHTML(description,100,null) : description;
+	}
+
+	@Transient
+	public String getMediumMessage() {
+		return description != null && description.length() > 200 ? Utils.truncateHTML(description,200,null) : description;
+	}
 }

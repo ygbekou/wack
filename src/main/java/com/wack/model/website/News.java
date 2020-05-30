@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.wack.util.Utils;
 import com.wack.model.BaseEntity;
 import com.wack.model.User;
  
@@ -33,7 +34,6 @@ public class News extends BaseEntity {
 	private User author;
 	private String language;
 	private String title;
-	@Lob
 	private String content;
 	@Column(name ="PUBLICATION_DATETIME")
 	private Timestamp publicationDatetime;
@@ -113,8 +113,7 @@ public class News extends BaseEntity {
 	}
 	public void setStatus(int status) {
 		this.status = status;
-	}		
- 
+	} 
  
 	public List<NewsVideo> getNewsVideos() {
 		return newsVideos;
@@ -125,4 +124,16 @@ public class News extends BaseEntity {
 	public List<String> getChildEntities() {
 		return Arrays.asList("newsVideos");
 	}
+	
+	@Transient
+	public String getShortMessage() {
+		return content != null && content.length() > 100 ? Utils.truncateHTML(content,100,null) : content;
+	}
+
+	@Transient
+	public String getMediumMessage() {
+		return content != null && content.length() > 200 ? Utils.truncateHTML(content,200,null) : content;
+	}
+	
+	
 }
