@@ -1,5 +1,7 @@
 package com.wack.model.website;
 
+import java.io.UnsupportedEncodingException;
+import java.sql.Blob;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -30,6 +33,7 @@ public class News extends BaseEntity {
 	private User author;
 	private String language;
 	private String title;
+	@Lob
 	private String content;
 	@Column(name ="PUBLICATION_DATETIME")
 	private Timestamp publicationDatetime;
