@@ -377,7 +377,7 @@ public class GenericServiceImpl implements GenericService {
 				field.set(entity, childs);
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 }

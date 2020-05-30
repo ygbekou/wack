@@ -109,15 +109,15 @@ public class News extends BaseEntity {
 	}
 	public void setStatus(int status) {
 		this.status = status;
-	}
-	
+	}		
+ 
+ 
 	public List<NewsVideo> getNewsVideos() {
 		return newsVideos;
 	}
 	public void setNewsVideos(List<NewsVideo> newsVideos) {
 		this.newsVideos = newsVideos;
 	}
-	
 	public List<String> getChildEntities() {
 		return Arrays.asList("newsVideos");
 	}
