@@ -113,7 +113,7 @@ public class GenericEntityController extends BaseController {
 		public List<BaseEntity> getAllByCriteriaAndOrderByAnfFiles(@PathVariable("entity") String entity,
 				@RequestBody SearchAttribute searchAttribute) throws ClassNotFoundException {
 
-			List<BaseEntity>  entities =getAllByCriteriaAndOrderBy(entity, searchAttribute);
+			List<BaseEntity>  entities = getAllByCriteriaAndOrderBy(entity, searchAttribute);
 			
 			for (BaseEntity en : entities) {
 				genericService.addFiles(en);
