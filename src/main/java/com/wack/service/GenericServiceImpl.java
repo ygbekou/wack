@@ -263,6 +263,28 @@ public class GenericServiceImpl implements GenericService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		try {
+
+			// transfer to upload folder
+			String storageDirectory = null;
+			if (entityName != null) {
+				storageDirectory = Constants.DOC_FOLDER + File.separator + entityName.toLowerCase()
+				+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
+				File dir = new File(storageDirectory);
+				if (dir.exists()) {
+					File[] files = dir.listFiles();
+					for (File file : files) {
+						fileNames.add(file.getCanonicalPath().substring(file.getCanonicalPath().indexOf("assets")));
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return fileNames;
 
 	}
