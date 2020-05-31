@@ -135,5 +135,9 @@ public class News extends BaseEntity {
 		return content != null && content.length() > 200 ? Utils.truncateHTML(content,200,null) : content;
 	}
 	
+	@Transient
+	public String getShortTitle() {
+		return title != null && title.length() > 50 ? Utils.truncateString(title,50) : title;
+	}
 	
 }
