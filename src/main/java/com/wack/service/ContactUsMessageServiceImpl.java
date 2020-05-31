@@ -38,8 +38,12 @@ public class ContactUsMessageServiceImpl  implements ContactUsMessageService {
 							+ "Phone Number:    "  + contactUsMessage.getPhone() + "\n\n"
 							+ contactUsMessage.getMessage();
 		
-		mailSender.sendMail(contactUsMessage.getEmail(), company.getToEmail().split(","), 
+		try {
+			mailSender.sendMail(contactUsMessage.getEmail(), company.getToEmail().split(","), 
 				"Contact Message from " + contactUsMessage.getName(), emailMessage);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 		
 		return saveMessage;
 		

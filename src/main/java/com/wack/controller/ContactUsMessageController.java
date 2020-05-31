@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wack.model.BaseEntity;
@@ -24,12 +25,20 @@ public class ContactUsMessageController extends BaseController {
 		ContactUsMessageService contactUsMessageService;
 	
 	
+	    //@RequestMapping(value="/save",method = RequestMethod.POST)
+		//public BaseEntity save(@RequestBody ContactUsMessage contactUsMessage) {
+			//	
+		//	this.contactUsMessageService.save(contactUsMessage);
+			//
+		//	return contactUsMessage;
+		//}
+
 		@RequestMapping(value="/save",method = RequestMethod.POST)
-		public BaseEntity save(@RequestBody ContactUsMessage contactUsMessage) {
-				
-			this.contactUsMessageService.save(contactUsMessage);
+		public BaseEntity save(@RequestBody BaseEntity be) {
 			
-			return contactUsMessage;
+			this.contactUsMessageService.save((ContactUsMessage)be);
+			
+			return be;
 		}
 		
 }
