@@ -7,6 +7,7 @@ import org.javatuples.Pair;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile; 
 import com.wack.model.BaseEntity;
@@ -24,6 +25,9 @@ public class CrudEntityController extends BaseController {
 
 	@Autowired
 	private ApplicationContext context;
+	
+	@Autowired
+	BCryptPasswordEncoder encoder;
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public BaseEntity save(@PathVariable("entity") String entity, @RequestBody BaseEntity be) {
@@ -48,6 +52,7 @@ public class CrudEntityController extends BaseController {
 		be.clearErrors();
 		try { 
 			if (results.getValue0()) {
+				be.setGeneratedFields(encoder);
 				this.genericService.cascadingEntities(be, be);
 				this.genericService.saveWithFiles(be, Arrays.asList(files), true, Arrays.asList("fileLocation"));
 			} else {

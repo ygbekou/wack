@@ -276,7 +276,7 @@ public class GenericServiceImpl implements GenericService {
 				if (dir.exists()) {
 					File[] files = dir.listFiles();
 					for (File file : files) {
-						fileNames.add(file.getCanonicalPath().substring(file.getCanonicalPath().indexOf("assets")));
+						fileNames.add(file.getName());
 					}
 				}
 

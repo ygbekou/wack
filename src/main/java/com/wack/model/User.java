@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.wack.model.authorization.Role;
 
 
@@ -314,4 +316,9 @@ public class User extends BaseEntity {
 		return Arrays.asList("employees");
 	}
 
+	
+	public void setGeneratedFields(BCryptPasswordEncoder encoder) {
+		this.setPassword(encoder.encode(this.password));
+	}
+	
 }

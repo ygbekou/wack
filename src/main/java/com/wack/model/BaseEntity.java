@@ -7,6 +7,8 @@ import com.wack.model.website.*;
 
 import javax.persistence.*;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @JsonTypeInfo(use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME, 
 include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
@@ -130,6 +132,10 @@ public abstract class BaseEntity {
 
 	public void setChildEntities(List<String> childEntities) {
 		this.childEntities = childEntities;
+	}
+	
+	public void setGeneratedFields(BCryptPasswordEncoder encoder) {
+		// Todo
 	}
 
 	@Override
