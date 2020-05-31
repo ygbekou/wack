@@ -45,12 +45,19 @@ public class CrudEntityController extends BaseController {
 			ex.printStackTrace();
 		}
 
-		if (results.getValue0()) {
-			this.genericService.cascadingEntities(be, be);
-			this.genericService.saveWithFiles(be, Arrays.asList(files), true, Arrays.asList("fileLocation"));
-		} else {
-			be.setErrors(results.getValue1());
+		be.clearErrors();
+		try { 
+			if (results.getValue0()) {
+				this.genericService.cascadingEntities(be, be);
+				this.genericService.saveWithFiles(be, Arrays.asList(files), true, Arrays.asList("fileLocation"));
+			} else {
+				be.setErrors(results.getValue1());
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			be.addError(ex.getMessage());
 		}
+				
 		
 		this.genericService.cascadingEntities(be, null);
 		

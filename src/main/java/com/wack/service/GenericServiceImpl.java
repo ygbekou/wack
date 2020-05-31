@@ -60,6 +60,7 @@ public class GenericServiceImpl implements GenericService {
 		this.cascadingEntities(entity, entity);
 
 		try {
+		
 			int i = 0;
 			for (MultipartFile file : files) {
 				String originalFileExtension = file.getOriginalFilename()

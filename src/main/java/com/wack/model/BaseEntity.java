@@ -97,6 +97,17 @@ public abstract class BaseEntity {
 		this.errors = errors;
 	}
 	
+	public void addError(String error ) {
+		if (this.errors == null) {
+			this.errors = new ArrayList<String>();
+		}
+		this.errors.add(error);
+	}
+	
+	public void clearErrors() {
+		this.errors = null;
+	}
+	
 	public String getCustomValidator() {
 		return customValidator;
 	}
