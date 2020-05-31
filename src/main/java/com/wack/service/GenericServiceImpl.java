@@ -62,6 +62,7 @@ public class GenericServiceImpl implements GenericService {
 		try {
 		
 			int i = 0;
+			int fileNameIndex = 0;
 			for (MultipartFile file : files) {
 				String originalFileExtension = file.getOriginalFilename()
 						.substring(file.getOriginalFilename().lastIndexOf("."));
@@ -72,10 +73,21 @@ public class GenericServiceImpl implements GenericService {
 					fileName = saveImage(file, "company", file.getOriginalFilename());
 
 				} else {
-
-					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(),
-							entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId() + "_" + i
-									+ originalFileExtension);
+					
+					List<String> existingFileNames = this.getFiles(entity.getId(), entity.getClass().getSimpleName().toLowerCase());
+					String expectingFileName = null;
+					
+					while (expectingFileName == null) {
+						expectingFileName = entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId() + "_" + fileNameIndex
+													+ originalFileExtension;
+						
+						if (existingFileNames.contains(expectingFileName)) {
+							expectingFileName = null;
+							fileNameIndex += 1;
+						}
+					}
+					
+					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), expectingFileName);
 				}
 				String fieldName = null;
 				if (file.getOriginalFilename().startsWith("picture.")) {
@@ -96,6 +108,7 @@ public class GenericServiceImpl implements GenericService {
 				field.set(entity, fileName);
 				this.save(entity);
 				i++;
+				fileNameIndex++;
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -199,8 +212,11 @@ public class GenericServiceImpl implements GenericService {
 				}
 
 				File newFile = new File(storageDirectory + "/" + fileName);
-				file.transferTo(newFile);
-
+				
+				//if (!newFile.exists()) {
+					file.transferTo(newFile);
+				//}
+				
 				return fileName;
 
 			} catch (Exception e) {
