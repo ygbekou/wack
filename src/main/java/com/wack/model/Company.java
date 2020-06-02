@@ -81,6 +81,107 @@ public class Company extends BaseEntity {
 
 	@Column(name = "THEME_COLOR")
 	private String themeColor;
+	
+	@Column (name="DISPLAY_MISSION")
+	private boolean displayMission = false;
+	@Column (name="DISPLAY_TESTIMONIAL")
+	private boolean displayTestimonial = false;
+	@Column (name="DISPLAY_SERVICES")
+	private boolean displayServices = false;
+	@Column (name="DISPLAY_CLIENT_LOGOS")
+	private boolean displayClientLogos = false;
+	@Column (name="DISPLAY_TEAMS")
+	private boolean displayTeams = false;
+	@Column (name="DISPLAY_EXPERTISE")
+	private boolean displayExpertise = false;	
+	@Column (name="DISPLAY_AUTHOR")
+	private boolean displayAuthor = false;
+	@Column (name="DISPLAY_FEATURED")
+	private boolean displayFeatured = false;
+	@Column (name="DISPLAY_BLOGS")
+	private boolean displayBlogs = false;
+	@Column (name="DISPLAY_SHORT_LANG")
+	private boolean displayShortLang = false;
+	
+	public boolean isDisplayShortLang() {
+		return displayShortLang;
+	}
+
+	public void setDisplayShortLang(boolean displayShortLang) {
+		this.displayShortLang = displayShortLang;
+	}
+
+	public boolean isDisplayMission() {
+		return displayMission;
+	}
+
+	public void setDisplayMission(boolean displayMission) {
+		this.displayMission = displayMission;
+	}
+
+	public boolean isDisplayTestimonial() {
+		return displayTestimonial;
+	}
+
+	public void setDisplayTestimonial(boolean displayTestimonial) {
+		this.displayTestimonial = displayTestimonial;
+	}
+
+	public boolean isDisplayServices() {
+		return displayServices;
+	}
+
+	public void setDisplayServices(boolean displayServices) {
+		this.displayServices = displayServices;
+	}
+
+	public boolean isDisplayClientLogos() {
+		return displayClientLogos;
+	}
+
+	public void setDisplayClientLogos(boolean displayClientLogos) {
+		this.displayClientLogos = displayClientLogos;
+	}
+
+	public boolean isDisplayTeams() {
+		return displayTeams;
+	}
+
+	public void setDisplayTeams(boolean displayTeams) {
+		this.displayTeams = displayTeams;
+	}
+
+	public boolean isDisplayExpertise() {
+		return displayExpertise;
+	}
+
+	public void setDisplayExpertise(boolean displayExpertise) {
+		this.displayExpertise = displayExpertise;
+	}
+
+	public boolean isDisplayAuthor() {
+		return displayAuthor;
+	}
+
+	public void setDisplayAuthor(boolean displayAuthor) {
+		this.displayAuthor = displayAuthor;
+	}
+
+	public boolean isDisplayFeatured() {
+		return displayFeatured;
+	}
+
+	public void setDisplayFeatured(boolean displayFeatured) {
+		this.displayFeatured = displayFeatured;
+	}
+
+	public boolean isDisplayBlogs() {
+		return displayBlogs;
+	}
+
+	public void setDisplayBlogs(boolean displayBlogs) {
+		this.displayBlogs = displayBlogs;
+	}
 
 	public int getFixedMenu() {
 		return fixedMenu;
@@ -89,6 +190,7 @@ public class Company extends BaseEntity {
 	public void setFixedMenu(int fixedMenu) {
 		this.fixedMenu = fixedMenu;
 	}
+
 	public int getLeftToRight() {
 		return leftToRight;
 	}
