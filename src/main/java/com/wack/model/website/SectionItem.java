@@ -33,12 +33,22 @@ public class SectionItem extends BaseEntity {
 	
 	@Column(name ="PICTURE")
 	private String picture;
+	
+	private String summary;
 
 	private Integer status;
 	
 	private String language;
 
 	
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
 	public Long getId() {
 		return id;
 	}

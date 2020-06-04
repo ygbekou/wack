@@ -45,6 +45,15 @@ public class News extends BaseEntity {
 	private String picture = "default.jpeg";
 	private int status;
 	
+	private int featured;
+	
+	public int getFeatured() {
+		return featured;
+	}
+	public void setFeatured(int featured) {
+		this.featured = featured;
+	}
+
 	@Transient
 	private List<NewsVideo> newsVideos;
 	

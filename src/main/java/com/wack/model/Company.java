@@ -63,7 +63,7 @@ public class Company extends BaseEntity {
 	private Double longitude;
 	private Double latitude;
 	@Column(name = "HOME_IMAGE")
-	private String homeImage;
+	private String homeImage; 
 	private int status;
 	// site themes
 
@@ -102,7 +102,38 @@ public class Company extends BaseEntity {
 	private boolean displayBlogs = false;
 	@Column (name="DISPLAY_SHORT_LANG")
 	private boolean displayShortLang = false;
+	@Column (name="DISPLAY_TOOLBAR")
+	private boolean displayToolbar = false;
+	@Column (name="DISPLAY_FOOTER_CONTACT")
+	private boolean displayFooterContact = false;
+
+	@Column (name="DISPLAY_FEATURED_BLOGS")
+	private boolean displayFeaturedBlogs = false;
 	
+	public boolean isDisplayFeaturedBlogs() {
+		return displayFeaturedBlogs;
+	}
+
+	public void setDisplayFeaturedBlogs(boolean displayFeaturedBlogs) {
+		this.displayFeaturedBlogs = displayFeaturedBlogs;
+	}
+
+	public boolean isDisplayFooterContact() {
+		return displayFooterContact;
+	}
+
+	public void setDisplayFooterContact(boolean displayFooterContact) {
+		this.displayFooterContact = displayFooterContact;
+	}
+
+	public boolean isDisplayToolbar() {
+		return displayToolbar;
+	}
+
+	public void setDisplayToolbar(boolean displayToolbar) {
+		this.displayToolbar = displayToolbar;
+	}
+
 	public boolean isDisplayShortLang() {
 		return displayShortLang;
 	}
