@@ -36,8 +36,16 @@ public class Section extends BaseEntity {
 	
 	private String language;
 
+	private String menu;	
 	
-	
+	public String getMenu() {
+		return menu;
+	}
+
+	public void setMenu(String menu) {
+		this.menu = menu;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -44,9 +44,16 @@ public class News extends BaseEntity {
 	private int rating;
 	private String picture = "default.jpeg";
 	private int status;
-	
+	@Column(name="AUTHOR_TEXT")
+	private String authorText;	
 	private int featured;
 	
+	public String getAuthorText() {
+		return authorText;
+	}
+	public void setAuthorText(String authorText) {
+		this.authorText = authorText;
+	}
 	public int getFeatured() {
 		return featured;
 	}
