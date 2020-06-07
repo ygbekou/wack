@@ -25,6 +25,7 @@ public class Comment extends BaseEntity {
 	private int rating;
 	private String message;
 	private String author;
+	@Column(name="AUTHOR_EMAIL")
 	private String authorEmail;
 	private int status;
 	

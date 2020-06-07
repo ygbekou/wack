@@ -43,6 +43,10 @@ public class Company extends BaseEntity {
 	private String googleMap;
 	@Column(name = "FACEBOOK_URL")
 	private String facebookUrl;
+	
+	@Column(name = "GOOGLE_PLUS_URL")
+	private String googlePlusUrl;
+	
 	@Column(name = "TWITTER_URL")
 	private String twitterUrl;
 	@Column(name = "INSTAGRAM_URL")
@@ -110,6 +114,14 @@ public class Company extends BaseEntity {
 	@Column (name="DISPLAY_FEATURED_BLOGS")
 	private boolean displayFeaturedBlogs = false;
 	
+	public String getGooglePlusUrl() {
+		return googlePlusUrl;
+	}
+
+	public void setGooglePlusUrl(String googlePlusUrl) {
+		this.googlePlusUrl = googlePlusUrl;
+	}
+
 	public boolean isDisplayFeaturedBlogs() {
 		return displayFeaturedBlogs;
 	}

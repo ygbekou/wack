@@ -234,7 +234,7 @@ public class GenericServiceImpl implements GenericService {
 				// transfer to upload folder
 				String storageDirectory = null;
 				if (entityName != null) {
-					storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase() + "s"
+					storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase()  
 							+ File.separator;
 					File dir = new File(storageDirectory);
 					if (!dir.exists()) {
