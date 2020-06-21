@@ -46,7 +46,8 @@ public class Company extends BaseEntity {
 	
 	@Column(name = "GOOGLE_PLUS_URL")
 	private String googlePlusUrl;
-	
+	@Column(name = "LINKED_IN_URL")
+	private String linkedInUrl;	
 	@Column(name = "TWITTER_URL")
 	private String twitterUrl;
 	@Column(name = "INSTAGRAM_URL")
@@ -73,6 +74,14 @@ public class Company extends BaseEntity {
 
 	@Column(name = "FIXED_MENU")
 	private int fixedMenu;
+
+	public String getLinkedInUrl() {
+		return linkedInUrl;
+	}
+
+	public void setLinkedInUrl(String linkedInUrl) {
+		this.linkedInUrl = linkedInUrl;
+	}
 
 	@Column(name = "LEFT_TO_RIGHT")
 	private int leftToRight;
