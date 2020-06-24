@@ -1,0 +1,198 @@
+package com.softenza.emarket.service;
+
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.transaction.Transactional;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.RandomStringGenerator;
+import org.javatuples.Quartet;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.softenza.emarket.service.GenericServiceImpl;
+import com.softenza.emarket.dao.UserDao;
+import com.softenza.emarket.model.BaseEntity;
+import com.softenza.emarket.model.Company;
+import com.softenza.emarket.model.User;
+import com.softenza.emarket.util.Constants;
+
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import static org.apache.commons.text.CharacterPredicates.DIGITS;
+import static org.apache.commons.text.CharacterPredicates.LETTERS;
+
+@Service(value="userService")
+public class UserServiceImpl  extends GenericServiceImpl implements UserService, UserDetailsService {
+	
+	@Autowired
+	GenericService genericService;
+	
+	@Autowired
+	UserDao userDao;
+	
+	@Autowired
+	BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	@Qualifier("myMailSender")
+	MyMailSender mailSender;
+	
+	private static RandomStringGenerator stringGenerator;
+	
+	static {
+		stringGenerator = new RandomStringGenerator.Builder()
+			     .withinRange('0', 'z').filteredBy(LETTERS, DIGITS).build();
+	}
+	
+	@Transactional
+	public BaseEntity save(BaseEntity entity, MultipartFile file) {		
+		User user;
+		try {
+			
+			Field userField = entity.getClass().getDeclaredField("user");
+			userField.setAccessible(true);
+			Field passwordField = null;
+
+			user = (User) userField.get(entity);
+	        passwordField = user.getClass().getDeclaredField("password");
+	        String generatedPassword = null;
+	        
+	        boolean isUserExisting = user.getId() != null && user.getId() > 0;
+	        
+			if (!isUserExisting && passwordField != null) {
+				passwordField.setAccessible(true);
+        		//passwordField.set(user, encoder.encode(passwordField.get(user).toString()));
+				generatedPassword = stringGenerator.generate(8);
+				passwordField.set(user, encoder.encode(generatedPassword));	
+			}
+	        user = (User) genericService.save(user);
+	        
+	        if (!isUserExisting && passwordField != null) {
+	        	if (generatedPassword != null) {
+	        		this.sendPassword(user, generatedPassword);
+	        	} 
+			}
+	        
+	       
+	        if (user != null) {	 
+	  
+	        	if (file != null && !file.isEmpty()) {
+					try {
+						String originalFileExtension = file.getOriginalFilename()
+								.substring(file.getOriginalFilename().lastIndexOf("."));
+
+						// transfer to upload folder
+						String storageDirectory = null;
+						if (entity != null) {					
+							storageDirectory = Constants.PIC_FOLDER	+ File.separator+ "users" ;
+							File dir = new File(storageDirectory);
+							if (!dir.exists()) {
+								dir.mkdirs();
+							}
+
+						} else {
+							throw new Exception("Unknown");
+						}
+						
+						String newFilename = null;
+						newFilename = user.getId() + originalFileExtension;
+						
+
+						File newFile = new File(storageDirectory + "/" + newFilename);
+						Field pictureField = user.getClass().getDeclaredField("picture");
+						pictureField.setAccessible(true);
+						pictureField.set(user, newFilename);
+						user = (User) genericService.save(user);
+				        
+						file.transferTo(newFile);
+				        
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+	        	userField.set(entity, user);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new NullPointerException();
+		} 
+				
+		
+		return genericService.save(entity);		
+	}
+
+	@Transactional
+	public User getUser(String email, String userName, String password) {
+		return userDao.getUser(email, userName, password);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+		User user = userDao.getUser(userName, userName, null);
+		if(user == null){
+			throw new UsernameNotFoundException("Invalid username or password.");
+		}
+		return new org.springframework.security.core.userdetails.User(user.getUserName(), user.getPassword(), getAuthority());
+	}
+	
+	private List<SimpleGrantedAuthority> getAuthority() {
+		return Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
+	}
+	
+	@Transactional
+	public String sendPassword(User user, String password) {		
+		String generatedPassword = StringUtils.isEmpty(password) ?  stringGenerator.generate(8) : password;
+		try {
+			User storedUser = this.getUser(user.getEmail(), user.getUserName(), null);
+			
+			if (StringUtils.isEmpty(password)) {
+				storedUser.setPassword(encoder.encode(generatedPassword));	
+				storedUser.setFirstTimeLogin("Y");
+			    this.genericService.save(storedUser);
+			}
+			
+			Company company = this.genericService.getCompany("EN");
+			
+			String emailMessage = "Your password is: " + generatedPassword + ". Please keep it safe.";
+			
+			mailSender.sendMail(company.getFromEmail(), storedUser.getEmail().split("'"), 
+					"Message from " + company.getName(), emailMessage);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			return "Failure";
+		}
+		
+		return "Success";
+		
+	}
+	
+	@Transactional
+	public String changePassword(User user, String password) {		
+		try {
+			User storedUser = this.getUser(user.getEmail(), user.getUserName(), null);
+			
+			if (!StringUtils.isEmpty(password)) {
+				storedUser.setPassword(encoder.encode(password));	
+				storedUser.setFirstTimeLogin("N");
+			    this.genericService.save(storedUser);
+			}
+		} catch(Exception ex) {
+			return "Failure";
+		}
+		
+		return "Success";		
+	}
+	
+
+}

@@ -9,10 +9,10 @@
 		<version>2.3.0.RELEASE</version>
 		<relativePath />
 	</parent>
-	<groupId>com.wack</groupId>
-	<artifactId>wack</artifactId>
+	<groupId>com.emarket</groupId>
+	<artifactId>emarket</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
-	<name>wack</name>
+	<name>emarket</name>
 	<description>Web Site Management</description>
 	<packaging>war</packaging>
 
@@ -118,7 +118,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>wack</finalName>
+		<finalName>emarket</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
