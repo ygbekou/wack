@@ -69,6 +69,9 @@ public class Company extends BaseEntity {
 	private Double latitude;
 	@Column(name = "HOME_IMAGE")
 	private String homeImage; 
+	@Column(name = "FOOTER_TYPE")
+	private String footerType;
+	
 	private int status;
 	// site themes
 
@@ -123,6 +126,14 @@ public class Company extends BaseEntity {
 	@Column (name="DISPLAY_FEATURED_BLOGS")
 	private boolean displayFeaturedBlogs = false;
 	
+	public String getFooterType() {
+		return footerType;
+	}
+
+	public void setFooterType(String footerType) {
+		this.footerType = footerType;
+	}
+
 	public String getGooglePlusUrl() {
 		return googlePlusUrl;
 	}

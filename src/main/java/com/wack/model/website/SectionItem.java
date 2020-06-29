@@ -38,8 +38,19 @@ public class SectionItem extends BaseEntity {
 	private String summary;
 
 	private Integer status;
+	
+	@Column(name ="`RANK`")
+	private Integer rank;
 
 	private String language;
+	
+	public Integer getRank() {
+		return rank;
+	}
+
+	public void setRank(Integer rank) {
+		this.rank = rank;
+	}
 
 	public String getName() {
 		return name;

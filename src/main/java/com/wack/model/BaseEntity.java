@@ -34,7 +34,7 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = MailingList.class, name = "MailingList"),
     @JsonSubTypes.Type(value = Feedback.class, name = "Feedback"),
     @JsonSubTypes.Type(value = NewsVideo.class, name = "NewsVideo"),  
-    
+    @JsonSubTypes.Type(value = Location.class, name = "Location"),  
     @JsonSubTypes.Type(value = Faq.class, name = "Faq"),     
     @JsonSubTypes.Type(value = Comment.class, name = "Comment"),
     @JsonSubTypes.Type(value = Client.class, name = "Client"),

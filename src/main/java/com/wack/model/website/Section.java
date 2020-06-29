@@ -38,6 +38,18 @@ public class Section extends BaseEntity {
 
 	private String menu;	
 	
+	@Column(name ="`RANK`")
+	private Integer rank;
+
+	
+	public Integer getRank() {
+		return rank;
+	}
+
+	public void setRank(Integer rank) {
+		this.rank = rank;
+	}
+
 	public String getMenu() {
 		return menu;
 	}

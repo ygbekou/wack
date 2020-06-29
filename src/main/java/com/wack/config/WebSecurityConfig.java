@@ -69,6 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/service/com.wack.model.website.News/*").permitAll()                
                 .antMatchers("/service/Company/allByCriteriaAndOrderBy").permitAll()
                 .antMatchers("/service/Company/allByCriteria").permitAll()
+                .antMatchers("/service/Location/allByCriteriaAndOrderBy").permitAll()                
                 .antMatchers("/service/Department/all").permitAll()
                 .antMatchers("/service/UserGroup/all").permitAll()
                 .antMatchers("/service/ContactUsMessage/save").permitAll()
