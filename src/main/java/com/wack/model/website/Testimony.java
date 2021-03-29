@@ -34,7 +34,8 @@ public class Testimony extends BaseEntity {
 	private String instagram;
 	private String website;
 	private int status;
-	
+	private int rank;
+	private String comments;
 	
 	
 	public Long getId() {
@@ -121,4 +122,17 @@ public class Testimony extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	public int getRank() {
+		return rank;
+	}
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	
 }

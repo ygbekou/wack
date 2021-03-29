@@ -73,24 +73,28 @@ public class GenericServiceImpl implements GenericService {
 					fileName = saveImage(file, "company", file.getOriginalFilename());
 
 				} else {
+					if (entity.getUseIdAsFileName() != null && entity.getUseIdAsFileName() == 1) {
+						fileName = saveImage(file, entity.getClass().getSimpleName().toLowerCase(), entity.getId()+".jpg");
+					} else {
 					
-					List<String> existingFileNames = this.getFiles(entity.getId(), entity.getClass().getSimpleName().toLowerCase());
-					String expectingFileName = null;
-					
-					while (expectingFileName == null) {
-						expectingFileName = entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId() + "_" + fileNameIndex
-													+ originalFileExtension;
+						List<String> existingFileNames = this.getFiles(entity.getId(), entity.getClass().getSimpleName().toLowerCase());
+						String expectingFileName = null;
 						
-						if (existingFileNames.contains(expectingFileName)) {
-							expectingFileName = null;
-							fileNameIndex += 1;
+						while (expectingFileName == null) {
+							expectingFileName = entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId() + "_" + fileNameIndex
+														+ originalFileExtension;
+							
+							if (existingFileNames.contains(expectingFileName)) {
+								expectingFileName = null;
+								fileNameIndex += 1;
+							}
 						}
+						
+						fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), expectingFileName);
 					}
-					
-					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), expectingFileName);
 				}
 				String fieldName = null;
-				if (file.getOriginalFilename().startsWith("picture.")) {
+				if (file.getOriginalFilename().startsWith("picture.") || (entity.getUseIdAsFileName() == 1) ) {
 					fieldName = "picture";
 				} else {
 

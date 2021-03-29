@@ -21,7 +21,7 @@ public class Slider extends BaseEntity {
 	private String name;
 	
 	@Column(name ="PICTURE")
-	private String fileLocation;
+	private String picture;
 	
 	
 	public Long getId() {
@@ -40,12 +40,13 @@ public class Slider extends BaseEntity {
 		this.name = name;
 	}
 
-	public String getFileLocation() {
-		return fileLocation;
+	public String getPicture() {
+		return picture;
 	}
 
-	public void setFileLocation(String fileLocation) {
-		this.fileLocation = fileLocation;
+	public void setPicture(String picture) {
+		this.picture = picture;
 	}
 
+	
 }

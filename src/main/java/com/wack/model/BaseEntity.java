@@ -39,7 +39,8 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = Comment.class, name = "Comment"),
     @JsonSubTypes.Type(value = Client.class, name = "Client"),
     @JsonSubTypes.Type(value = CategoryNews.class, name = "CategoryNews"),     
-    @JsonSubTypes.Type(value = Category.class, name = "Category") 
+    @JsonSubTypes.Type(value = Category.class, name = "Category"),
+    @JsonSubTypes.Type(value = CompanyHistory.class, name = "CompanyHistory") 
 }) 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @MappedSuperclass
@@ -63,6 +64,8 @@ public abstract class BaseEntity {
 	private List<String> fileNames;
 	@Transient
 	private List<String> childEntities;
+	@Transient
+	private Integer useIdAsFileName;
 	
 	public abstract Long getId() ;
 
@@ -134,6 +137,14 @@ public abstract class BaseEntity {
 		this.childEntities = childEntities;
 	}
 	
+	public Integer getUseIdAsFileName() {
+		return useIdAsFileName;
+	}
+
+	public void setUseIdAsFileName(Integer useIdAsFileName) {
+		this.useIdAsFileName = useIdAsFileName;
+	}
+
 	public void setGeneratedFields(BCryptPasswordEncoder encoder) {
 		// Todo
 	}
