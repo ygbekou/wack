@@ -24,6 +24,8 @@ public class PaymentType extends BaseEntity {
 	
 	private Integer status;
 	
+	@Column(name = "FREQUENCY")
+	private String frequency;
 	
 	public Long getId() {
 		return id;
@@ -51,6 +53,14 @@ public class PaymentType extends BaseEntity {
 
 	public Integer getStatus() {
 		return status;
+	}
+
+	public String getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(String frequency) {
+		this.frequency = frequency;
 	}
 
 	public void setStatus(Integer status) {

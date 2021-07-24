@@ -10,31 +10,71 @@ import javax.persistence.Table;
 @Entity
 @Table(name="COUNTRY")
 public class Country extends BaseEntity {
-	
 	@Id
-	@Column(name ="COUNTRY_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "COUNTRY_ID")
 	private Long id;
-	
-	@Column(name ="NAME")
+
+	@Column(name = "ADDRESS_FORMAT")
+	private String addressFormat;
+
+	@Column(name = "ISO_CODE_2")
+	private String isoCode2;
+
+	@Column(name = "ISO_CODE_3")
+	private String isoCode3;
+	 
+	private String code;
+
 	private String name;
 
-	@Column(name="DOMAIN")
-	private String domain;
-	
-	public String getDomain() {
-		return domain;
-	}
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
+	@Column(name = "POSTCODE_REQUIRED")
+	private int postcodeRequired;
 
+	private int status;
+	
 	public Country(){}
 	public Country(Country country) {
 		// TODO Auto-generated constructor stub
 		this.name=country.getName();
 	}
 
+	public String getAddressFormat() {
+		return addressFormat;
+	}
+	public void setAddressFormat(String addressFormat) {
+		this.addressFormat = addressFormat;
+	}
+	public String getIsoCode2() {
+		return isoCode2;
+	}
+	public void setIsoCode2(String isoCode2) {
+		this.isoCode2 = isoCode2;
+	}
+	public String getIsoCode3() {
+		return isoCode3;
+	}
+	public void setIsoCode3(String isoCode3) {
+		this.isoCode3 = isoCode3;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public int getPostcodeRequired() {
+		return postcodeRequired;
+	}
+	public void setPostcodeRequired(int postcodeRequired) {
+		this.postcodeRequired = postcodeRequired;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	@Override
 	public Long getId() {
 		return id;
