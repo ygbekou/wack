@@ -3,7 +3,13 @@ package com.wack.model;
 import java.util.*;
 import com.fasterxml.jackson.annotation.*;
 import com.wack.model.authorization.*;
+import com.wack.model.stock.PaymentType;
 import com.wack.model.website.*;
+import com.wack.poll.Poll;
+import com.wack.poll.PollChoice;
+import com.wack.poll.PollQuestion;
+import com.wack.poll.PollType;
+import com.wack.poll.Vote;
 
 import javax.persistence.*;
 
@@ -38,9 +44,19 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = Faq.class, name = "Faq"),     
     @JsonSubTypes.Type(value = Comment.class, name = "Comment"),
     @JsonSubTypes.Type(value = Client.class, name = "Client"),
-    @JsonSubTypes.Type(value = CategoryNews.class, name = "CategoryNews"),     
-    @JsonSubTypes.Type(value = Category.class, name = "Category"),
-    @JsonSubTypes.Type(value = CompanyHistory.class, name = "CompanyHistory") 
+    @JsonSubTypes.Type(value = CategoryNews.class, name = "CategoryNews"),
+    @JsonSubTypes.Type(value = Poll.class, name = "Poll"), 
+    @JsonSubTypes.Type(value = PollChoice.class, name = "PollChoice"), 
+    @JsonSubTypes.Type(value = PollQuestion.class, name = "PollQuestion"), 
+    @JsonSubTypes.Type(value = PollType.class, name = "PollType"), 
+    @JsonSubTypes.Type(value = Vote.class, name = "Vote"),
+    @JsonSubTypes.Type(value = Position.class, name = "Position"), 
+    @JsonSubTypes.Type(value = Project.class, name = "Project"), 
+    @JsonSubTypes.Type(value = SessionHistory.class, name = "SessionHistory"), 
+    @JsonSubTypes.Type(value = Contribution.class, name = "Contribution"), 
+    @JsonSubTypes.Type(value = PaymentType.class, name = "PaymentType"), 
+    @JsonSubTypes.Type(value = PaymentHistory.class, name = "PaymentHistory"), 
+    @JsonSubTypes.Type(value = Category.class, name = "Category") 
 }) 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @MappedSuperclass
@@ -64,8 +80,6 @@ public abstract class BaseEntity {
 	private List<String> fileNames;
 	@Transient
 	private List<String> childEntities;
-	@Transient
-	private Integer useIdAsFileName;
 	
 	public abstract Long getId() ;
 
@@ -137,14 +151,6 @@ public abstract class BaseEntity {
 		this.childEntities = childEntities;
 	}
 	
-	public Integer getUseIdAsFileName() {
-		return useIdAsFileName;
-	}
-
-	public void setUseIdAsFileName(Integer useIdAsFileName) {
-		this.useIdAsFileName = useIdAsFileName;
-	}
-
 	public void setGeneratedFields(BCryptPasswordEncoder encoder) {
 		// Todo
 	}
