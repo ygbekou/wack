@@ -11,10 +11,10 @@
 	</parent>
 	<groupId>com.wack</groupId>
 	<artifactId>wack</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>wack</name>
 	<description>Web Site Management</description>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
 		<jdk.version>1.8</jdk.version>
