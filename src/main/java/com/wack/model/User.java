@@ -38,7 +38,10 @@ public class User extends BaseEntity {
 	private String lastName;
 	@Column(name = "MIDDLE_NAME")
 	private String middleName;
+	@Column(name = "PIC")
 	private String picture;
+	
+	@Column(name = "E_MAIL")
 	private String email;
 	private String sex;
 	@Column(name = "BIRTH_DATE")

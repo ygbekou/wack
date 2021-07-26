@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.wack.domain.GenericDto;
 import com.wack.domain.GenericResponse;
 import com.wack.model.BaseEntity;
+import com.wack.model.Mail;
 import com.wack.model.User;
 import com.wack.service.UserService;
 import com.wack.util.Constants;
@@ -45,6 +46,7 @@ import com.wack.domain.PermissionVO;
 import com.wack.service.AuthorizationService;
 import com.wack.domain.AuthToken;
 import com.wack.domain.LoginUser;
+import com.wack.domain.MailVO;
 import com.wack.model.authorization.Role;
 import com.wack.model.authorization.UserRole;
 
@@ -206,5 +208,11 @@ public class UserController extends BaseController {
 				user.getFirstTimeLogin(), Arrays.asList(new Long[] { user.getUserGroup().getId() }),
 				resources.getValue0(), resources.getValue1(), user.getId(), userService.getHomePage(user)));
 
+	}
+	
+	@RequestMapping(value = "/sendMassEmail", method = RequestMethod.POST)
+	public @ResponseBody GenericResponse sendMassEmail(@PathVariable("entity") String entity, @RequestBody Mail mail) {
+
+		return new GenericResponse(userService.sendMassEmails(mail));
 	}
 }

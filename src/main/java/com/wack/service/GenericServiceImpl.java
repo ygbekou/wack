@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -58,6 +59,8 @@ public class GenericServiceImpl implements GenericService {
 		this.save(entity);
 
 		this.cascadingEntities(entity, entity);
+		
+		deleteRemovedFiles(entity);
 
 		try {
 		
@@ -120,6 +123,19 @@ public class GenericServiceImpl implements GenericService {
 
 		return entity;
 	}
+	
+	private void deleteRemovedFiles(BaseEntity entity) {
+
+		if (entity.getRemainingFileNames() != null && entity.getFileNames() != null) {
+			List<String> differences = entity.getFileNames().stream()
+					.filter(element -> !entity.getRemainingFileNames().contains(element)).collect(Collectors.toList());
+
+			for (String fileName : differences) {
+				this.deleteFile(entity.getClass().getSimpleName(), entity.getId(), fileName);
+			}
+		}
+	}
+
 
 	@Transactional
 	public void delete(BaseEntity entity) {

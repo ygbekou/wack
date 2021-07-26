@@ -71,6 +71,7 @@ public class Company extends BaseEntity {
 	private String homeImage; 
 	@Column(name = "FOOTER_TYPE")
 	private String footerType;
+	private String website;
 	
 	private int status;
 	// site themes
@@ -540,6 +541,14 @@ public class Company extends BaseEntity {
 
 	public void setHomeImage(String homeImage) {
 		this.homeImage = homeImage;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
 	}
 
 }

@@ -79,7 +79,9 @@ public abstract class BaseEntity {
 	@Transient
 	private List<String> fileNames;
 	@Transient
-	private List<String> childEntities;
+	private List<String> remainingFileNames;
+	@Transient
+	private List<String> childEntities = new ArrayList<>();
 	
 	public abstract Long getId() ;
 
@@ -143,6 +145,14 @@ public abstract class BaseEntity {
 		this.fileNames = fileNames;
 	}
 
+	public List<String> getRemainingFileNames() {
+		return remainingFileNames;
+	}
+
+	public void setRemainingFileNames(List<String> remainingFileNames) {
+		this.remainingFileNames = remainingFileNames;
+	}
+
 	public List<String> getChildEntities() {
 		return childEntities;
 	}
@@ -153,6 +163,10 @@ public abstract class BaseEntity {
 	
 	public void setGeneratedFields(BCryptPasswordEncoder encoder) {
 		// Todo
+	}
+	
+	public Long getUseIdAsFileName() {
+		return getId();
 	}
 
 	@Override
