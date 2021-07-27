@@ -5,11 +5,11 @@ import java.util.List;
 import org.hibernate.Session;
 import org.javatuples.Quartet;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.web.multipart.MultipartFile; 
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
 import com.wack.model.User;
+import com.wack.poll.PollQuestion;
 
 @Service(value="genericService")
 public interface GenericService {
@@ -36,4 +36,6 @@ public interface GenericService {
 	public Integer deleteNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
 	public String getHomePage(User user);
 	public void cascadingEntities(BaseEntity entity, BaseEntity value);
+	
+		
 }
