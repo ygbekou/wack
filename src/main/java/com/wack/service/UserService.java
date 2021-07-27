@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.wack.service.GenericService;
-import com.wack.domain.MailVO;
 import com.wack.model.BaseEntity;
 import com.wack.model.Mail;
 import com.wack.model.User;

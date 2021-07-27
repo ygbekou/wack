@@ -46,7 +46,6 @@ import com.wack.domain.PermissionVO;
 import com.wack.service.AuthorizationService;
 import com.wack.domain.AuthToken;
 import com.wack.domain.LoginUser;
-import com.wack.domain.MailVO;
 import com.wack.model.authorization.Role;
 import com.wack.model.authorization.UserRole;
 
