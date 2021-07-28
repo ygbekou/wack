@@ -7,16 +7,15 @@ import java.util.List;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.wack.poll.Poll;
 import com.wack.poll.PollChoice;
 import com.wack.poll.PollQuestion;
-import com.wack.poll.Vote;
 import com.wack.service.GenericService;
 import com.wack.service.PollService;
 
@@ -60,12 +59,12 @@ public class PollRestService {
 		return retVal == null ? new ArrayList<PollQuestion>() : retVal;
 	}*/
 
-	@RequestMapping(value = "/getPendingPollQuestions", method = RequestMethod.POST, headers = "Accept=application/json")
-	public @ResponseBody List<PollQuestion> getPendingPollQuestions(@RequestBody Poll poll) {
-
+ 	@RequestMapping(value = "/getPendingPollQuestions/{pollId}/{userId}", method = RequestMethod.GET, headers = "Accept=application/json")
+	public @ResponseBody List<PollQuestion> getPendingPollQuestions(@PathVariable("pollId") Long pollId,
+			@PathVariable("userId") Long userId ) {
 		List<PollQuestion> retVal = new ArrayList<PollQuestion>();
 		try {
-			retVal = pollService.getPendingPollQuestions(poll.getId(), poll.getUserId());
+			retVal = pollService.getPendingPollQuestions(pollId, userId);
 			if (retVal != null) {
 				Collections.sort(retVal);
 			}
