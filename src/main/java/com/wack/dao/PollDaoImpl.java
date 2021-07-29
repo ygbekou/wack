@@ -33,7 +33,7 @@ public class PollDaoImpl implements PollDao {
 			if (obj[3] != null) {
 				Position p = new Position();
 				p.setId(new Long(obj[3].toString()));
-				p.setName((obj[4] == null ? "" : obj[4].toString()));
+				//p.setName((obj[4] == null ? "" : obj[4].toString()));
 				ys.setPosition(p);
 			}
 			yss.add(ys);

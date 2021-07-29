@@ -24,6 +24,8 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = Company.class, name = "Company"),     
     @JsonSubTypes.Type(value = Employee.class, name = "Employee"),
     @JsonSubTypes.Type(value = UserGroup.class, name = "UserGroup"),    
+    @JsonSubTypes.Type(value = MeetingReport.class, name = "MeetingReport"),     
+    @JsonSubTypes.Type(value = MeetingReportDesc.class, name = "MeetingReportDesc"),     
     @JsonSubTypes.Type(value = MenuItem.class, name = "MenuItem"),     
     @JsonSubTypes.Type(value = Permission.class, name = "Permission"),
     @JsonSubTypes.Type(value = Resource.class, name = "Resource"),    
