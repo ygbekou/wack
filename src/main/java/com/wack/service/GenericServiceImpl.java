@@ -17,7 +17,6 @@ import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.wack.dao.GenericDao;
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
@@ -446,4 +445,6 @@ public class GenericServiceImpl implements GenericService {
 			e.printStackTrace();
 		}
 	}
+	
+
 }

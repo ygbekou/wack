@@ -32,6 +32,9 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 	
 	@Column(name = "DESCRIPTION")
 	private String description;
+	
+	@Column(name = "URL")
+	private String url;
 
 	@ManyToOne
 	@JoinColumn(name = "POLL_QUESTION_ID")
@@ -55,6 +58,14 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 
 	public void setError(String error) {
 		this.error = error;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public void setWinner(boolean winner) {

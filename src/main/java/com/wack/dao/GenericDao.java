@@ -5,6 +5,8 @@ import java.util.List;
 import org.hibernate.Session;
 import org.javatuples.Quartet;
 
+import com.wack.poll.PollQuestion;
+
 public interface GenericDao<E,K> {
 	public E persist(E entity);
 	public E merge(E entity);
