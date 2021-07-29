@@ -29,6 +29,9 @@ public class User extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "USER_GROUP_ID")
 	private UserGroup userGroup;
+	@ManyToOne
+	@JoinColumn(name = "POSITION_ID")
+	private Position position;
 	@Column(name = "USER_NAME")
 	private String userName;
 	private String password;
@@ -305,6 +308,14 @@ public class User extends BaseEntity {
 
 	public void setReceiveNewsletter(boolean receiveNewsletter) {
 		this.receiveNewsletter = receiveNewsletter;
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 
 	public List<Employee> getEmployees() {

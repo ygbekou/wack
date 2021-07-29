@@ -1,6 +1,8 @@
 package com.wack.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,14 +10,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 
 @Entity
 @Table(name = "POSITION")
 public class Position extends BaseEntity implements Comparable<Object>, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -26,19 +27,14 @@ public class Position extends BaseEntity implements Comparable<Object>, Serializ
 	@Column(name = "RANK")
 	private Integer rank;
 
-	@Column(name = "NAME")
-	private String name;
-
 	@Column(name = "LEADERSHIP")
-	private Short leadership=0;
-
-	public boolean getLeadership() {
-		return leadership == 1 ? true : false;
-	}
-
-	public void setLeadership(boolean leadership) {
-		this.leadership = leadership ? (short) 1 : 0;
-	}
+	private int leadership = 0;
+	
+	private int status;
+	
+	@Transient
+	List<PositionDesc> positionDescs;
+	
 
 	@Override
 	public Long getId() {
@@ -57,17 +53,33 @@ public class Position extends BaseEntity implements Comparable<Object>, Serializ
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public int getStatus() {
+		return status;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public int getLeadership() {
+		return leadership;
+	}
+
+	public void setLeadership(int leadership) {
+		this.leadership = leadership;
+	}
+
+	public List<PositionDesc> getPositionDescs() {
+		return positionDescs;
+	}
+
+	public void setPositionDescs(List<PositionDesc> positionDescs) {
+		this.positionDescs = positionDescs;
 	}
 
 	@Override
-	public String toString() {
-		return name;
+	public List<String> getChildEntities() {
+		return Arrays.asList("positionDescs");
 	}
 
 	@Override

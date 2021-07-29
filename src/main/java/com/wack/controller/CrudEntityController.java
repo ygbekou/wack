@@ -32,6 +32,7 @@ public class CrudEntityController extends BaseController {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public BaseEntity save(@PathVariable("entity") String entity, @RequestBody BaseEntity be) {
 		genericService.save(be);
+		genericService.cascadingEntities(be, null);
 		return be;
 	}
 

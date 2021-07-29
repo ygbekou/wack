@@ -40,17 +40,24 @@ public class GenericServiceImpl implements GenericService {
 
 	@Transactional
 	public BaseEntity save(BaseEntity entity) {
+
+		BaseEntity en = null;
 		entity.setModDate(new Date());
 		if (entity.getModifiedBy() == null) {
 			entity.setModifiedBy(1L);
 		}
 		if (entity.getId() == null) {
 			entity.setCreateDate(new Date());
-			return this.genericDao.persist(entity);
+			en = this.genericDao.persist(entity);
 		} else {
-			return this.genericDao.merge(entity);
+			en = this.genericDao.merge(entity);
 		}
+
+		this.cascadingEntities(entity, entity);
+		
+		return en;
 	}
+	
 
 	@Transactional
 	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, boolean useId,
