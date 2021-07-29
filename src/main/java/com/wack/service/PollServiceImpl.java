@@ -16,9 +16,6 @@ public class PollServiceImpl implements PollService  {
 	@Autowired
 	PollDao pollDao;
 
-	@Autowired
-	GenericService genericService;
-	
 	@Override
 	public List<PollQuestion> getPendingPollQuestions(Long pollId, Long userId) {
 		// TODO Auto-generated method stub
