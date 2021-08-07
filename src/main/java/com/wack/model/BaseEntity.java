@@ -7,8 +7,11 @@ import com.wack.model.stock.PaymentType;
 import com.wack.model.website.*;
 import com.wack.poll.Poll;
 import com.wack.poll.PollChoice;
+import com.wack.poll.PollDesc;
 import com.wack.poll.PollQuestion;
+import com.wack.poll.PollQuestionDesc;
 import com.wack.poll.PollType;
+import com.wack.poll.PollTypeDesc;
 import com.wack.poll.Vote;
 
 import javax.persistence.*;
@@ -49,9 +52,12 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = Client.class, name = "Client"),
     @JsonSubTypes.Type(value = CategoryNews.class, name = "CategoryNews"),
     @JsonSubTypes.Type(value = Poll.class, name = "Poll"), 
+    @JsonSubTypes.Type(value = PollDesc.class, name = "PollDesc"), 
     @JsonSubTypes.Type(value = PollChoice.class, name = "PollChoice"), 
     @JsonSubTypes.Type(value = PollQuestion.class, name = "PollQuestion"), 
+    @JsonSubTypes.Type(value = PollQuestionDesc.class, name = "PollQuestionDesc"),
     @JsonSubTypes.Type(value = PollType.class, name = "PollType"), 
+    @JsonSubTypes.Type(value = PollTypeDesc.class, name = "PollTypeDesc"), 
     @JsonSubTypes.Type(value = Video.class, name = "Video"),
     @JsonSubTypes.Type(value = Vote.class, name = "Vote"),
     @JsonSubTypes.Type(value = Position.class, name = "Position"), 

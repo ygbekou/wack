@@ -1,6 +1,8 @@
 package com.wack.poll;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,21 +25,12 @@ public class Poll extends BaseEntity   implements Comparable<Object>, Serializab
 	@Column(name = "POLL_ID")
 	private Long id;
 
-	@Column(name = "TITLE")
-	private String title;
-
-	@Column(name = "DESCRIPTION")
-	private String description;
-
-	@Column(name = "END_NOTE")
-	private String endNote;
-
 	@ManyToOne
 	@JoinColumn(name = "POLL_TYPE_ID")
 	private PollType pollType;
 
 	@Column(name = "STATUS")
-	private Short status = 1;
+	private Integer status = 1;
 
 	@Transient
 	private Integer pollTypeId;
@@ -47,6 +40,9 @@ public class Poll extends BaseEntity   implements Comparable<Object>, Serializab
 
 	@Transient
 	private String error;
+	
+	@Transient
+	List<PollDesc> pollDescs;
 
 	public String getError() {
 		return error;
@@ -69,16 +65,8 @@ public class Poll extends BaseEntity   implements Comparable<Object>, Serializab
 		return id;
 	}
 
-	public boolean getStatus() {
-		return status == 1 ? true : false;
-	}
-
-	public String getEndNote() {
-		return endNote;
-	}
-
-	public void setEndNote(String endNote) {
-		this.endNote = endNote;
+	public Integer getStatus() {
+		return status;
 	}
 
 	public Integer getPollTypeId() {
@@ -89,28 +77,12 @@ public class Poll extends BaseEntity   implements Comparable<Object>, Serializab
 		this.pollTypeId = pollTypeId;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public void setStatus(boolean status) {
-		this.status = (short) (status == true ? 1 : 0);
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public PollType getPollType() {
@@ -119,6 +91,19 @@ public class Poll extends BaseEntity   implements Comparable<Object>, Serializab
 
 	public void setPollType(PollType pollType) {
 		this.pollType = pollType;
+	}
+	
+	public List<PollDesc> getPollDescs() {
+		return pollDescs;
+	}
+
+	public void setPollDescs(List<PollDesc> pollDescs) {
+		this.pollDescs = pollDescs;
+	}
+
+	@Override
+	public List<String> getChildEntities() {
+		return Arrays.asList("pollDescs");
 	}
 	
 	@Override

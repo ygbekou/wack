@@ -1,6 +1,8 @@
 package com.wack.poll;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,13 +30,10 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 	private Integer rank;
 
 	@Column(name = "VOTE_COUNT")
-	private Integer voteCount=0;
+	private Integer voteCount = 0;
 	
-	@Column(name = "DESCRIPTION")
-	private String description;
-	
-	@Column(name = "URL")
-	private String url;
+//	@Column(name = "URL")
+//	private String url;
 
 	@ManyToOne
 	@JoinColumn(name = "POLL_QUESTION_ID")
@@ -46,8 +45,13 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 	
 	@Transient
 	private boolean winner;
+	
 	@Transient
 	private String error;
+	
+	@Transient
+	List<PollChoiceDesc> pollChoiceDescs;
+	
 	public boolean isWinner() {
 		return winner;
 	}
@@ -60,13 +64,13 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 		this.error = error;
 	}
 
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
+//	public String getUrl() {
+//		return url;
+//	}
+//
+//	public void setUrl(String url) {
+//		this.url = url;
+//	}
 
 	public void setWinner(boolean winner) {
 		this.winner = winner;
@@ -78,14 +82,6 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 
 	public void setVoteCount(Integer voteCount) {
 		this.voteCount = voteCount;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public PollQuestion getPollQuestion() {
@@ -119,6 +115,19 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public List<PollChoiceDesc> getPollChoiceDescs() {
+		return pollChoiceDescs;
+	}
+
+	public void setPollChoiceDescs(List<PollChoiceDesc> pollChoiceDescs) {
+		this.pollChoiceDescs = pollChoiceDescs;
+	}
+
+	@Override
+	public List<String> getChildEntities() {
+		return Arrays.asList("pollChoices");
 	}
 
 	@Override
