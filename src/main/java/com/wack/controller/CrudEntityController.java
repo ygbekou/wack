@@ -1,5 +1,5 @@
 package com.wack.controller;
-import java.lang.reflect.Field;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -32,6 +32,7 @@ public class CrudEntityController extends BaseController {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public BaseEntity save(@PathVariable("entity") String entity, @RequestBody BaseEntity be) {
 		genericService.save(be);
+		genericService.cascadingEntities(be, null);
 		return be;
 	}
 

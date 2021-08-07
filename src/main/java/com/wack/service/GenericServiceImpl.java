@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +40,24 @@ public class GenericServiceImpl implements GenericService {
 
 	@Transactional
 	public BaseEntity save(BaseEntity entity) {
+
+		BaseEntity en = null;
 		entity.setModDate(new Date());
 		if (entity.getModifiedBy() == null) {
 			entity.setModifiedBy(1L);
 		}
 		if (entity.getId() == null) {
 			entity.setCreateDate(new Date());
-			return this.genericDao.persist(entity);
+			en = this.genericDao.persist(entity);
 		} else {
-			return this.genericDao.merge(entity);
+			en = this.genericDao.merge(entity);
 		}
+
+		this.cascadingEntities(entity, entity);
+		
+		return en;
 	}
+	
 
 	@Transactional
 	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, boolean useId,
@@ -389,7 +397,12 @@ public class GenericServiceImpl implements GenericService {
 						.getMethod("get" + childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1))
 						.invoke(entity);
 				for (BaseEntity child : childs) {
-					field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().toLowerCase());
+					try {
+						field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().toLowerCase());
+					} catch(Exception e) {
+						field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().substring(0, 1).toLowerCase() 
+								+ entity.getClass().getSimpleName().substring(1));
+					}
 					field.setAccessible(true);
 					field.set(child, value);
 					if (value != null) {
