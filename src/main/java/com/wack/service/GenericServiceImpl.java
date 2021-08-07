@@ -407,12 +407,14 @@ public class GenericServiceImpl implements GenericService {
 					field.set(child, value);
 					if (value != null) {
 						this.save(child);
+					} else {
+						this.cascadingEntities(child, null);
 					}
 				}
 			}
 
 		} catch (Exception ex) {
-
+			ex.printStackTrace();
 		}
 	}
 
@@ -446,6 +448,10 @@ public class GenericServiceImpl implements GenericService {
 				Field field = entity.getClass().getDeclaredField(childEntity);
 				field.setAccessible(true);
 				field.set(entity, childs);
+				
+				for (BaseEntity ch: childs) {
+					getChilds(ch);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

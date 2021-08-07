@@ -127,7 +127,7 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 
 	@Override
 	public List<String> getChildEntities() {
-		return Arrays.asList("pollChoices");
+		return Arrays.asList("pollChoiceDescs");
 	}
 
 	@Override
