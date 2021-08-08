@@ -1,6 +1,8 @@
 package com.wack.poll;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,9 +29,6 @@ public class PollQuestion extends BaseEntity implements Comparable<Object>, Seri
 	@Column(name = "RANK")
 	private Integer rank;
 
-	@Column(name = "DESCRIPTION")
-	private String description;
-
 	@ManyToOne
 	@JoinColumn(name = "POLL_ID")
 	private Poll poll;
@@ -41,20 +40,18 @@ public class PollQuestion extends BaseEntity implements Comparable<Object>, Seri
 	@JoinColumn(name = "POSITION_ID")
 	private Position position;
 
+	@Transient
+	List<PollQuestionDesc> pollQuestionDescs;
+	
+	@Transient
+	List<PollChoice> pollChoices;
+	
 	public String getError() {
 		return error;
 	}
 
 	public void setError(String error) {
 		this.error = error;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public Poll getPoll() {
@@ -90,6 +87,27 @@ public class PollQuestion extends BaseEntity implements Comparable<Object>, Seri
 		this.id = id;
 	}
 
+	public List<PollQuestionDesc> getPollQuestionDescs() {
+		return pollQuestionDescs;
+	}
+
+	public void setPollQuestionDescs(List<PollQuestionDesc> pollQuestionDescs) {
+		this.pollQuestionDescs = pollQuestionDescs;
+	}
+
+	public List<PollChoice> getPollChoices() {
+		return pollChoices;
+	}
+
+	public void setPollChoices(List<PollChoice> pollChoices) {
+		this.pollChoices = pollChoices;
+	}
+
+	@Override
+	public List<String> getChildEntities() {
+		return Arrays.asList("pollQuestionDescs", "pollChoices");
+	}
+	
 	@Override
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
