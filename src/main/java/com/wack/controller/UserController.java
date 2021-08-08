@@ -33,13 +33,14 @@ import com.wack.domain.GenericResponse;
 import com.wack.model.BaseEntity;
 import com.wack.model.Mail;
 import com.wack.model.User;
+import com.wack.model.UserGroup;
 import com.wack.service.UserService;
 import com.wack.util.Constants;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser.Feature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper; 
 import com.wack.config.JwtTokenUtil;
 import com.wack.domain.MenuVO;
 import com.wack.domain.PermissionVO;
@@ -172,10 +173,15 @@ public class UserController extends BaseController {
 			lu.setUserName(user.getUserName());
 			user.setPassword(encoder.encode(user.getPassword()));
 			user.setFirstTimeLogin("N");
+			if (user.getUserGroup() == null || user.getUserGroup().getId() == null) {
+				 UserGroup ug = new UserGroup();
+				ug.setId(30L);
+				user.setUserGroup(ug);
+			}
 			userService.save(user);
 			UserRole ur = new UserRole();
-			ur.setUser(user);
-			ur.setRole((Role) userService.find(Role.class, 2L));
+			ur.setUser(user);		
+			ur.setRole((Role) userService.find(Role.class, 30L));
 			userService.save(ur);
 			return this.register(lu);
 		} catch (Exception e) {
