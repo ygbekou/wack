@@ -62,7 +62,7 @@ public class News extends BaseEntity {
 	}
 
 	@Transient
-	private List<NewsVideo> newsVideos;
+	private List<Video> newsVideos;
 	
 	public int getRatingCount() {
 		return ratingCount;
@@ -131,10 +131,10 @@ public class News extends BaseEntity {
 		this.status = status;
 	} 
  
-	public List<NewsVideo> getNewsVideos() {
+	public List<Video> getNewsVideos() {
 		return newsVideos;
 	}
-	public void setNewsVideos(List<NewsVideo> newsVideos) {
+	public void setNewsVideos(List<Video> newsVideos) {
 		this.newsVideos = newsVideos;
 	}
 	public List<String> getChildEntities() {

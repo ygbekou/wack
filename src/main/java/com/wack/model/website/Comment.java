@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
+import com.wack.model.Project;
  
 @Entity
 @Table(name="COMMENT")
@@ -22,6 +23,11 @@ public class Comment extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "NEWS_ID")
 	private News news;
+	
+	@ManyToOne
+	@JoinColumn(name = "PROJECT_ID")
+	private Project project;
+
 	private int rating;
 	private String message;
 	private String author;
@@ -29,8 +35,12 @@ public class Comment extends BaseEntity {
 	private String authorEmail;
 	private int status;
 	
-	
-	
+	public Project getProject() {
+		return project;
+	}
+	public void setProject(Project project) {
+		this.project = project;
+	}
 	public Long getId() {
 		return id;
 	}
