@@ -161,4 +161,11 @@ public class Transaction extends BaseEntity {
 		this.comment = comment;
 	}
 
+	public String getMemberName() {
+		return this.user != null ? this.user.getName() : "";
+	}
+	
+	public String getProjectTitle() {
+		return this.project != null ? this.project.getTitle() : "";
+	}
 }

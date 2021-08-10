@@ -114,4 +114,7 @@ public class PollDesc extends BaseEntity implements Serializable {
 		this.pollTypeDesc = pollTypeDesc;
 	}
 
+	public String getPollTypeDescName() {
+		return pollTypeDesc != null ? pollTypeDesc.getName() : "";
+	}
 }
