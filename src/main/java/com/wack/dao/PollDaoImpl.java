@@ -1,4 +1,5 @@
 package com.wack.dao;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -25,13 +26,22 @@ public class PollDaoImpl implements PollDao {
 	private EntityManager entityManager;
 
 	public List<PollQuestion> getPendingPollQuestions(Long pollId, Long userId) {
-		String sqlQuery = "SELECT PQ.POLL_QUESTION_ID, PQ.DESCRIPTION,  PQ.RANK, P.POSITION_ID, P.NAME  "
-				+ "FROM  POLL_QUESTION PQ LEFT OUTER JOIN POSITION P ON (P.POSITION_ID = PQ.POSITION_ID ) WHERE PQ.POLL_ID= :pollId  "
-				+ "AND NOT EXISTS (SELECT 1 FROM VOTE V, POLL_CHOICE PC WHERE PC.POLL_CHOICE_ID = V.POLL_CHOICE_ID "
-				+ "AND PC.POLL_QUESTION_ID=PQ.POLL_QUESTION_ID AND V.USER_ID = :userId)";
+		List<Object[]> objects = null;
+		if (userId > 0) {
+			String sqlQuery = "SELECT PQ.POLL_QUESTION_ID, PQ.DESCRIPTION,  PQ.RANK, P.POSITION_ID, P.NAME  "
+					+ "FROM  POLL_QUESTION PQ LEFT OUTER JOIN POSITION P ON (P.POSITION_ID = PQ.POSITION_ID ) WHERE PQ.POLL_ID= :pollId  "
+					+ "AND NOT EXISTS (SELECT 1 FROM VOTE V, POLL_CHOICE PC WHERE PC.POLL_CHOICE_ID = V.POLL_CHOICE_ID "
+					+ "AND PC.POLL_QUESTION_ID=PQ.POLL_QUESTION_ID AND V.USER_ID = :userId)";
 
-		List<Object[]> objects = entityManager.createNativeQuery(sqlQuery).setParameter("userId", userId)
-				.setParameter("pollId", pollId).getResultList();
+			objects = entityManager.createNativeQuery(sqlQuery).setParameter("userId", userId)
+					.setParameter("pollId", pollId).getResultList();
+		}else {
+			String sqlQuery = "SELECT PQ.POLL_QUESTION_ID, PQ.DESCRIPTION,  PQ.RANK, P.POSITION_ID, P.NAME  "
+					+ "FROM  POLL_QUESTION PQ LEFT OUTER JOIN POSITION P ON (P.POSITION_ID = PQ.POSITION_ID ) WHERE PQ.POLL_ID= :pollId  ";
+
+			objects = entityManager.createNativeQuery(sqlQuery)
+					.setParameter("pollId", pollId).getResultList();
+		}
 
 		List<PollQuestion> yss = new ArrayList<PollQuestion>();
 		PollQuestion ys;
