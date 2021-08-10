@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Session;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;

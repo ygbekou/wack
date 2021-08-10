@@ -69,6 +69,7 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = Contribution.class, name = "Contribution"), 
     @JsonSubTypes.Type(value = PaymentType.class, name = "PaymentType"), 
     @JsonSubTypes.Type(value = PaymentHistory.class, name = "PaymentHistory"), 
+    @JsonSubTypes.Type(value = Transaction.class, name = "Transaction"), 
     @JsonSubTypes.Type(value = Category.class, name = "Category") 
 }) 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
