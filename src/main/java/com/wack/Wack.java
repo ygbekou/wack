@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -65,5 +66,10 @@ public class Wack extends SpringBootServletInitializer{
 //	    bean.setOrder(0);
 //	    return bean;
 	    return new CorsFilter(source);
+	}
+	
+	@Bean
+	public RestTemplate getRestTemplate() {
+		return new RestTemplate();
 	}
 }

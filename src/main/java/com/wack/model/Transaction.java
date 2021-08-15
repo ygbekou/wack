@@ -36,7 +36,7 @@ public class Transaction extends BaseEntity {
 	private Double rebate =0.0;
 
 	@Column(name = "IO")
-	private Short io=1;
+	private Integer io;
 
 	@Column(name = "COMMENT")
 	private String comment;
@@ -112,11 +112,11 @@ public class Transaction extends BaseEntity {
 		this.project = project;
 	}
 
-	public Short getIo() {
+	public Integer getIo() {
 		return io;
 	}
 
-	public void setIo(Short io) {
+	public void setIo(Integer io) {
 		this.io = io;
 	}
 
