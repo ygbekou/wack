@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stripe.Stripe;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 import com.wack.domain.GenericChartDto;
 import com.wack.domain.GenericVO;
+import com.wack.domain.PaymentResponse;
 import com.wack.model.BaseEntity;
+import com.wack.model.Transaction;
 import com.wack.model.stock.Payment;
+import com.wack.service.PaymentProcessingService;
 import com.wack.service.PaymentService;
 import com.wack.util.CacheUtil;
 
@@ -30,6 +36,10 @@ public class PaymentController extends BaseController {
 		@Autowired
 		@Qualifier("paymentService")
 		PaymentService paymentService;
+		
+		@Autowired
+		@Qualifier("stripeService")
+		PaymentProcessingService stripeService;
 	
 	
 		@RequestMapping(value="/save",method = RequestMethod.POST)
@@ -45,6 +55,24 @@ public class PaymentController extends BaseController {
 			GenericChartDto result =  paymentService.getMonthlyPayments();
 			
 			return result;
+		}
+		
+		@RequestMapping(value = "/stripe-key", method = RequestMethod.GET)
+		public String retrieveStripeKey() {
+			return this.stripeService.retrievePublishableKey();
+		}
+		
+		@RequestMapping(value="/clientSecret", method = RequestMethod.POST)
+		public PaymentResponse secret(@RequestBody Transaction transaction) {
+			PaymentResponse response;
+			try {
+				response = new PaymentResponse(stripeService.secret(transaction));
+			} catch(Exception ex) {
+				response = new PaymentResponse();
+				response.setErrorCode("FAILURE");
+			}
+			
+			return response;
 		}
 		
 }
