@@ -1,10 +1,13 @@
 package com.wack.model;
+
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import com.wack.domain.ChartData;
 import com.wack.domain.PieChartData;
+import com.wack.model.website.Video;
 import com.wack.util.Utils;
+
 @Entity
 @Table(name = "PROJECT")
 public class Project extends BaseEntity {
@@ -16,7 +19,7 @@ public class Project extends BaseEntity {
 
 	@Column(name = "TITLE")
 	private String title;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	private User user;
@@ -43,72 +46,125 @@ public class Project extends BaseEntity {
 	private Date endDate;
 
 	@Column(name = "STATUS")
-	private Integer status=0;
-	
+	private Integer status = 0;
+
 	@Column(name = "OBJECTIF")
 	private String objectif;
-	
+
 	@Column(name = "LOCATION")
 	private String location;
-	
+
 	@Column(name = "INOVATION")
 	private String inovation;
-	
+
 	@Column(name = "EXISTANT")
 	private String existant;
-	
+
 	@Column(name = "RESOURCE")
 	private String resource;
-	
+
 	@Column(name = "EXECUTION")
 	private String execution;
-	
+
 	@Column(name = "CONSTRAINTS")
 	private String constraints;
-	
+
 	@Column(name = "FEASIBILITY")
 	private String feasibility;
-	
+
 	@Column(name = "BUDGET_LINE")
 	private String budgetLine;
-	
+
 	@Column(name = "RESULT")
 	private String result;
-	
+
 	@Column(name = "DURATION")
 	private String duration;
 
+	@Column(name = "VIEW_COUNT")
+	private int viewCount = 0;
+
+	@Column(name = "RATING_COUNT")
+	private int ratingCount = 0;
+
+	private int rating = 0;
+
 	private String picture = "default.jpeg";
+
+	private int featured;
 	
 	@Transient
 	private boolean hasPhoto;
-	
+
 	@Transient
 	private List<Contribution> contributions;
 
 	@Transient
 	private List<Transaction> expenses;
 
-	@Transient 
+	@Transient
 	private Double totalContributions;
 
-	@Transient 
+	@Transient
 	private Double totalExpenses;
-	
-	@Transient 
-	ChartData data ;
-	
-	@Transient 
-	PieChartData pdata ;
-	
+
+	@Transient
+	ChartData data;
+
+	@Transient
+	PieChartData pdata;
+
 	@Transient
 	Double minContribution;
-	
+
 	@Transient
 	Double maxContribution;
 
 	@Transient
 	Double totalFees;
+
+	@Transient
+	private List<Video> videos;
+
+	public List<Video> getVideos() {
+		return videos;
+	}
+
+	public int getFeatured() {
+		return featured;
+	}
+
+	public void setFeatured(int featured) {
+		this.featured = featured;
+	}
+
+	public int getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
+	}
+
+	public int getRatingCount() {
+		return ratingCount;
+	}
+
+	public void setRatingCount(int ratingCount) {
+		this.ratingCount = ratingCount;
+	}
+
+	public int getRating() {
+		return rating;
+	}
+
+	public void setRating(int rating) {
+		this.rating = rating;
+	}
+
+	public void setVideos(List<Video> videos) {
+		this.videos = videos;
+	}
 
 	public String getObjectif() {
 		return objectif;
@@ -213,7 +269,6 @@ public class Project extends BaseEntity {
 	public void setResult(String result) {
 		this.result = result;
 	}
- 
 
 	public Double getTotalFees() {
 		return totalFees;
@@ -286,7 +341,6 @@ public class Project extends BaseEntity {
 	public void setContributions(List<Contribution> contributions) {
 		this.contributions = contributions;
 	}
-
 
 	@Transient
 	public String getStatusDescription() {
@@ -381,9 +435,8 @@ public class Project extends BaseEntity {
 		return status;
 	}
 
-
 	public void setStatus(Integer status) {
-		this.status =  status ;
+		this.status = status;
 	}
 
 	@Override
@@ -394,10 +447,27 @@ public class Project extends BaseEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
 
 	@Transient
 	public String getShortDescription() {
+		return description != null && description.length() > 200 ? Utils.truncateHTML(description, 200, null)
+				: description;
+	}
+	
+	
+	@Transient
+	public String getShortMessage() {
 		return description != null && description.length() > 100 ? Utils.truncateHTML(description,100,null) : description;
 	}
+
+	@Transient
+	public String getMediumMessage() {
+		return description != null && description.length() > 200 ? Utils.truncateHTML(description,200,null) : description;
+	}
+	
+	@Transient
+	public String getShortTitle() {
+		return title != null && title.length() > 50 ? Utils.truncateString(title,50) : title;
+	}
+	
 }

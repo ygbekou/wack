@@ -174,8 +174,9 @@ public class UserController extends BaseController {
 			user.setPassword(encoder.encode(user.getPassword()));
 			user.setFirstTimeLogin("N");
 			if (user.getUserGroup() == null || user.getUserGroup().getId() == null) {
-				 UserGroup ug = new UserGroup();
-				ug.setId(30L);
+				//  UserGroup ug = new UserGroup();
+				 UserGroup ug = (UserGroup) userService.find(UserGroup.class, 30L);
+				// ug.setId(30L);
 				user.setUserGroup(ug);
 			}
 			userService.save(user);
