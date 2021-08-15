@@ -16,6 +16,10 @@ public class Project extends BaseEntity {
 
 	@Column(name = "TITLE")
 	private String title;
+	
+	@ManyToOne
+	@JoinColumn(name = "USER_ID")
+	private User user;
 
 	@Column(name = "DESCRIPTION")
 	private String description;
@@ -39,8 +43,43 @@ public class Project extends BaseEntity {
 	private Date endDate;
 
 	@Column(name = "STATUS")
-	private Short status=1;
+	private Integer status=0;
+	
+	@Column(name = "OBJECTIF")
+	private String objectif;
+	
+	@Column(name = "LOCATION")
+	private String location;
+	
+	@Column(name = "INOVATION")
+	private String inovation;
+	
+	@Column(name = "EXISTANT")
+	private String existant;
+	
+	@Column(name = "RESOURCE")
+	private String resource;
+	
+	@Column(name = "EXECUTION")
+	private String execution;
+	
+	@Column(name = "CONSTRAINTS")
+	private String constraints;
+	
+	@Column(name = "FEASIBILITY")
+	private String feasibility;
+	
+	@Column(name = "BUDGET_LINE")
+	private String budgetLine;
+	
+	@Column(name = "RESULT")
+	private String result;
+	
+	@Column(name = "DURATION")
+	private String duration;
 
+	private String picture = "default.jpeg";
+	
 	@Transient
 	private boolean hasPhoto;
 	
@@ -70,6 +109,111 @@ public class Project extends BaseEntity {
 
 	@Transient
 	Double totalFees;
+
+	public String getObjectif() {
+		return objectif;
+	}
+
+	public String getDuration() {
+		return duration;
+	}
+
+	public void setDuration(String duration) {
+		this.duration = duration;
+	}
+
+	public String getPicture() {
+		return picture;
+	}
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+
+	public void setObjectif(String objectif) {
+		this.objectif = objectif;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getInovation() {
+		return inovation;
+	}
+
+	public void setInovation(String inovation) {
+		this.inovation = inovation;
+	}
+
+	public String getExistant() {
+		return existant;
+	}
+
+	public void setExistant(String existant) {
+		this.existant = existant;
+	}
+
+	public String getResource() {
+		return resource;
+	}
+
+	public void setResource(String resource) {
+		this.resource = resource;
+	}
+
+	public String getExecution() {
+		return execution;
+	}
+
+	public void setExecution(String execution) {
+		this.execution = execution;
+	}
+
+	public String getConstraints() {
+		return constraints;
+	}
+
+	public void setConstraints(String constraints) {
+		this.constraints = constraints;
+	}
+
+	public String getFeasibility() {
+		return feasibility;
+	}
+
+	public void setFeasibility(String feasibility) {
+		this.feasibility = feasibility;
+	}
+
+	public String getBudgetLine() {
+		return budgetLine;
+	}
+
+	public void setBudgetLine(String budgetLine) {
+		this.budgetLine = budgetLine;
+	}
+
+	public String getResult() {
+		return result;
+	}
+
+	public void setResult(String result) {
+		this.result = result;
+	}
+ 
 
 	public Double getTotalFees() {
 		return totalFees;
@@ -233,13 +377,13 @@ public class Project extends BaseEntity {
 		this.endDate = endDate;
 	}
 
-	public boolean getStatus() {
-		return status==1?true:false;
+	public Integer getStatus() {
+		return status;
 	}
 
 
-	public void setStatus(boolean status) {
-		this.status = (short) (status==true?1:0);
+	public void setStatus(Integer status) {
+		this.status =  status ;
 	}
 
 	@Override
