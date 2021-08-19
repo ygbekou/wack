@@ -320,4 +320,8 @@ public class Utils {
 	public static Integer getIntegerValue(Object obj) {
 		return obj == null ? null : new Integer(obj.toString());
 	}
+	
+	public static int getCurrencyDecimalPlaces(String ccy) {
+		return ("XOF".equalsIgnoreCase(ccy)) ? 0 : 2;
+	}
 }
