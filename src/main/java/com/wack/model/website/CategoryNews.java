@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
+import com.wack.model.News;
 
 @Entity
 @Table(name = "CATEGORY_NEWS")

@@ -72,6 +72,9 @@ public class User extends BaseEntity {
 	private String instagram;
 	private String website;
 	
+	@Column(name = "PHONE")
+	private String phone;
+	
 	@Column(name="RECEIVE_NEWSLETTER")
 	private boolean receiveNewsletter;
 	
@@ -96,6 +99,14 @@ public class User extends BaseEntity {
 		this.id = id;
 	}
 
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
 	public Long getId() {
 		return id;

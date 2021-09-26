@@ -7,7 +7,7 @@ public class Constants {
 	public final static String VALIDATOR_PACKAGE_NAME = "com.wack.validator.";
 	
 	/**
-	 * LOCAL	 
+	 * LOCAL - Panawe	 
 	 * 
 	public static String DOC_FOLDER = "C:\\My Projects\\batandbel\\src\\assets\\docs";
 	public static String PIC_FOLDER = "C:\\My Projects\\batandbel\\src\\assets\\images";
@@ -16,20 +16,20 @@ public class Constants {
 	
 	/**
 	 * LOCAL	 
-	 *  */
+	 *  
 	public static String DOC_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\docs";
 	public static String PIC_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\images";
 	public static String REPORT_RESULT_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\reports"; 
-	
+	*/
 	
 	/**
 	 * PROD	
 	 *  
-	 
-	public static String REPORT_RESULT_FOLDER = "/home/panawe/apps/apache-tomcat-9.0.0.M22/webapps/ROOT/assets/reports"; 
-	public static String PIC_FOLDER="/home/panawe/apps/apache-tomcat-9.0.0.M22/webapps/ROOT/assets/images";
-	public static String DOC_FOLDER = "/home/panawe/apps/apache-tomcat-9.0.0.M22/webapps/ROOT/assets/docs"; 
-	**/ 
+	 **/ 
+	public static String REPORT_RESULT_FOLDER = "/home/ec2-user/apps/apache-tomcat-9.0.0.M22/webapps/ROOT/assets/reports"; 
+	public static String PIC_FOLDER="/home/ec2-user/apps/apache-tomcat-9.0.0.M22/webapps/ROOT/assets/images";
+	public static String DOC_FOLDER = "/home/ec2-user/apps/apache-tomcat-9.0.0.M22/webapps/ROOT/assets/docs"; 
+	
 	
 	public static Locale LOCALE = new Locale( "fr", "FR" );		
 	public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 5000*60*60;

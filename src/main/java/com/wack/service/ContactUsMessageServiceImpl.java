@@ -1,6 +1,8 @@
 package com.wack.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -29,18 +31,33 @@ public class ContactUsMessageServiceImpl  implements ContactUsMessageService {
 	@Transactional
 	public BaseEntity save(ContactUsMessage contactUsMessage) {		
 		ContactUsMessage saveMessage = (ContactUsMessage) genericService.save(contactUsMessage);
+		Company company = this.genericService.getCompany("fr");
+		String subject = "Message depuis le site de "+company.getName()+" venant de " + contactUsMessage.getName();
+		ArrayList<String> to = new ArrayList<String>();
+		for(String a: company.getToEmail().split(",")) {
+			to.add(a);
+		} 
 		
-		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-
-		Company company = this.genericService.getCompany("EN");
-		
-		String emailMessage = "Name :    "  + contactUsMessage.getName() + "\n"
-							+ "Phone Number:    "  + contactUsMessage.getPhone() + "\n\n"
+		if(contactUsMessage.getProject()!=null) {
+			subject = "Feedback sur le projet "
+					+contactUsMessage.getProject().getTitle()
+					+" depuis le site de "+company.getName();
+			to.add(contactUsMessage.getProject().getUser().getEmail());
+		}else if(contactUsMessage.getNews()!=null) {
+			subject = "Feedback sur l'article "
+					+contactUsMessage.getNews().getTitle()
+					+" depuis le site de "+company.getName();
+			to.add(contactUsMessage.getNews().getAuthor().getEmail());
+		}
+		String emailMessage = "Auteur :    "  + contactUsMessage.getName() + "\n"
+							+ "Tel:    "  + (contactUsMessage.getPhone()==null?"": contactUsMessage.getPhone()) + "\n"
+							+ "E-mail:    "  + contactUsMessage.getEmail() + "\n\n"
 							+ contactUsMessage.getMessage();
-		
 		try {
-			mailSender.sendMail(contactUsMessage.getEmail(), company.getToEmail().split(","), 
-				"Contact Message from " + contactUsMessage.getName(), emailMessage);
+			String[] array = new String[to.size()];
+			to.toArray(array); // fill the array
+			mailSender.sendMail(contactUsMessage.getEmail(), array, 
+				subject, emailMessage);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}

@@ -1,4 +1,4 @@
-package com.wack.model.website;
+package com.wack.model;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Blob;
@@ -18,8 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.wack.util.Utils;
-import com.wack.model.BaseEntity;
-import com.wack.model.User;
  
 @Entity
 @Table(name="NEWS")
@@ -62,7 +60,7 @@ public class News extends BaseEntity {
 	}
 
 	@Transient
-	private List<Video> newsVideos;
+	private List<Video> videos;
 	
 	public int getRatingCount() {
 		return ratingCount;
@@ -131,14 +129,15 @@ public class News extends BaseEntity {
 		this.status = status;
 	} 
  
-	public List<Video> getNewsVideos() {
-		return newsVideos;
+ 
+	public List<Video> getVideos() {
+		return videos;
 	}
-	public void setNewsVideos(List<Video> newsVideos) {
-		this.newsVideos = newsVideos;
+	public void setVideos(List<Video> videos) {
+		this.videos = videos;
 	}
 	public List<String> getChildEntities() {
-		return Arrays.asList("newsVideos");
+		return Arrays.asList("videos");
 	}
 	
 	@Transient

@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>wack</name>
 	<description>Web Site Management</description>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<properties>
 		<jdk.version>1.8</jdk.version>

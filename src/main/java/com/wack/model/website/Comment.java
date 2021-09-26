@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
+import com.wack.model.News;
 import com.wack.model.Project;
  
 @Entity

@@ -1,4 +1,4 @@
-package com.wack.model.website;
+package com.wack.model;
 
 import java.util.Date;
 
@@ -11,9 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.wack.model.BaseEntity;
-import com.wack.model.Project;
  
 @Entity
 @Table(name="VIDEO")

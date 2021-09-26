@@ -1,11 +1,11 @@
 package com.wack.model;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import com.wack.domain.ChartData;
 import com.wack.domain.PieChartData;
-import com.wack.model.website.Video;
 import com.wack.util.Utils;
 
 @Entity
@@ -448,6 +448,10 @@ public class Project extends BaseEntity {
 		this.id = id;
 	}
 
+	public List<String> getChildEntities() {
+		return Arrays.asList("videos");
+	}
+	
 	@Transient
 	public String getShortDescription() {
 		return description != null && description.length() > 200 ? Utils.truncateHTML(description, 200, null)

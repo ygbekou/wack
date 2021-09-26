@@ -82,9 +82,9 @@ public class GenericServiceImpl implements GenericService {
 					fileName = saveImage(file, "company", file.getOriginalFilename());
 
 				} else {
-					if (entity.getUseIdAsFileName() != null && entity.getUseIdAsFileName() == 1) {
+					/*if (entity.getUseIdAsFileName() != null && entity.getUseIdAsFileName() == 1) {
 						fileName = saveImage(file, entity.getClass().getSimpleName().toLowerCase(), entity.getId()+".jpg");
-					} else {
+					} else {*/
 					
 						List<String> existingFileNames = this.getFiles(entity.getId(), entity.getClass().getSimpleName().toLowerCase());
 						String expectingFileName = null;
@@ -100,7 +100,7 @@ public class GenericServiceImpl implements GenericService {
 						}
 						
 						fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), expectingFileName);
-					}
+					// }
 				}
 				String fieldName = null;
 				if (file.getOriginalFilename().startsWith("picture.") || (entity.getUseIdAsFileName() == 1) ) {
@@ -359,7 +359,6 @@ public class GenericServiceImpl implements GenericService {
 
 	public Company getCompany(String language) {
 		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-
 		paramTupleList.add(Quartet.with("c.language = ", "language", language, "String"));
 		paramTupleList.add(Quartet.with("c.status = ", "status", "0", "Integer"));
 		String queryStr = "SELECT c FROM Company c WHERE 1 = 1";
@@ -367,9 +366,7 @@ public class GenericServiceImpl implements GenericService {
 		if (companies.size() > 0) {
 			return (Company) companies.get(0);
 		}
-
 		return null;
-
 	}
 
 	public Integer deleteNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters) {
@@ -395,6 +392,7 @@ public class GenericServiceImpl implements GenericService {
 				List<BaseEntity> childs = (List<BaseEntity>) entity.getClass()
 						.getMethod("get" + childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1))
 						.invoke(entity);
+				if(childs!=null)
 				for (BaseEntity child : childs) {
 					try {
 						field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().toLowerCase());
