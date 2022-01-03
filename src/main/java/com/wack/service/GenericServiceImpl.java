@@ -197,6 +197,8 @@ public class GenericServiceImpl implements GenericService {
 
 	public List<BaseEntity> getByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters,
 			String orderBy) {
+		System.out.println(queryStr);
+		System.out.println(parameters);
 		return this.genericDao.getByCriteria(queryStr, parameters, orderBy);
 	}
 

@@ -1,31 +1,22 @@
 package com.wack.controller;
 
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.stripe.Stripe;
-import com.stripe.model.PaymentIntent;
-import com.stripe.param.PaymentIntentCreateParams;
 import com.wack.domain.GenericChartDto;
-import com.wack.domain.GenericVO;
 import com.wack.domain.PaymentResponse;
 import com.wack.model.BaseEntity;
 import com.wack.model.Transaction;
 import com.wack.model.stock.Payment;
 import com.wack.service.PaymentProcessingService;
 import com.wack.service.PaymentService;
-import com.wack.util.CacheUtil;
-
-import net.sf.ehcache.Element;
 
 
 @RestController
@@ -73,6 +64,14 @@ public class PaymentController extends BaseController {
 			}
 			
 			return response;
+		}
+		
+		@RequestMapping(value="/saveTransaction",method = RequestMethod.POST)
+		public BaseEntity save(@RequestBody Transaction transaction) throws Exception {
+				
+			this.paymentService.save(transaction);
+			
+			return transaction;
 		}
 		
 }

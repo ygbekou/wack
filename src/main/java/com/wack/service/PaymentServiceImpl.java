@@ -15,6 +15,7 @@ import com.wack.domain.GenericChartDto;
 import com.wack.domain.GenericVO;
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
+import com.wack.model.Transaction;
 import com.wack.model.stock.ContractLabor;
 import com.wack.model.stock.Payment;
 
@@ -28,6 +29,10 @@ public class PaymentServiceImpl  implements PaymentService {
 	@Autowired
 	@Qualifier("myMailSender")
 	MyMailSender mailSender;
+	
+	@Autowired
+	@Qualifier("paygateGlobalService")
+	PaymentProcessingService paygateGlobalService;;
 	
 	
 	@Transactional
@@ -98,4 +103,24 @@ public class PaymentServiceImpl  implements PaymentService {
 		return result;
 	}
 
+	
+	@Transactional
+	public BaseEntity save(Transaction transaction) throws Exception {		
+		Boolean isNew = transaction.getId() == null;
+		
+		Transaction trans = (Transaction) genericService.save(transaction);
+		
+		if (isNew) {
+			if ("FLOOZ".equals(trans.getPaymentMethod())) {
+				paygateGlobalService.processPayment(transaction);
+			} else if ("TMONEY".equals(trans.getPaymentMethod())) {
+				paygateGlobalService.setRedirectionPaymentUrl(transaction);
+			}
+			
+		}
+		
+		return trans;
+		
+	}
+	
 }

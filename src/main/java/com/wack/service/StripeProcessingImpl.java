@@ -17,6 +17,7 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
+import com.wack.domain.PaygateglobalConfirmationEntity;
 import com.wack.model.Transaction;
 
 
@@ -73,4 +74,22 @@ public class StripeProcessingImpl implements PaymentProcessingService {
     private void postConstruct() {
         Stripe.apiKey = this.stripeSecretKey;
     }
+
+	@Override
+	public void processPayment(Transaction transaction) throws InterruptedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Transaction processPaymentConfirmation(PaygateglobalConfirmationEntity confirmationEntity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setRedirectionPaymentUrl(Transaction transaction) {
+		// TODO Auto-generated method stub
+		
+	}
 }

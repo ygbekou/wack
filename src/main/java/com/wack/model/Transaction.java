@@ -54,7 +54,20 @@ public class Transaction extends BaseEntity {
 	
 	@Column(name = "TRAN_DATE")
 	private Date tranDate = new Date();
+	
+	private String phone;
+	
+	@Column(name = "PAYMENT_METHOD")
+	private String paymentMethod;
+	
 
+	@Column(name = "FAILURE_REASON")
+	private String failureReason;
+	
+	private int status;
+	
+	@Transient
+	private String paygateGlobalPaymentUrl;
 	
 
 	public Date getTranDate() {
@@ -73,7 +86,7 @@ public class Transaction extends BaseEntity {
 	private Short anonymous=0;
 	
 	@Transient
-	private String currencyCode="CFA";
+	private String currencyCode="XOF";
 
 	public String getCurrencyCode() {
 		return currencyCode;
@@ -168,4 +181,46 @@ public class Transaction extends BaseEntity {
 	public String getProjectTitle() {
 		return this.project != null ? this.project.getTitle() : "";
 	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(String paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public String getPaygateGlobalPaymentUrl() {
+		return paygateGlobalPaymentUrl;
+	}
+
+	public void setPaygateGlobalPaymentUrl(String paygateGlobalPaymentUrl) {
+		this.paygateGlobalPaymentUrl = paygateGlobalPaymentUrl;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getFailureReason() {
+		return failureReason;
+	}
+
+	public void setFailureReason(String failureReason) {
+		this.failureReason = failureReason;
+	}
+	
+	
 }
