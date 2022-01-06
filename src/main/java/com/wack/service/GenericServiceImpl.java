@@ -1,6 +1,8 @@
 package com.wack.service;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,14 +16,18 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.javatuples.Quartet;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.wack.dao.GenericDao;
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
 import com.wack.model.User;
 import com.wack.model.authorization.UserRole;
+import com.wack.model.website.Slider;
 import com.wack.util.Constants;
 
 @Service(value = "genericService")
@@ -53,10 +59,42 @@ public class GenericServiceImpl implements GenericService {
 		}
 
 		this.cascadingEntities(entity, entity);
-		
+
+		performExtraUpdate(entity);
+
 		return en;
 	}
-	
+
+	public void performExtraUpdate(BaseEntity entity) {
+
+		if ("Slider".equals(entity.getClass().getSimpleName())) {
+			System.out.println("Performing Extra activities on Slider save.");
+
+			JSONArray jsonArray = new JSONArray();
+			List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+			
+			String queryStr =  "SELECT s FROM Slider s WHERE 1 = 1";
+			List<Slider> sliders = (List)getByCriteria(queryStr, paramTupleList, " ORDER BY s.rank ");
+			
+			for (Slider slider : sliders) {
+				JSONObject jsonObject = new JSONObject();
+				String storageDirectory = "assets/images/sliders/" + slider.getId() + "/";
+				jsonObject.put("image", storageDirectory + slider.getPicture());
+				jsonArray.put(jsonObject);
+			}
+
+			try (FileWriter file = new FileWriter(Constants.DATA_FOLDER + "/slides.json")) {
+				// We can write any JSONArray or JSONObject instance to the file
+				file.write(jsonArray.toString());
+				file.flush();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
 
 	@Transactional
 	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files, boolean useId,
@@ -65,11 +103,11 @@ public class GenericServiceImpl implements GenericService {
 		this.save(entity);
 
 		this.cascadingEntities(entity, entity);
-		
+
 		deleteRemovedFiles(entity);
 
 		try {
-		
+
 			int i = 0;
 			int fileNameIndex = 0;
 			for (MultipartFile file : files) {
@@ -82,28 +120,31 @@ public class GenericServiceImpl implements GenericService {
 					fileName = saveImage(file, "company", file.getOriginalFilename());
 
 				} else {
-					/*if (entity.getUseIdAsFileName() != null && entity.getUseIdAsFileName() == 1) {
-						fileName = saveImage(file, entity.getClass().getSimpleName().toLowerCase(), entity.getId()+".jpg");
-					} else {*/
-					
-						List<String> existingFileNames = this.getFiles(entity.getId(), entity.getClass().getSimpleName().toLowerCase());
-						String expectingFileName = null;
-						
-						while (expectingFileName == null) {
-							expectingFileName = entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId() + "_" + fileNameIndex
-														+ originalFileExtension;
-							
-							if (existingFileNames.contains(expectingFileName)) {
-								expectingFileName = null;
-								fileNameIndex += 1;
-							}
+					/*
+					 * if (entity.getUseIdAsFileName() != null && entity.getUseIdAsFileName() == 1)
+					 * { fileName = saveImage(file, entity.getClass().getSimpleName().toLowerCase(),
+					 * entity.getId()+".jpg"); } else {
+					 */
+
+					List<String> existingFileNames = this.getFiles(entity.getId(),
+							entity.getClass().getSimpleName().toLowerCase());
+					String expectingFileName = null;
+
+					while (expectingFileName == null) {
+						expectingFileName = entity.getClass().getSimpleName().toLowerCase() + "_" + entity.getId() + "_"
+								+ fileNameIndex + originalFileExtension;
+
+						if (existingFileNames.contains(expectingFileName)) {
+							expectingFileName = null;
+							fileNameIndex += 1;
 						}
-						
-						fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), expectingFileName);
+					}
+
+					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), expectingFileName);
 					// }
 				}
 				String fieldName = null;
-				if (file.getOriginalFilename().startsWith("picture.") || (entity.getUseIdAsFileName() == 1) ) {
+				if (file.getOriginalFilename().startsWith("picture.") || (entity.getUseIdAsFileName() == 1)) {
 					fieldName = "picture";
 				} else {
 
@@ -129,7 +170,7 @@ public class GenericServiceImpl implements GenericService {
 
 		return entity;
 	}
-	
+
 	private void deleteRemovedFiles(BaseEntity entity) {
 
 		if (entity.getRemainingFileNames() != null && entity.getFileNames() != null) {
@@ -141,7 +182,6 @@ public class GenericServiceImpl implements GenericService {
 			}
 		}
 	}
-
 
 	@Transactional
 	public void delete(BaseEntity entity) {
@@ -240,11 +280,11 @@ public class GenericServiceImpl implements GenericService {
 				}
 
 				File newFile = new File(storageDirectory + "/" + fileName);
-				
-				//if (!newFile.exists()) {
-					file.transferTo(newFile);
-				//}
-				
+
+				// if (!newFile.exists()) {
+				file.transferTo(newFile);
+				// }
+
 				return fileName;
 
 			} catch (Exception e) {
@@ -262,7 +302,7 @@ public class GenericServiceImpl implements GenericService {
 				// transfer to upload folder
 				String storageDirectory = null;
 				if (entityName != null) {
-					storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase()  
+					storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase()
 							+ File.separator;
 					File dir = new File(storageDirectory);
 					if (!dir.exists()) {
@@ -294,7 +334,7 @@ public class GenericServiceImpl implements GenericService {
 			String storageDirectory = null;
 			if (entityName != null) {
 				storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase()
-				+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
+						+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
 				File dir = new File(storageDirectory);
 				if (dir.exists()) {
 					File[] files = dir.listFiles();
@@ -308,14 +348,14 @@ public class GenericServiceImpl implements GenericService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 
 			// transfer to upload folder
 			String storageDirectory = null;
 			if (entityName != null) {
 				storageDirectory = Constants.DOC_FOLDER + File.separator + entityName.toLowerCase()
-				+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
+						+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
 				File dir = new File(storageDirectory);
 				if (dir.exists()) {
 					File[] files = dir.listFiles();
@@ -329,7 +369,7 @@ public class GenericServiceImpl implements GenericService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return fileNames;
 
 	}
@@ -341,7 +381,7 @@ public class GenericServiceImpl implements GenericService {
 			String storageDirectory = null;
 			if (entityName != null) {
 				storageDirectory = Constants.PIC_FOLDER + File.separator + entityName.toLowerCase()
-				+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
+						+ (entityName.toLowerCase().endsWith("s") ? "" : "s") + File.separator + entityId;
 				File dir = new File(storageDirectory);
 				if (dir.exists()) {
 					File file = new File(storageDirectory + "/" + fileName);
@@ -394,22 +434,23 @@ public class GenericServiceImpl implements GenericService {
 				List<BaseEntity> childs = (List<BaseEntity>) entity.getClass()
 						.getMethod("get" + childEntity.substring(0, 1).toUpperCase() + childEntity.substring(1))
 						.invoke(entity);
-				if(childs!=null)
-				for (BaseEntity child : childs) {
-					try {
-						field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().toLowerCase());
-					} catch(Exception e) {
-						field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().substring(0, 1).toLowerCase() 
-								+ entity.getClass().getSimpleName().substring(1));
+				if (childs != null)
+					for (BaseEntity child : childs) {
+						try {
+							field = child.getClass().getDeclaredField(entity.getClass().getSimpleName().toLowerCase());
+						} catch (Exception e) {
+							field = child.getClass()
+									.getDeclaredField(entity.getClass().getSimpleName().substring(0, 1).toLowerCase()
+											+ entity.getClass().getSimpleName().substring(1));
+						}
+						field.setAccessible(true);
+						field.set(child, value);
+						if (value != null) {
+							this.save(child);
+						} else {
+							this.cascadingEntities(child, null);
+						}
 					}
-					field.setAccessible(true);
-					field.set(child, value);
-					if (value != null) {
-						this.save(child);
-					} else {
-						this.cascadingEntities(child, null);
-					}
-				}
 			}
 
 		} catch (Exception ex) {
@@ -447,8 +488,8 @@ public class GenericServiceImpl implements GenericService {
 				Field field = entity.getClass().getDeclaredField(childEntity);
 				field.setAccessible(true);
 				field.set(entity, childs);
-				
-				for (BaseEntity ch: childs) {
+
+				for (BaseEntity ch : childs) {
 					getChilds(ch);
 				}
 			}
@@ -456,6 +497,5 @@ public class GenericServiceImpl implements GenericService {
 			e.printStackTrace();
 		}
 	}
-	
 
 }

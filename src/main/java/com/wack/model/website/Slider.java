@@ -20,9 +20,9 @@ public class Slider extends BaseEntity {
 	
 	private String name;
 	
-	@Column(name ="PICTURE")
 	private String picture;
 	
+	private Integer rank;
 	
 	public Long getId() {
 		return id;
@@ -46,6 +46,14 @@ public class Slider extends BaseEntity {
 
 	public void setPicture(String picture) {
 		this.picture = picture;
+	}
+
+	public Integer getRank() {
+		return rank;
+	}
+
+	public void setRank(Integer rank) {
+		this.rank = rank;
 	}
 
 	
