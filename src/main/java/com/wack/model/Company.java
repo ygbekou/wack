@@ -127,6 +127,9 @@ public class Company extends BaseEntity {
 	@Column (name="DISPLAY_FEATURED_BLOGS")
 	private boolean displayFeaturedBlogs = false;
 	
+	@Column (name="DISPLAY_LANG_MENU")
+	private boolean displayLangMenu = false;
+	
 	public String getFooterType() {
 		return footerType;
 	}
@@ -549,6 +552,14 @@ public class Company extends BaseEntity {
 
 	public void setWebsite(String website) {
 		this.website = website;
+	}
+
+	public boolean isDisplayLangMenu() {
+		return displayLangMenu;
+	}
+
+	public void setDisplayLangMenu(boolean displayLangMenu) {
+		this.displayLangMenu = displayLangMenu;
 	}
 
 }
