@@ -28,6 +28,10 @@ public class Video extends BaseEntity {
 	@JoinColumn(name = "PROJECT_ID")
 	private Project project;
 	
+	@ManyToOne
+	@JoinColumn(name = "USER_ID")
+	private User user;
+	
 	private String name;
 	private String link;
 	private int status;
@@ -113,4 +117,12 @@ public class Video extends BaseEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
 }
