@@ -55,6 +55,7 @@ public class User extends BaseEntity {
 	private String mobilePhone;
 	private String address;
 	private String city;
+	private String resume;
 	@ManyToOne
 	@JoinColumn(name = "COUNTRY_ID")
 	private Country country;
@@ -83,7 +84,17 @@ public class User extends BaseEntity {
 	private List<Role> roles;
 	@Transient
 	private List<Employee> employees;
+	@Transient
+	private List<Video> videos;
 	
+	public List<Video> getVideos() {
+		return videos;
+	}
+
+	public void setVideos(List<Video> videos) {
+		this.videos = videos;
+	}
+
 	public String getFirstTimeLogin() {
 		return firstTimeLogin;
 	}
@@ -99,6 +110,14 @@ public class User extends BaseEntity {
 		this.id = id;
 	}
 
+
+	public String getResume() {
+		return resume;
+	}
+
+	public void setResume(String resume) {
+		this.resume = resume;
+	}
 
 	public String getPhone() {
 		return phone;
@@ -337,13 +356,17 @@ public class User extends BaseEntity {
 		this.employees = employees;
 	}
 	
-	public List<String> getChildEntities() {
+/*	public List<String> getChildEntities() {
 		return Arrays.asList("employees");
-	}
+	}*/
 
 	
 	public void setGeneratedFields(BCryptPasswordEncoder encoder) {
 		this.setPassword(encoder.encode(this.password));
+	}
+	
+	public List<String> getChildEntities() {
+		return Arrays.asList("videos");
 	}
 	
 }
