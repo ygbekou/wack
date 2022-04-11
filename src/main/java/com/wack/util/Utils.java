@@ -2,6 +2,7 @@ package com.wack.util;
 
 import static org.apache.commons.lang.StringEscapeUtils.escapeHtml;
 import java.text.MessageFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date; 
@@ -13,7 +14,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern; 
-import org.springframework.stereotype.Component; 
+import org.springframework.stereotype.Component;
 
 @Component
 public class Utils {
@@ -320,6 +321,21 @@ public class Utils {
 	public static Integer getIntegerValue(Object obj) {
 		return obj == null ? null : new Integer(obj.toString());
 	}
+	
+	public static Date getDateValue(Object obj) {
+		return getDateValue(obj, "yyyy-MM-dd hh:mm:ss");
+	}
+	
+	public static Date getDateValue(Object obj, String formatString) { 
+		try {
+			return obj == null ? null : DateUtil.parseDate(obj.toString(), formatString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	
 	public static int getCurrencyDecimalPlaces(String ccy) {
 		return ("XOF".equalsIgnoreCase(ccy)) ? 0 : 2;

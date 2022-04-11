@@ -148,7 +148,7 @@ public class GenericServiceImpl implements GenericService {
 					fieldName = "picture";
 				} else {
 
-					fieldName = useId ? attributeNames.get(i) : file.getOriginalFilename().split("\\.")[0];
+					fieldName = entity.getUseId() && useId ? attributeNames.get(i) : file.getOriginalFilename().split("\\.")[0];
 				}
 
 				Field field = null;
@@ -189,13 +189,22 @@ public class GenericServiceImpl implements GenericService {
 	}
 
 	@Transactional
-	public void deleteCascade(String parentEntity, String entityName, Long id) {
-		String query = "DELETE FROM " + entityName + " WHERE " + parentEntity + "_ID IN (SELECT " + parentEntity;
-		List<String> childEntities = this.entityCascades.get(entityName);
-		for (String childEntity : childEntities) {
-			deleteCascade(entityName, childEntity, id);
+	public void deleteCascade(Class cl, Long id) {
+		BaseEntity entity = find(cl, id);
+		
+		for (String child: entity.getChildEntities()) {
+			Class childClass = null;
+			try {
+				childClass = Class.forName(cl.getPackage() + child);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			BaseEntity childEntity = find(childClass, id);
+			this.genericDao.delete(childEntity);
 		}
-		// this.genericDao.delete(entity);
+		
+		this.genericDao.delete(entity);
 	}
 
 	@Transactional

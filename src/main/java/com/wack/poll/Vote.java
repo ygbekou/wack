@@ -23,11 +23,14 @@ public class Vote extends BaseEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "POLL_CHOICE_ID")
-	private PollQuestion pollChoice;
+	private PollChoice pollChoice;
 	
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	private User user; 
+	
+	@Column(name = "STATUS")
+	private Integer status = 1;
 
 	public User getUser() {
 		return user;
@@ -46,12 +49,19 @@ public class Vote extends BaseEntity {
 		this.id = id;
 	}
 
-	public PollQuestion getPollChoice() {
+	public PollChoice getPollChoice() {
 		return pollChoice;
 	}
 
-	public void setPollChoice(PollQuestion pollChoice) {
+	public void setPollChoice(PollChoice pollChoice) {
 		this.pollChoice = pollChoice;
 	}
 
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 }

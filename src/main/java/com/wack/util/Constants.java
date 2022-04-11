@@ -18,10 +18,10 @@ public class Constants {
 	/**
 	 * LOCAL	 
 	 */
-	public static String DOC_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\docs";
-	public static String PIC_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\images";
-	public static String REPORT_RESULT_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\reports"; 
-	public static String DATA_FOLDER = "C:\\Development\\batandbelui\\src\\assets\\data";
+	public static String DOC_FOLDER = "C:\\Development\\arbamo\\src\\assets\\docs";
+	public static String PIC_FOLDER = "C:\\Development\\arbamo\\src\\assets\\images";
+	public static String REPORT_RESULT_FOLDER = "C:\\Development\\arbamo\\src\\assets\\reports"; 
+	public static String DATA_FOLDER = "C:\\Development\\arbamo\\src\\assets\\data";
 	
 	/**
 	 * PROD	

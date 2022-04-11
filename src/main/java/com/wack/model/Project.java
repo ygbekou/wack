@@ -32,6 +32,9 @@ public class Project extends BaseEntity {
 
 	@Column(name = "BUDGET")
 	private Double budget;
+	
+	@Column(name = "CONTRIBUTION")
+	private Double contribution;
 
 	@Column(name = "PROJECTED_START_DATE")
 	private Date projectedStartDate;
@@ -260,6 +263,14 @@ public class Project extends BaseEntity {
 
 	public void setBudgetLine(String budgetLine) {
 		this.budgetLine = budgetLine;
+	}
+
+	public Double getContribution() {
+		return contribution;
+	}
+
+	public void setContribution(Double contribution) {
+		this.contribution = contribution;
 	}
 
 	public String getResult() {
