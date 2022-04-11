@@ -131,6 +131,9 @@ public class GenericDaoImpl<E, K> implements GenericDao<E, K> {
 			} else if ("List<String>".equals(parameter.getValue3())) {
 				query.setParameter(parameter.getValue1(), Arrays.asList(parameter.getValue2().split("\\s*,\\s*"))
 						.stream().map(s -> s.trim()).collect(Collectors.toList()));
+			} else if ("ListI".equals(parameter.getValue3())) {
+				query.setParameter(parameter.getValue1(), Arrays.asList(parameter.getValue2().split("\\s*,\\s*"))
+						.stream().map(s -> new Integer(s.trim())).collect(Collectors.toList()));
 			} else if ("Date".equals(parameter.getValue3())) {
 				try {
 					query.setParameter(parameter.getValue1(), DateUtil.parseDate(parameter.getValue2(), "MM/dd/yyyy"),

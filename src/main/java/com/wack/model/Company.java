@@ -72,6 +72,10 @@ public class Company extends BaseEntity {
 	@Column(name = "FOOTER_TYPE")
 	private String footerType;
 	private String website;
+	@Column(name = "CAREER_BANNER_TITLE")
+	private String careerBannerTitle;
+	@Column(name = "CAREER_BANNER_TEXT")
+	private String careerBannerText;
 	
 	private int status;
 	// site themes
@@ -129,6 +133,14 @@ public class Company extends BaseEntity {
 	
 	@Column (name="DISPLAY_LANG_MENU")
 	private boolean displayLangMenu = false;
+	@Column (name="DISPLAY_MENU_CAREER")
+	private boolean displayMenuCareer = false;
+	@Column (name="DISPLAY_MENU_POLL")
+	private boolean displayMenuPoll = false;
+	@Column (name="DISPLAY_MENU_BLOG")
+	private boolean displayMenuBlog = false;
+	@Column (name="DISPLAY_MENU_PROJECT")
+	private boolean displayMenuProject = false;
 	
 	public String getFooterType() {
 		return footerType;
@@ -562,4 +574,53 @@ public class Company extends BaseEntity {
 		this.displayLangMenu = displayLangMenu;
 	}
 
+	public boolean isDisplayMenuCareer() {
+		return displayMenuCareer;
+	}
+
+	public void setDisplayMenuCareer(boolean displayMenuCareer) {
+		this.displayMenuCareer = displayMenuCareer;
+	}
+
+	public boolean isDisplayMenuPoll() {
+		return displayMenuPoll;
+	}
+
+	public void setDisplayMenuPoll(boolean displayMenuPoll) {
+		this.displayMenuPoll = displayMenuPoll;
+	}
+	
+	public boolean isDisplayMenuBlog() {
+		return displayMenuBlog;
+	}
+
+	public void setDisplayMenuBlog(boolean displayMenuBlog) {
+		this.displayMenuBlog = displayMenuBlog;
+	}
+	
+	public boolean isDisplayMenuProject() {
+		return displayMenuProject;
+	}
+
+	public void setDisplayMenuProject(boolean displayMenuProject) {
+		this.displayMenuProject = displayMenuProject;
+	}
+	
+	public String getCareerBannerTitle() {
+		return careerBannerTitle;
+	}
+
+	public void setCareerBannerTitle(String careerBannerTitle) {
+		this.careerBannerTitle = careerBannerTitle;
+	}
+
+	public String getCareerBannerText() {
+		return careerBannerText;
+	}
+
+	public void setCareerBannerText(String careerBannerText) {
+		this.careerBannerText = careerBannerText;
+	}
+
+	
 }

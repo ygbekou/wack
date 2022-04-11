@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wack.domain.PollSearchCriteria;
+import com.wack.poll.Poll;
 import com.wack.poll.PollDesc;
 import com.wack.poll.PollQuestion;
 import com.wack.poll.PollQuestionDesc;
+import com.wack.poll.Vote;
 import com.wack.service.PollService;
 
 
@@ -51,21 +53,25 @@ public class PollRestService {
 	}
  	
  	
- 	@RequestMapping(value="/getPollDescs",method = RequestMethod.POST)
+ 	@RequestMapping(value="/getPollDescs", method = RequestMethod.POST)
 	public List<PollDesc> getPollDescs(@RequestBody PollSearchCriteria searchCriteria) throws Exception {
 			
 		return this.pollService.getPollDescs(searchCriteria);
 		
 	}
  	
-
- 	@RequestMapping(value="/getPollQuestionDescs",method = RequestMethod.POST)
+ 	@RequestMapping(value="/getPollQuestionDescs", method = RequestMethod.POST)
 	public List<PollQuestionDesc> getPollQuestionDescs(@RequestBody PollSearchCriteria searchCriteria) throws Exception {
 			
 		return this.pollService.getPollQuestionDescs(searchCriteria);
 	}
  	
- 	
+ 	@RequestMapping(value="/vote", method = RequestMethod.POST)
+	public Vote vote(@RequestBody Vote vote) throws Exception {
+			
+		return (Vote) this.pollService.processVote(vote);
+		
+	}
 
  }
 

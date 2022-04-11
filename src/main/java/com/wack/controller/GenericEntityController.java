@@ -236,11 +236,14 @@ public class GenericEntityController extends BaseController {
 			}
 		}
 		
-		@RequestMapping(value="/cascade/delete",method = RequestMethod.POST)
-		public String cascadeDelete(@PathVariable("entity") String entity, @RequestBody List<Long> ids) throws JsonParseException, 
-		JsonMappingException, IOException, ClassNotFoundException {
-			this.genericService.delete(this.getClass(entity), ids);
-			return "SUCCESS";
+		@RequestMapping(value="/deleteCascade/{id}", method = RequestMethod.GET, produces = "application/json")
+		public GenericResponse deleteCascade(@PathVariable("entity") String entity, 
+				@PathVariable("id") Long id) throws JsonParseException, 
+				JsonMappingException, IOException, ClassNotFoundException {
+			
+			this.genericService.deleteCascade(this.getClass(entity), id);
+			
+			return new GenericResponse("SUCCESS");
 		}
 	
 }

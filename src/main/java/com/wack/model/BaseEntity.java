@@ -27,6 +27,9 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = Company.class, name = "Company"),     
     @JsonSubTypes.Type(value = Employee.class, name = "Employee"),
     @JsonSubTypes.Type(value = Image.class, name = "Image"),    
+    @JsonSubTypes.Type(value = JobAppli.class, name = "JobAppli"), 
+    @JsonSubTypes.Type(value = JobPosition.class, name = "JobPosition"), 
+    @JsonSubTypes.Type(value = JobPositionDesc.class, name = "JobPositionDesc"), 
     @JsonSubTypes.Type(value = UserGroup.class, name = "UserGroup"),    
     @JsonSubTypes.Type(value = MeetingReport.class, name = "MeetingReport"),     
     @JsonSubTypes.Type(value = MeetingReportDesc.class, name = "MeetingReportDesc"),     
@@ -93,6 +96,8 @@ public abstract class BaseEntity {
 	private List<String> remainingFileNames;
 	@Transient
 	private List<String> childEntities = new ArrayList<>();
+	@Transient
+	private Boolean useId = true;
 	
 	public abstract Long getId() ;
 
@@ -162,6 +167,14 @@ public abstract class BaseEntity {
 
 	public void setRemainingFileNames(List<String> remainingFileNames) {
 		this.remainingFileNames = remainingFileNames;
+	}
+
+	public Boolean getUseId() {
+		return useId;
+	}
+
+	public void setUseId(Boolean useId) {
+		this.useId = useId;
 	}
 
 	public List<String> getChildEntities() {

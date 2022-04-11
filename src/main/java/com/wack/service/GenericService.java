@@ -18,6 +18,7 @@ public interface GenericService {
 	public BaseEntity saveWithFiles(BaseEntity entity, List<MultipartFile> files,
 			boolean useId, List<String> attributeNames);
 	public void delete(BaseEntity entity);
+	public void deleteCascade(Class cl, Long id);
 	public void delete(Class cl, List<Long> ids);
 	public void deleteFile(Class cl, List<Long> ids, String fileName);
 	public BaseEntity find(Class cl, Long key);

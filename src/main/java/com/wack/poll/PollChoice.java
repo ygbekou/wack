@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Formula;
+
 import com.wack.model.BaseEntity;
 import com.wack.model.User;
 
@@ -31,6 +33,9 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 
 	@Column(name = "VOTE_COUNT")
 	private Integer voteCount = 0;
+	
+	@Formula("(SELECT COUNT(V.VOTE_ID) FROM VOTE V WHERE V.POLL_CHOICE_ID = POLL_CHOICE_ID)")
+	private Integer voteCounts;
 	
 //	@Column(name = "URL")
 //	private String url;
@@ -82,6 +87,14 @@ public class PollChoice extends BaseEntity  implements Comparable<Object>, Seria
 
 	public void setVoteCount(Integer voteCount) {
 		this.voteCount = voteCount;
+	}
+
+	public Integer getVoteCounts() {
+		return voteCounts;
+	}
+
+	public void setVoteCounts(Integer voteCounts) {
+		this.voteCounts = voteCounts;
 	}
 
 	public PollQuestion getPollQuestion() {
