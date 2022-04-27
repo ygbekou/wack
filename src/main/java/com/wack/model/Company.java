@@ -141,6 +141,12 @@ public class Company extends BaseEntity {
 	private boolean displayMenuBlog = false;
 	@Column (name="DISPLAY_MENU_PROJECT")
 	private boolean displayMenuProject = false;
+	@Column (name="DISPLAY_MENU_EVENT")
+	private boolean displayMenuEvent = false;
+	@Column (name="DISPLAY_PROJECTS")
+	private boolean displayProjects = false;
+	@Column (name="DISPLAY_POLLS")
+	private boolean displayPolls = false;
 	
 	public String getFooterType() {
 		return footerType;
@@ -606,6 +612,14 @@ public class Company extends BaseEntity {
 		this.displayMenuProject = displayMenuProject;
 	}
 	
+	public boolean isDisplayMenuEvent() {
+		return displayMenuEvent;
+	}
+
+	public void setDisplayMenuEvent(boolean displayMenuEvent) {
+		this.displayMenuEvent = displayMenuEvent;
+	}
+
 	public String getCareerBannerTitle() {
 		return careerBannerTitle;
 	}
@@ -620,6 +634,22 @@ public class Company extends BaseEntity {
 
 	public void setCareerBannerText(String careerBannerText) {
 		this.careerBannerText = careerBannerText;
+	}
+
+	public boolean isDisplayProjects() {
+		return displayProjects;
+	}
+
+	public void setDisplayProjects(boolean displayProjects) {
+		this.displayProjects = displayProjects;
+	}
+
+	public boolean isDisplayPolls() {
+		return displayPolls;
+	}
+
+	public void setDisplayPolls(boolean displayPolls) {
+		this.displayPolls = displayPolls;
 	}
 
 	

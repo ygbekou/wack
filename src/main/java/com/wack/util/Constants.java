@@ -17,12 +17,12 @@ public class Constants {
 	
 	/**
 	 * LOCAL	 
-	
+	*/
 	public static String DOC_FOLDER = "C:\\Development\\arbamo\\src\\assets\\docs";
 	public static String PIC_FOLDER = "C:\\Development\\arbamo\\src\\assets\\images";
 	public static String REPORT_RESULT_FOLDER = "C:\\Development\\arbamo\\src\\assets\\reports"; 
 	public static String DATA_FOLDER = "C:\\Development\\arbamo\\src\\assets\\data";
-	 */
+	 
 	/**
 	 * PROD	ROOT
 	 *  
@@ -35,11 +35,12 @@ public class Constants {
 	/**
 	 * PROD	bidamaservices
 	 *  
-	 **/
+	 *
 	public static String REPORT_RESULT_FOLDER = "/home/ec2-user/apps/apache-tomcat-9.0.0.M22/webapps/bidamaservices/assets/reports"; 
 	public static String PIC_FOLDER="/home/ec2-user/apps/apache-tomcat-9.0.0.M22/webapps/bidamaservices/assets/images";
 	public static String DOC_FOLDER = "/home/ec2-user/apps/apache-tomcat-9.0.0.M22/webapps/bidamaservices/assets/docs"; 
 	public static String DATA_FOLDER = "/home/ec2-user/apps/apache-tomcat-9.0.0.M22/webapps/bidamaservices/assets/data";
+	*/
 	
 	public static Locale LOCALE = new Locale( "fr", "FR" );		
 	public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 5000*60*60;

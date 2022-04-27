@@ -23,6 +23,8 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
 @JsonSubTypes({
     @JsonSubTypes.Type(value = Country.class, name = "Country"),     
     @JsonSubTypes.Type(value = ContactUsMessage.class, name = "ContactUsMessage"),
+    @JsonSubTypes.Type(value = Event.class, name = "Event"),
+    @JsonSubTypes.Type(value = EventDesc.class, name = "EventDesc"),
     @JsonSubTypes.Type(value = User.class, name = "User"),
     @JsonSubTypes.Type(value = Company.class, name = "Company"),     
     @JsonSubTypes.Type(value = Employee.class, name = "Employee"),
