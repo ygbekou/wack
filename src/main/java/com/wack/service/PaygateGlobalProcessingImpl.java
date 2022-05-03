@@ -51,6 +51,7 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 	@Transactional
 	public void processPayment(Transaction transaction) throws InterruptedException {
 
+		String requestEntityId = "P - " + transaction.getId().toString();
 		Long montant = new Long(String
 				.valueOf((new BigDecimal(transaction.getAmount()))
 						.setScale(Utils.getCurrencyDecimalPlaces(transaction.getCurrencyCode()), RoundingMode.FLOOR))
@@ -64,7 +65,7 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 				transaction.getPhone(), String.valueOf(montant),
 				" Transaction ID " + transaction.getId() + " for project " + transaction.getProject().getTitle()
 						+ " by User with ID " + transaction.getUser().getId(),
-				transaction.getId().toString());
+						requestEntityId);
 
 		ResponseEntity<PaygateglobalResponseEntity> responseEntity = restTemplate.postForEntity(paygateglobalRequestUrl,
 				requestEntity, PaygateglobalResponseEntity.class);
@@ -74,7 +75,7 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 		if ("0".equals(responseEntity.getBody().getStatus())) {
 
 			PaygateglobalVerificationEntity verificationEntity = new PaygateglobalVerificationEntity(paygateglobalApi,
-					transaction.getId().toString());
+					requestEntityId);
 
 			responseEntity = restTemplate.postForEntity(paygateglobalVerificationUrl, verificationEntity,
 					PaygateglobalResponseEntity.class);
@@ -90,9 +91,11 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 
 			if (!"0".equals(responseEntity.getBody().getStatus())) {
 				System.out.println("FLOOZ STATUS : " + responseEntity.getBody().getStatus());
+				transaction.setErrors(Arrays.asList("PAYGATE" + responseEntity.getBody().getStatus()));
 			}
 		} else {
 			System.out.println("FLOOZ STATUS : " + responseEntity.getBody().getStatus());
+			transaction.setErrors(Arrays.asList("PAYGATE" + responseEntity.getBody().getStatus()));
 		}
 
 	}

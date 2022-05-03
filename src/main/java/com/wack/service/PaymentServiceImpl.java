@@ -111,12 +111,9 @@ public class PaymentServiceImpl  implements PaymentService {
 		Transaction trans = (Transaction) genericService.save(transaction);
 		
 		if (isNew) {
-			if ("FLOOZ".equals(trans.getPaymentMethod())) {
+			if ("FLOOZ".equals(trans.getPaymentMethod()) || "TMONEY".equals(trans.getPaymentMethod())) {
 				paygateGlobalService.processPayment(transaction);
-			} else if ("TMONEY".equals(trans.getPaymentMethod())) {
-				paygateGlobalService.setRedirectionPaymentUrl(transaction);
 			}
-			
 		}
 		
 		return trans;

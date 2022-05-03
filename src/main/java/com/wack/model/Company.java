@@ -147,6 +147,13 @@ public class Company extends BaseEntity {
 	private boolean displayProjects = false;
 	@Column (name="DISPLAY_POLLS")
 	private boolean displayPolls = false;
+	@Column (name="ACCEPT_CARD_PAYMENT")
+	private boolean acceptCardPayment = false;
+	@Column (name="ACCEPT_TMONEY_PAYMENT")
+	private boolean acceptTmoneyPayment = false;
+	@Column (name="ACCEPT_FLOOZ_PAYMENT")
+	private boolean acceptFloozPayment = false;
+	
 	
 	public String getFooterType() {
 		return footerType;
@@ -652,5 +659,28 @@ public class Company extends BaseEntity {
 		this.displayPolls = displayPolls;
 	}
 
-	
+	public boolean isAcceptCardPayment() {
+		return acceptCardPayment;
+	}
+
+	public void setAcceptCardPayment(boolean acceptCardPayment) {
+		this.acceptCardPayment = acceptCardPayment;
+	}
+
+	public boolean isAcceptTmoneyPayment() {
+		return acceptTmoneyPayment;
+	}
+
+	public void setAcceptTmoneyPayment(boolean acceptTmoneyPayment) {
+		this.acceptTmoneyPayment = acceptTmoneyPayment;
+	}
+
+	public boolean isAcceptFloozPayment() {
+		return acceptFloozPayment;
+	}
+
+	public void setAcceptFloozPayment(boolean acceptFloozPayment) {
+		this.acceptFloozPayment = acceptFloozPayment;
+	}
+
 }
