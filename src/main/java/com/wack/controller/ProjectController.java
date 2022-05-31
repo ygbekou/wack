@@ -2,7 +2,6 @@ package com.wack.controller;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,11 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.wack.domain.JobSearchCriteria;
 import com.wack.domain.project.Dashboard;
 import com.wack.domain.project.ProjectSearchCriteria;
-import com.wack.model.JobPositionDesc;
-import com.wack.service.CareerService;
 import com.wack.service.ProjectService;
 
 

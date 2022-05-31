@@ -21,7 +21,8 @@ import com.wack.util.Utils;
 public class ProjectDaoImpl implements ProjectDao {
 	private static Logger LOGGER = Logger.getLogger(ProjectDaoImpl.class);
 
-	private final static String PROJECT_QUERY = "SELECT P.PROJECT_ID, P.BUDGET, SUM(CONT) CONT, SUM(EXP) EXP, \r\n"
+	private final static String PROJECT_QUERY = 
+			"SELECT P.PROJECT_ID, P.BUDGET, SUM(CONT) CONT, SUM(EXP) EXP, \r\n"
 			+ "			SUM(NBR_CONT), SUM(NBR_EXP), SUM(MAX_CONT),\r\n"
 			+ "			SUM(MIN_CONT), SUM(AVG_CONT), SUM(DUR), SUM(MAX_EXP), SUM(MIN_EXP) \r\n"
 			+ "FROM (\r\n"
