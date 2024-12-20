@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.wack.domain.PollSearchCriteria;
+import com.wack.model.Employee;
 import com.wack.model.Position;
 import com.wack.poll.Poll;
 import com.wack.poll.PollDesc;
@@ -170,4 +171,5 @@ public class PollDaoImpl implements PollDao {
 		return pollQuestionDescs;
 
 	}
+	
 }

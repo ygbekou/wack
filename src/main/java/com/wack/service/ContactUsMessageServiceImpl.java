@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.wack.dao.ProjectDao;
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
 import com.wack.model.ContactUsMessage;
+import com.wack.model.ProjectDesc;
 
 
 @Service(value="contactUsMessageService")
@@ -22,6 +24,9 @@ public class ContactUsMessageServiceImpl  implements ContactUsMessageService {
 	
 	@Autowired
 	GenericService genericService;
+	
+	@Autowired
+	ProjectDao projectDao;
 	
 	@Autowired
 	@Qualifier("myMailSender")
@@ -38,9 +43,11 @@ public class ContactUsMessageServiceImpl  implements ContactUsMessageService {
 			to.add(a);
 		} 
 		
+		ProjectDesc projectDesc = projectDao.getProjectDesc(contactUsMessage.getProject().getId(), contactUsMessage.getLang());
+		
 		if(contactUsMessage.getProject()!=null) {
 			subject = "Feedback sur le projet "
-					+contactUsMessage.getProject().getTitle()
+					+projectDesc.getTitle()
 					+" depuis le site de "+company.getName();
 			to.add(contactUsMessage.getProject().getUser().getEmail());
 		}else if(contactUsMessage.getNews()!=null) {

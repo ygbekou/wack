@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
 import com.wack.model.Employee;
+import com.wack.model.Project;
 import com.wack.model.User;
 
 
@@ -24,6 +25,10 @@ public class Purchase extends BaseEntity {
 	@Column(name ="PURCHASE_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToOne
+	@JoinColumn(name = "PROJECT_ID")
+	private Project project;
 	
 	@ManyToOne
 	@JoinColumn(name = "PRODUCT_ID")
@@ -72,6 +77,14 @@ public class Purchase extends BaseEntity {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public Product getProduct() {
@@ -171,7 +184,7 @@ public class Purchase extends BaseEntity {
 	}
 	
 	public String getProductName() {
-		return this.getProduct().getName();
+		return this.product.getName();
 	}
 	
 	public String getPrimaryPurchaserName() {

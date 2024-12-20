@@ -154,6 +154,11 @@ public class Company extends BaseEntity {
 	@Column (name="ACCEPT_FLOOZ_PAYMENT")
 	private boolean acceptFloozPayment = false;
 	
+	@Column(name = "OWNER_ID")
+	private Long ownerId;
+	
+	@Column (name="MAIN_COMPANY")
+	private boolean mainCompany = false;
 	
 	public String getFooterType() {
 		return footerType;
@@ -683,4 +688,19 @@ public class Company extends BaseEntity {
 		this.acceptFloozPayment = acceptFloozPayment;
 	}
 
+	public Long getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	public boolean isMainCompany() {
+		return mainCompany;
+	}
+
+	public void setMainCompany(boolean mainCompany) {
+		this.mainCompany = mainCompany;
+	}
 }

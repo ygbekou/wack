@@ -17,25 +17,17 @@ public class Project extends BaseEntity {
 	@Column(name = "PROJECT_ID")
 	private Long id;
 
-	@Column(name = "TITLE")
-	private String title;
-
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	private User user;
-
-	@Column(name = "DESCRIPTION")
-	private String description;
-
-	@Column(name = "SPONSORS")
-	private String sponsors;
+	
+	@ManyToOne
+	@JoinColumn(name = "COMPANY_ID")
+	private Company company;
 
 	@Column(name = "BUDGET")
 	private Double budget;
 	
-	@Column(name = "CONTRIBUTION")
-	private Double contribution;
-
 	@Column(name = "PROJECTED_START_DATE")
 	private Date projectedStartDate;
 
@@ -50,39 +42,6 @@ public class Project extends BaseEntity {
 
 	@Column(name = "STATUS")
 	private Integer status = 0;
-
-	@Column(name = "OBJECTIF")
-	private String objectif;
-
-	@Column(name = "LOCATION")
-	private String location;
-
-	@Column(name = "INOVATION")
-	private String inovation;
-
-	@Column(name = "EXISTANT")
-	private String existant;
-
-	@Column(name = "RESOURCE")
-	private String resource;
-
-	@Column(name = "EXECUTION")
-	private String execution;
-
-	@Column(name = "CONSTRAINTS")
-	private String constraints;
-
-	@Column(name = "FEASIBILITY")
-	private String feasibility;
-
-	@Column(name = "BUDGET_LINE")
-	private String budgetLine;
-
-	@Column(name = "RESULT")
-	private String result;
-
-	@Column(name = "DURATION")
-	private String duration;
 
 	@Column(name = "VIEW_COUNT")
 	private int viewCount = 0;
@@ -128,6 +87,9 @@ public class Project extends BaseEntity {
 
 	@Transient
 	private List<Video> videos;
+	
+	@Transient
+	List<ProjectDesc> projectDescs;
 
 	public List<Video> getVideos() {
 		return videos;
@@ -169,18 +131,6 @@ public class Project extends BaseEntity {
 		this.videos = videos;
 	}
 
-	public String getObjectif() {
-		return objectif;
-	}
-
-	public String getDuration() {
-		return duration;
-	}
-
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
-
 	public String getPicture() {
 		return picture;
 	}
@@ -188,15 +138,7 @@ public class Project extends BaseEntity {
 	public void setPicture(String picture) {
 		this.picture = picture;
 	}
-
-	public void setObjectif(String objectif) {
-		this.objectif = objectif;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
+	
 	public User getUser() {
 		return user;
 	}
@@ -205,80 +147,12 @@ public class Project extends BaseEntity {
 		this.user = user;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public Company getCompany() {
+		return company;
 	}
 
-	public String getInovation() {
-		return inovation;
-	}
-
-	public void setInovation(String inovation) {
-		this.inovation = inovation;
-	}
-
-	public String getExistant() {
-		return existant;
-	}
-
-	public void setExistant(String existant) {
-		this.existant = existant;
-	}
-
-	public String getResource() {
-		return resource;
-	}
-
-	public void setResource(String resource) {
-		this.resource = resource;
-	}
-
-	public String getExecution() {
-		return execution;
-	}
-
-	public void setExecution(String execution) {
-		this.execution = execution;
-	}
-
-	public String getConstraints() {
-		return constraints;
-	}
-
-	public void setConstraints(String constraints) {
-		this.constraints = constraints;
-	}
-
-	public String getFeasibility() {
-		return feasibility;
-	}
-
-	public void setFeasibility(String feasibility) {
-		this.feasibility = feasibility;
-	}
-
-	public String getBudgetLine() {
-		return budgetLine;
-	}
-
-	public void setBudgetLine(String budgetLine) {
-		this.budgetLine = budgetLine;
-	}
-
-	public Double getContribution() {
-		return contribution;
-	}
-
-	public void setContribution(Double contribution) {
-		this.contribution = contribution;
-	}
-
-	public String getResult() {
-		return result;
-	}
-
-	public void setResult(String result) {
-		this.result = result;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	public Double getTotalFees() {
@@ -337,6 +211,14 @@ public class Project extends BaseEntity {
 		this.totalExpenses = totalExpenses;
 	}
 
+	public Double getBudget() {
+		return budget;
+	}
+
+	public void setBudget(Double budget) {
+		this.budget = budget;
+	}
+
 	public List<Transaction> getExpenses() {
 		return expenses;
 	}
@@ -376,38 +258,6 @@ public class Project extends BaseEntity {
 
 	public void setHasPhoto(boolean hasPhoto) {
 		this.hasPhoto = hasPhoto;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getSponsors() {
-		return sponsors;
-	}
-
-	public void setSponsors(String sponsors) {
-		this.sponsors = sponsors;
-	}
-
-	public Double getBudget() {
-		return budget;
-	}
-
-	public void setBudget(Double budget) {
-		this.budget = budget;
 	}
 
 	public Date getProjectedStartDate() {
@@ -460,29 +310,25 @@ public class Project extends BaseEntity {
 	}
 
 	public List<String> getChildEntities() {
-		return Arrays.asList("videos");
+		return Arrays.asList("videos", "projectDescs");
 	}
+
 	
-	@Transient
-	public String getShortDescription() {
-		return description != null && description.length() > 200 ? Utils.truncateHTML(description, 200, null)
-				: description;
+	public List<ProjectDesc> getProjectDescs() {
+		return projectDescs;
 	}
-	
-	
-	@Transient
-	public String getShortMessage() {
-		return description != null && description.length() > 100 ? Utils.truncateHTML(description,100,null) : description;
+
+	public void setProjectDescs(List<ProjectDesc> projectDescs) {
+		this.projectDescs = projectDescs;
 	}
 
 	@Transient
-	public String getMediumMessage() {
-		return description != null && description.length() > 200 ? Utils.truncateHTML(description,200,null) : description;
+	public Date getRealStartDate() {
+		return startDate != null ? startDate: projectedStartDate;
 	}
 	
 	@Transient
-	public String getShortTitle() {
-		return title != null && title.length() > 50 ? Utils.truncateString(title,50) : title;
+	public Date getRealEndDate() {
+		return endDate != null ? endDate: projectedEndDate;
 	}
-	
 }

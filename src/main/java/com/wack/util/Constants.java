@@ -17,11 +17,35 @@ public class Constants {
 	
 	/**
 	 * LOCAL	 
-	*/
+	*
+	
 	public static String DOC_FOLDER = "C:\\Development\\arbamo\\src\\assets\\docs";
 	public static String PIC_FOLDER = "C:\\Development\\arbamo\\src\\assets\\images";
 	public static String REPORT_RESULT_FOLDER = "C:\\Development\\arbamo\\src\\assets\\reports"; 
 	public static String DATA_FOLDER = "C:\\Development\\arbamo\\src\\assets\\data";
+	*/
+	
+	/**
+	 * PROD EPIC	 
+	*
+	*/
+	public static String REPORT_RESULT_FOLDER = "/var/www/html/assets/reports"; 
+	public static String PIC_FOLDER="/var/www/html/assets/images";
+	public static String DOC_FOLDER = "/var/www/html/assets/docs"; 
+	public static String DATA_FOLDER = "/var/www/html/assets/data";
+	
+	
+	/**
+	 * PROD	ROOT
+	 *  
+	 *
+	 *
+	public static String REPORT_RESULT_FOLDER = "/var/www/html/assets/reports"; 
+	public static String PIC_FOLDER="/var/www/html/assets/images";
+	public static String DOC_FOLDER = "/var/www/html/assets/docs"; 
+	public static String DATA_FOLDER = "/var/www/html/assets/data";
+	*/
+	
 	 
 	/**
 	 * PROD	ROOT

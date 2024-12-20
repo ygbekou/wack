@@ -27,6 +27,10 @@ import com.wack.model.BaseEntity;
 import com.wack.model.Company;
 import com.wack.model.User;
 import com.wack.model.authorization.UserRole;
+import com.wack.model.stock.PrdCategory;
+import com.wack.model.stock.PrdCategoryDesc;
+import com.wack.model.stock.Product;
+import com.wack.model.stock.ProductDesc;
 import com.wack.model.website.Slider;
 import com.wack.util.Constants;
 
@@ -46,6 +50,8 @@ public class GenericServiceImpl implements GenericService {
 	@Transactional
 	public BaseEntity save(BaseEntity entity) {
 
+		performBeforeUpdate(entity);
+		
 		BaseEntity en = null;
 		entity.setModDate(new Date());
 		if (entity.getModifiedBy() == null) {
@@ -65,6 +71,21 @@ public class GenericServiceImpl implements GenericService {
 		return en;
 	}
 
+	
+	public void performBeforeUpdate(BaseEntity entity) {
+
+		if ("User".equals(entity.getClass().getSimpleName()) && entity.getId() != null) {
+			User lUser = (User) find(User.class, entity.getId());
+			User user = (User) entity;
+			
+			user.setPassword(lUser.getPassword());
+			
+			entity = user;
+
+		} 
+	}
+
+	
 	public void performExtraUpdate(BaseEntity entity) {
 
 		if ("Slider".equals(entity.getClass().getSimpleName())) {
@@ -72,10 +93,10 @@ public class GenericServiceImpl implements GenericService {
 
 			JSONArray jsonArray = new JSONArray();
 			List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
-			
-			String queryStr =  "SELECT s FROM Slider s WHERE 1 = 1";
-			List<Slider> sliders = (List)getByCriteria(queryStr, paramTupleList, " ORDER BY s.rank ");
-			
+
+			String queryStr = "SELECT s FROM Slider s WHERE 1 = 1";
+			List<Slider> sliders = (List) getByCriteria(queryStr, paramTupleList, " ORDER BY s.rank ");
+
 			for (Slider slider : sliders) {
 				JSONObject jsonObject = new JSONObject();
 				String storageDirectory = "assets/images/sliders/" + slider.getId() + "/";
@@ -92,6 +113,18 @@ public class GenericServiceImpl implements GenericService {
 				e.printStackTrace();
 			}
 
+		} else if ("PrdCategory".equals(entity.getClass().getSimpleName())) {
+			PrdCategory prdCat = (PrdCategory) entity;
+			for (PrdCategoryDesc prdCatDesc : prdCat.getPrdCategoryDescs()) {
+				prdCatDesc.setPrdCategory(prdCat);
+				save(prdCatDesc);
+			}
+		} else if ("Product".equals(entity.getClass().getSimpleName())) {
+			Product prd = (Product) entity;
+			for (ProductDesc prdDesc : prd.getProductDescs()) {
+				prdDesc.setProduct(prd);
+				save(prdDesc);
+			}
 		}
 
 	}
@@ -117,14 +150,23 @@ public class GenericServiceImpl implements GenericService {
 				String fileName = null;
 				if (entity.getClass().getSimpleName().equalsIgnoreCase("company")) {
 
-					fileName = saveImage(file, "company", file.getOriginalFilename());
+					if (useId && entity.getUseId()) {
+						fileName = saveImage(file, "companys" + File.separator + entity.getId(),
+								file.getOriginalFilename());
+					} else {
+						fileName = saveImage(file, "company", file.getOriginalFilename());
+					}
+
+				} else if (entity.getClass().getSimpleName().equalsIgnoreCase("user")) {
+
+					if (useId && entity.getUseId()) {
+						fileName = saveImage(file, "users" + File.separator + entity.getId(),
+								file.getOriginalFilename());
+					} else {
+						fileName = saveImage(file, "users", file.getOriginalFilename());
+					}
 
 				} else {
-					/*
-					 * if (entity.getUseIdAsFileName() != null && entity.getUseIdAsFileName() == 1)
-					 * { fileName = saveImage(file, entity.getClass().getSimpleName().toLowerCase(),
-					 * entity.getId()+".jpg"); } else {
-					 */
 
 					List<String> existingFileNames = this.getFiles(entity.getId(),
 							entity.getClass().getSimpleName().toLowerCase());
@@ -141,24 +183,28 @@ public class GenericServiceImpl implements GenericService {
 					}
 
 					fileName = saveFile(file, entity.getId(), entity.getClass().getSimpleName(), expectingFileName);
-					// }
+
 				}
 				String fieldName = null;
 				if (file.getOriginalFilename().startsWith("picture.") || (entity.getUseIdAsFileName() == 1)) {
 					fieldName = "picture";
 				} else {
 
-					fieldName = entity.getUseId() && useId ? attributeNames.get(i) : file.getOriginalFilename().split("\\.")[0];
+					fieldName = entity.getUseId() && useId ? attributeNames.get(i)
+							: file.getOriginalFilename().split("\\.")[0];
 				}
 
 				Field field = null;
 				try {
 					field = entity.getClass().getDeclaredField(fieldName);
 				} catch (Exception ex) {
+					System.out.println("Failed to get field name: " + fieldName + ", File Name: " + fileName);
 					continue;
 				}
 
 				field.setAccessible(true);
+				System.out.println(
+						"Entity ID: " + entity.getId() + ", Field Name: " + fieldName + ", File Name: " + fileName);
 				field.set(entity, fileName);
 				this.save(entity);
 				i++;
@@ -191,8 +237,8 @@ public class GenericServiceImpl implements GenericService {
 	@Transactional
 	public void deleteCascade(Class cl, Long id) {
 		BaseEntity entity = find(cl, id);
-		
-		for (String child: entity.getChildEntities()) {
+
+		for (String child : entity.getChildEntities()) {
 			Class childClass = null;
 			try {
 				childClass = Class.forName(cl.getPackage() + child);
@@ -203,7 +249,7 @@ public class GenericServiceImpl implements GenericService {
 			BaseEntity childEntity = find(childClass, id);
 			this.genericDao.delete(childEntity);
 		}
-		
+
 		this.genericDao.delete(entity);
 	}
 
@@ -505,6 +551,28 @@ public class GenericServiceImpl implements GenericService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Transactional
+	public BaseEntity saveCompany(BaseEntity entity, List<MultipartFile> files) throws Exception {
+		System.out.println("GenericServiceImpl.saveCompany() start ...");
+		Company c = (Company) entity;
+		try {
+			System.out.println("GenericServiceImpl.saveCompany() Owner ID = " + c.getOwnerId());
+
+			User owner = c.getOwnerId() != null ? (User) find(User.class, c.getOwnerId()) : null;
+
+			c = (Company) saveWithFiles(entity, files, owner != null && owner.getUserType() == 1, null);
+			if (owner != null) {
+				owner.setCompany(c);
+				save(owner);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+		return c;
 	}
 
 }

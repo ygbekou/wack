@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wack.domain.GenericChartDto;
 import com.wack.domain.PaymentResponse;
+import com.wack.domain.StatisticCriteria;
 import com.wack.model.BaseEntity;
 import com.wack.model.Transaction;
 import com.wack.model.stock.Payment;
@@ -44,6 +45,13 @@ public class PaymentController extends BaseController {
 		@RequestMapping(value="statistic/months",method = RequestMethod.GET)
 		public GenericChartDto getAllActiveReferences() throws ClassNotFoundException{
 			GenericChartDto result =  paymentService.getMonthlyPayments();
+			
+			return result;
+		}
+		
+		@RequestMapping(value="/statistic/chartdata", method = RequestMethod.POST)
+		public GenericChartDto save(@RequestBody StatisticCriteria criteria) throws ClassNotFoundException{
+			GenericChartDto result =  paymentService.getChartInfo(criteria);
 			
 			return result;
 		}

@@ -22,4 +22,8 @@ public interface UserService extends GenericService {
 	public List<User> getActiveUsers();
 	
 	public String sendMassEmails(Mail mail);
+	
+	public BaseEntity getUserWithProjects(Long employeeId);
+	
+	public BaseEntity getEmployeeByUserWithProjects(Long userId);
 }

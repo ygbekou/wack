@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.wack.model.BaseEntity;
 import com.wack.model.User;
@@ -43,6 +44,9 @@ public class Material extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "MOD_BY", referencedColumnName = "USER_ID", insertable=false, updatable=false)
 	private User modifier;
+	
+	@Transient
+	private PrdCategoryDesc prdCategoryDesc;
 	
 	public Long getId() {
 		return id;
@@ -101,7 +105,7 @@ public class Material extends BaseEntity {
 	}
 
 	public String getProductName() {
-		return this.getProduct().getName();
+		return "";
 	}
 
 	public int getStatus() {
@@ -119,4 +123,14 @@ public class Material extends BaseEntity {
 	public String getStatusDesc() {
 		return this.status == 0 ? "Actif" : "Inactif";
 	}
+
+	public PrdCategoryDesc getPrdCategoryDesc() {
+		return prdCategoryDesc;
+	}
+
+	public void setPrdCategoryDesc(PrdCategoryDesc prdCategoryDesc) {
+		this.prdCategoryDesc = prdCategoryDesc;
+	}
+	
+	
 }

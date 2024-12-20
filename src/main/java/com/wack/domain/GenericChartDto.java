@@ -12,6 +12,7 @@ public class GenericChartDto implements Serializable {
 	
 	public GenericChartDto() {}
 	
+	
 	public List<String> getLabels() {
 		return labels;
 	}

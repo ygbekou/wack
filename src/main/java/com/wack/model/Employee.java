@@ -1,5 +1,7 @@
 package com.wack.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "EMPLOYEE")
@@ -34,6 +37,11 @@ public class Employee extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "MOD_BY", referencedColumnName = "USER_ID", insertable=false, updatable=false)
 	private User modifier;
+	
+	@Transient
+	List<ProjectUser> assignedProjects;
+	@Transient
+	List<Project> unAssignedProjects;
 	
 	public Employee() {}
 	
@@ -161,7 +169,28 @@ public class Employee extends BaseEntity {
 			}
 			return this.user.getUserGroup().getName();
 		}
-		
+		public String getCompanyName() {
+			if (this.user == null || this.user.getCompany() == null) {
+				return "";
+			}
+			return this.user.getCompany().getName();
+		}
+
+		public List<ProjectUser> getAssignedProjects() {
+			return assignedProjects;
+		}
+
+		public void setAssignedProjects(List<ProjectUser> assignedProjects) {
+			this.assignedProjects = assignedProjects;
+		}
+
+		public List<Project> getUnAssignedProjects() {
+			return unAssignedProjects;
+		}
+
+		public void setUnAssignedProjects(List<Project> unAssignedProjects) {
+			this.unAssignedProjects = unAssignedProjects;
+		}
 
 		public String getModifierName() {
 			return this.modifier != null ? this.modifier.getName() : "";

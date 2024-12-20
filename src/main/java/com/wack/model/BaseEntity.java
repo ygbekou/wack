@@ -3,7 +3,10 @@ package com.wack.model;
 import java.util.*;
 import com.fasterxml.jackson.annotation.*;
 import com.wack.model.authorization.*;
+import com.wack.model.stock.ExpenseType;
 import com.wack.model.stock.PaymentType;
+import com.wack.model.stock.PrdCategory;
+import com.wack.model.stock.PrdCategoryDesc;
 import com.wack.model.website.*;
 import com.wack.poll.Poll;
 import com.wack.poll.PollChoice;
@@ -23,6 +26,7 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
 @JsonSubTypes({
     @JsonSubTypes.Type(value = Country.class, name = "Country"),     
     @JsonSubTypes.Type(value = ContactUsMessage.class, name = "ContactUsMessage"),
+    @JsonSubTypes.Type(value = ExpenseType.class, name = "ExpenseType"),
     @JsonSubTypes.Type(value = Event.class, name = "Event"),
     @JsonSubTypes.Type(value = EventDesc.class, name = "EventDesc"),
     @JsonSubTypes.Type(value = User.class, name = "User"),
@@ -60,10 +64,12 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = PollQuestionDesc.class, name = "PollQuestionDesc"),
     @JsonSubTypes.Type(value = PollType.class, name = "PollType"), 
     @JsonSubTypes.Type(value = PollTypeDesc.class, name = "PollTypeDesc"), 
+    @JsonSubTypes.Type(value = Country.class, name = "Quote"),
     @JsonSubTypes.Type(value = Video.class, name = "Video"),
     @JsonSubTypes.Type(value = Vote.class, name = "Vote"),
     @JsonSubTypes.Type(value = Position.class, name = "Position"), 
     @JsonSubTypes.Type(value = Project.class, name = "Project"), 
+    @JsonSubTypes.Type(value = ProjectUser.class, name = "ProjectUser"), 
     @JsonSubTypes.Type(value = Publicity.class, name = "Publicity"), 
     @JsonSubTypes.Type(value = Regulation.class, name = "Regulation"), 
     @JsonSubTypes.Type(value = SessionHistory.class, name = "SessionHistory"), 
@@ -72,7 +78,9 @@ include = com.fasterxml.jackson.annotation.JsonTypeInfo.As.PROPERTY, property = 
     @JsonSubTypes.Type(value = PaymentType.class, name = "PaymentType"), 
     @JsonSubTypes.Type(value = PaymentHistory.class, name = "PaymentHistory"), 
     @JsonSubTypes.Type(value = Transaction.class, name = "Transaction"), 
-    @JsonSubTypes.Type(value = Category.class, name = "Category") 
+    @JsonSubTypes.Type(value = Category.class, name = "Category"), 
+    @JsonSubTypes.Type(value = PrdCategory.class, name = "PrdCategory"), 
+    @JsonSubTypes.Type(value = PrdCategoryDesc.class, name = "PrdCategoryDesc") 
 }) 
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @MappedSuperclass
@@ -100,6 +108,10 @@ public abstract class BaseEntity {
 	private List<String> childEntities = new ArrayList<>();
 	@Transient
 	private Boolean useId = true;
+	@Transient
+	private int useIdAsFileName;
+	@Transient
+	private String lang;
 	
 	public abstract Long getId() ;
 
@@ -190,9 +202,21 @@ public abstract class BaseEntity {
 	public void setGeneratedFields(BCryptPasswordEncoder encoder) {
 		// Todo
 	}
-	
-	public Long getUseIdAsFileName() {
-		return getId();
+
+	public int getUseIdAsFileName() {
+		return useIdAsFileName;
+	}
+
+	public void setUseIdAsFileName(int useIdAsFileName) {
+		this.useIdAsFileName = useIdAsFileName;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 
 	@Override

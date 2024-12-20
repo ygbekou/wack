@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
 import com.wack.model.Employee;
+import com.wack.model.Project;
 
 
 @Entity
@@ -23,6 +24,10 @@ public class Quote extends BaseEntity {
 	@Column(name ="QUOTE_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToOne
+	@JoinColumn(name = "PROJECT_ID")
+	private Project project;
 	
 	@ManyToOne
 	@JoinColumn(name = "QUOTER_ID")
@@ -46,6 +51,14 @@ public class Quote extends BaseEntity {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public Employee getQuoter() {

@@ -37,6 +37,7 @@ public interface GenericService {
 	public Integer deleteNativeByCriteria(String queryStr, List<Quartet<String, String, String, String>> parameters);
 	public String getHomePage(User user);
 	public void cascadingEntities(BaseEntity entity, BaseEntity value);
+	public BaseEntity saveCompany(BaseEntity entity, List<MultipartFile> files) throws Exception;
 	
 		
 }

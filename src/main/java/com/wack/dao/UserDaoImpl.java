@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao{
 			email = "";
 		}
 		
-		List list = entityManager.createQuery("SELECT u FROM User u WHERE (u.email = :email OR u.userName = :userName) ")
+		List list = entityManager.createQuery("SELECT u FROM User u WHERE u.status = 1 AND (u.email = :email OR u.userName = :userName) ")
 			    .setParameter("email", email)
 			    .setParameter("userName", userName)
 			    .getResultList();

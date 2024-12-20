@@ -13,13 +13,26 @@ public class AuthToken {
 	private String picture;
 	private String firstTimeLogin;
 	private List authorities;
+	private String restrictions;
 	private List<MenuVO> menus;
 	private Long userId;
+	private Long companyId;
+	private int userType;
 	private String homePage;
 	private List<PermissionVO> nonMenuPermissions;
 
 	public AuthToken() {
 
+	}
+
+	public AuthToken(String token, String userName, String password, String firstName, String lastName, String roleName,
+			String picture, String firstTimeLogin, List authorities, List<MenuVO> menus,
+			List<PermissionVO> nonMenuPermissions, Long userId, String homePage, String restrictions, Long companyId, int userType) {
+		this(token, userName, password, firstName, lastName, roleName, picture, firstTimeLogin, authorities, menus,
+				nonMenuPermissions, userId, homePage);
+		this.restrictions = restrictions;
+		this.companyId = companyId;
+		this.userType = userType;
 	}
 
 	public AuthToken(String token, String userName, String password, String firstName, String lastName, String roleName,
@@ -54,6 +67,22 @@ public class AuthToken {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public Long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
+	}
+
+	public int getUserType() {
+		return userType;
+	}
+
+	public void setUserType(int userType) {
+		this.userType = userType;
 	}
 
 	public String getToken() {
@@ -126,6 +155,14 @@ public class AuthToken {
 
 	public void setAuthorities(List authorities) {
 		this.authorities = authorities;
+	}
+
+	public String getRestrictions() {
+		return restrictions;
+	}
+
+	public void setRestrictions(String restrictions) {
+		this.restrictions = restrictions;
 	}
 
 	public List<MenuVO> getMenus() {

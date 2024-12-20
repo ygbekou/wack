@@ -2,20 +2,27 @@ package com.wack.model;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.wack.model.authorization.Role;
+import com.wack.model.stock.ProductDesc;
 
 
 @Entity
@@ -26,12 +33,19 @@ public class User extends BaseEntity {
 	@Column(name = "USER_ID")
 	@GeneratedValue
 	private Long id;
+	
 	@ManyToOne
 	@JoinColumn(name = "USER_GROUP_ID")
 	private UserGroup userGroup;
+	
+	@ManyToOne
+	@JoinColumn(name = "COMPANY_ID")
+	private Company company;
+	
 	@ManyToOne
 	@JoinColumn(name = "POSITION_ID")
 	private Position position;
+	
 	@Column(name = "USER_NAME")
 	private String userName;
 	private String password;
@@ -55,7 +69,7 @@ public class User extends BaseEntity {
 	private String mobilePhone;
 	private String address;
 	private String city;
-	private String resume;
+	
 	@ManyToOne
 	@JoinColumn(name = "COUNTRY_ID")
 	private Country country;
@@ -79,6 +93,25 @@ public class User extends BaseEntity {
 	@Column(name="RECEIVE_NEWSLETTER")
 	private boolean receiveNewsletter;
 	
+	@Column(name="RESTRICT_EMP_TAB")
+	private boolean restrictEmpTab;
+	
+	@Column(name="RESTRICT_SAL_TAB")
+	private boolean restrictSalTab;
+	
+	@Column(name="RESTRICT_FUND_TAB")
+	private boolean restrictFundTab;
+	
+	@Column(name="USER_TYPE")
+	private int userType;
+	
+	@Column(name="USE_COMPANY_CONTACT")
+	private boolean useCompanyContact;
+	
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
+	List<UserDesc> userDescs;
+	
 	// Transient
 	@Transient
 	private List<Role> roles;
@@ -86,6 +119,11 @@ public class User extends BaseEntity {
 	private List<Employee> employees;
 	@Transient
 	private List<Video> videos;
+	@Transient
+	List<Project> assignedProjects;
+	@Transient
+	List<Project> unAssignedProjects;
+	
 	
 	public List<Video> getVideos() {
 		return videos;
@@ -110,15 +148,6 @@ public class User extends BaseEntity {
 		this.id = id;
 	}
 
-
-	public String getResume() {
-		return resume;
-	}
-
-	public void setResume(String resume) {
-		this.resume = resume;
-	}
-
 	public String getPhone() {
 		return phone;
 	}
@@ -141,6 +170,14 @@ public class User extends BaseEntity {
 
 	public void setUserGroup(UserGroup userGroup) {
 		this.userGroup = userGroup;
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 
 	public String getUserName() {
@@ -340,6 +377,46 @@ public class User extends BaseEntity {
 		this.receiveNewsletter = receiveNewsletter;
 	}
 
+	public boolean isRestrictEmpTab() {
+		return restrictEmpTab;
+	}
+
+	public void setRestrictEmpTab(boolean restrictEmpTab) {
+		this.restrictEmpTab = restrictEmpTab;
+	}
+
+	public boolean isRestrictSalTab() {
+		return restrictSalTab;
+	}
+
+	public void setRestrictSalTab(boolean restrictSalTab) {
+		this.restrictSalTab = restrictSalTab;
+	}
+
+	public boolean isRestrictFundTab() {
+		return restrictFundTab;
+	}
+
+	public void setRestrictFundTab(boolean restrictFundTab) {
+		this.restrictFundTab = restrictFundTab;
+	}
+
+	public boolean isUseCompanyContact() {
+		return useCompanyContact;
+	}
+
+	public void setUseCompanyContact(boolean useCompanyContact) {
+		this.useCompanyContact = useCompanyContact;
+	}
+
+	public int getUserType() {
+		return userType;
+	}
+
+	public void setUserType(int userType) {
+		this.userType = userType;
+	}
+
 	public Position getPosition() {
 		return position;
 	}
@@ -356,17 +433,51 @@ public class User extends BaseEntity {
 		this.employees = employees;
 	}
 	
-/*	public List<String> getChildEntities() {
-		return Arrays.asList("employees");
-	}*/
+	public List<Project> getAssignedProjects() {
+		return assignedProjects;
+	}
 
-	
+	public void setAssignedProjects(List<Project> assignedProjects) {
+		this.assignedProjects = assignedProjects;
+	}
+
+	public List<Project> getUnAssignedProjects() {
+		return unAssignedProjects;
+	}
+
+	public void setUnAssignedProjects(List<Project> unAssignedProjects) {
+		this.unAssignedProjects = unAssignedProjects;
+	}
+
+	public List<UserDesc> getUserDescs() {
+		return userDescs;
+	}
+
+	public void setUserDescs(List<UserDesc> userDescs) {
+		this.userDescs = userDescs;
+	}
+
 	public void setGeneratedFields(BCryptPasswordEncoder encoder) {
 		this.setPassword(encoder.encode(this.password));
 	}
 	
 	public List<String> getChildEntities() {
 		return Arrays.asList("videos");
+	}
+	
+	public String getRestrictions() {
+		StringBuilder builder = new StringBuilder();
+		if (isRestrictEmpTab()) {
+			builder.append("RESTRICT_EMP_TAB");
+		}
+		if (isRestrictSalTab()) {
+			builder.append("RESTRICT_SAL_TAB");
+		}
+		if (isRestrictFundTab()) {
+			builder.append("RESTRICT_FUND_TAB");
+		}
+		
+		return builder.toString();
 	}
 	
 }

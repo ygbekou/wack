@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.stripe.exception.StripeException;
+import com.wack.dao.ProjectDao;
 import com.wack.domain.PaygateglobalConfirmationEntity;
 import com.wack.domain.PaygateglobalRequestEntity;
 import com.wack.domain.PaygateglobalResponseEntity;
 import com.wack.domain.PaygateglobalVerificationEntity;
+import com.wack.model.ProjectDesc;
 import com.wack.model.Transaction;
 import com.wack.model.User;
 import com.wack.util.Utils;
@@ -26,6 +28,9 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 
 	@Autowired
 	GenericService genericService;
+
+	@Autowired
+	ProjectDao projectDao;
 
 	@Autowired
 	RestTemplate restTemplate;
@@ -51,6 +56,8 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 	@Transactional
 	public void processPayment(Transaction transaction) throws InterruptedException {
 
+		ProjectDesc projectDesc = projectDao.getProjectDesc(transaction.getProject().getId(), transaction.getLang());
+
 		String requestEntityId = "P - " + transaction.getId().toString();
 		Long montant = new Long(String
 				.valueOf((new BigDecimal(transaction.getAmount()))
@@ -58,14 +65,12 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 				.replace(".", ""));
 
 		System.out.println(" Amount: " + String.valueOf(montant) + ", " + " Transaction ID " + transaction.getId()
-				+ " for project " + transaction.getProject().getTitle() + " by User with ID "
-				+ transaction.getUser().getId());
+				+ " for project " + projectDesc + " by User with ID " + transaction.getUser().getId());
 
 		PaygateglobalRequestEntity requestEntity = new PaygateglobalRequestEntity(paygateglobalApi,
-				transaction.getPhone(), String.valueOf(montant),
-				" Transaction ID " + transaction.getId() + " for project " + transaction.getProject().getTitle()
-						+ " by User with ID " + transaction.getUser().getId(),
-						requestEntityId);
+				transaction.getPhone(), String.valueOf(montant), " Transaction ID " + transaction.getId()
+						+ " for project " + projectDesc + " by User with ID " + transaction.getUser().getId(),
+				requestEntityId);
 
 		ResponseEntity<PaygateglobalResponseEntity> responseEntity = restTemplate.postForEntity(paygateglobalRequestUrl,
 				requestEntity, PaygateglobalResponseEntity.class);
@@ -101,8 +106,9 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 	}
 
 	public Transaction processPaymentConfirmation(PaygateglobalConfirmationEntity confirmationEntity) {
-		
-		Transaction transaction = (Transaction) genericService.find(Transaction.class, Long.valueOf(confirmationEntity.getIdentifier()));
+
+		Transaction transaction = (Transaction) genericService.find(Transaction.class,
+				Long.valueOf(confirmationEntity.getIdentifier()));
 
 		if (!(transaction.getStatus() == 1)) {
 			transaction.setErrors(Arrays.asList("TRANSACTION_ALREADY_PROCESSED"));
@@ -144,20 +150,19 @@ public class PaygateGlobalProcessingImpl implements PaymentProcessingService {
 		 * "&network=TOGOCEL&url=BASE_URL/checkout/payment");
 		 */
 
-		Long amount = new Long(String.valueOf(
-				(new BigDecimal(transaction.getAmount())).setScale(
-						Utils.getCurrencyDecimalPlaces(transaction.getCurrencyCode()), RoundingMode.FLOOR))
+		Long amount = new Long(String
+				.valueOf((new BigDecimal(transaction.getAmount()))
+						.setScale(Utils.getCurrencyDecimalPlaces(transaction.getCurrencyCode()), RoundingMode.FLOOR))
 				.replace(".", ""));
 
 		builder.append(this.paygateglobalPageUrl).append("?token=").append(this.paygateglobalApi).append("&amount=")
 				.append(amount).append("&description=")
 				.append("Commande No " + transaction.getId() + " chez " + genericService.getCompany("en") + " par "
 						+ user.getName())
-				.append("&identifier=").append(transaction.getId()).append("&phone=")
-				.append(transaction.getPhone()).append("&network=TOGOCEL&url=BASE_URL/%23/checkout/payment");
+				.append("&identifier=").append(transaction.getId()).append("&phone=").append(transaction.getPhone())
+				.append("&network=TOGOCEL&url=BASE_URL/%23/checkout/payment");
 		transaction.setPaygateGlobalPaymentUrl(builder.toString());
 	}
-	
 
 	@Override
 	public String secret(Transaction transaction) throws StripeException {

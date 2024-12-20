@@ -1,54 +1,35 @@
-*********     VICKY      ************
-AWS Account
-AWS user name
-Email address: viberckyryam@yahoo.fr/Viberckyryam!
-Pasword:       Viberckyryam!
 
-
-AWS Account
-AWS user name
-Email address: caobota.togo@gmail.com/Softenza123
-Pasword:       Softenza123
-
-
-*********     COADEP     ************
-AWS Account
-AWS user name
-Email address: coadep1@gmail.com/Coadep1!!
-Pasword:       Coadep1!!
-
-key pair name =  coadep1
-
-Passphrase for Putty =  coadep1.
-
-*********     ODHI     ************
-AWS Account
-Email address: odhiorg1@gmail.com/Softenza123
-Pasword:       Softenza123
-
-Passphrase for Putty =  odhi.
-
-*********    CEG KELEGOUGAN     *******
 AWS ACCOUNT
-Email address: ceg1kelegougan@gmail.com/ceg1Kelegougan!
-Password: ceg1Kelegougan!
+Dev Eric
+aninf.dev01@gmail.com/Hotm3143
 
-*********    CAO TOGO            ******
-AWS Account
-Email address: caotogoinfo@gmail.com
-Password:	Caobota1!
-ip address: 3.139.99.213
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/epicares.org/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/epicares.org/privkey.pem
+This certificate expires on 2024-12-23.
+These files will be updated when the certificate renews.
+
+
+
 
 Site admin:   bat@batandbel.com/123456
 
 *********    ALL TRUSTCONSULTING    ******
-ericgbekou@gmail.com/Hotm3143  				-- old
-alltrustalltrust@gmail.com/Alltrust123   	-- new
-key pair name =  theqkcare
+Email Address
+alltrustalltrust1@gmail.com/Hotm3177   		-- new
+alltrustinc@gmail.com/Alltrustinc123!
+
+AWS ACCOUNT
+alltrustalltrust1@gmail.com/Hotm31771 
+key pair name file =  alltrust_new
 
 Oracle Download Credentials:
 ericgbekou@hotmail.com/Softenza123
 
+
+
+P@55w0rd1!
 
 Connecting to AWS EC2 hosts using Filezilla
 
@@ -69,4 +50,7 @@ User: From the docs: "For Amazon Linux, the default user name is ec2-user. For R
 Press Connect Button - If saving of passwords has been disabled, you will be prompted that the logon type will be changed to 'Ask for password'. Say 'OK' and when connecting, at the password prompt push 'OK' without entering a password to proceed past the dialog.
 
 Note: FileZilla automatically figures out which key to use. You do not need to specify the key after importing it as described above.
+
+
+enGl7Pw0
 

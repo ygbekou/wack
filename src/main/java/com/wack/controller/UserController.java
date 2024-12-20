@@ -45,6 +45,7 @@ import com.wack.config.JwtTokenUtil;
 import com.wack.domain.MenuVO;
 import com.wack.domain.PermissionVO;
 import com.wack.service.AuthorizationService;
+import com.wack.service.GenericService;
 import com.wack.domain.AuthToken;
 import com.wack.domain.LoginUser;
 import com.wack.model.authorization.Role;
@@ -60,6 +61,11 @@ public class UserController extends BaseController {
 	@Autowired
 	@Qualifier("userService")
 	UserService userService;
+	
+	@Autowired
+	@Qualifier("genericService")
+	GenericService genericService;
+	
 	@Autowired
 	BCryptPasswordEncoder encoder;
 	@Autowired
@@ -197,6 +203,9 @@ public class UserController extends BaseController {
 		}
 	}
 
+	
+	
+	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
 
@@ -221,4 +230,21 @@ public class UserController extends BaseController {
 
 		return new GenericResponse(userService.sendMassEmails(mail));
 	}
+	
+	@RequestMapping(value="/{id}",method = RequestMethod.GET)
+	public BaseEntity get(@PathVariable("entity") String entity, @PathVariable("id") Long id) throws ClassNotFoundException{
+		
+		BaseEntity result = userService.getUserWithProjects(id);
+		
+		return result;
+	}
+	
+	@RequestMapping(value="byUser/{id}",method = RequestMethod.GET)
+	public BaseEntity getEmployeeByUser(@PathVariable("entity") String entity, @PathVariable("id") Long userId) throws ClassNotFoundException{
+		
+		BaseEntity result = userService.getEmployeeByUserWithProjects(userId);
+		
+		return result;
+	}
+	
 }

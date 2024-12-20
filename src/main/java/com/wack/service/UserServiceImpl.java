@@ -14,16 +14,22 @@ import org.apache.commons.text.RandomStringGenerator;
 import org.javatuples.Quartet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.wack.dao.UserDao;
 import com.wack.model.BaseEntity;
 import com.wack.model.Company;
+import com.wack.model.Employee;
 import com.wack.model.Mail;
+import com.wack.model.Project;
+import com.wack.model.ProjectUser;
 import com.wack.model.SMPP;
 import com.wack.model.SMS;
 import com.wack.model.User;
+import com.wack.model.authorization.Role;
+import com.wack.model.website.Slider;
 import com.wack.util.BulkSMS;
 import com.wack.util.Constants;
 import com.wack.util.ServiceConstants;
@@ -168,8 +174,11 @@ public class UserServiceImpl extends GenericServiceImpl implements UserService, 
 
 			String emailMessage = "Your password is: " + generatedPassword + ". Please keep it safe.";
 
-			mailSender.sendMail(company.getFromEmail(), storedUser.getEmail().split("'"),
-					"Message from " + company.getName(), emailMessage);
+			mailSender.sendMimeMail(company.getFromEmail(), new String[] { storedUser.getEmail() },
+					"Password change message from " + company.getName(), emailMessage);
+
+//			mailSender.sendMail(company.getFromEmail(), storedUser.getEmail().split("'"),
+//					"Message from " + company.getName(), emailMessage);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -212,54 +221,49 @@ public class UserServiceImpl extends GenericServiceImpl implements UserService, 
 			List<String> emails = new ArrayList<>();
 			List<String> phones = new ArrayList<>();
 
-			for (User user: users) {
+			for (User user : users) {
 				emails.add(user.getEmail());
 				phones.add(user.getMobilePhone());
 			}
 
 			String[] emailArray = emails.stream().toArray(String[]::new);
 			String[] phoneArray = phones.stream().toArray(String[]::new);
-			
+
 			Company company = this.genericService.getCompany("EN");
-			
-			boolean inserted=false;
+
+			boolean inserted = false;
 
 			if (emailArray.length > 0 && mail.isSendEmail()) {
-				//send Mail
+				// send Mail
 				String message = Constants.EMAIL_TEMPLATE_2
 						.replace("AUTHOR", company.getFromEmail() + " " + company.getName())
-						.replace("EMAIL_BODY", mail.getBody())
-						.replace("ORG_WEBSITE", company.getWebsite())
-						.replaceAll("ORG_NAME", company.getName())
-						.replaceAll("ORG_ADDRESS", company.getAddress());
-				
+						.replace("EMAIL_BODY", mail.getBody()).replace("ORG_WEBSITE", company.getWebsite())
+						.replaceAll("ORG_NAME", company.getName()).replaceAll("ORG_ADDRESS", company.getAddress());
+
 				mailSender.sendMail(company.getFromEmail(), emailArray, mail.getSubject(), message);
-				
-				//save mail
+
+				// save mail
 				genericService.save(mail);
-				inserted=true;
+				inserted = true;
 			}
-			
+
 			if (phoneArray.length > 0 && mail.isSendSms()) {
-				//send Sms
+				// send Sms
 				String message = Constants.EMAIL_TEMPLATE_SMS
 						.replace("AUTHOR", company.getFromEmail() + " " + company.getName())
-						.replace("EMAIL_BODY", mail.getBody())
-						.replace("ORG_WEBSITE", company.getWebsite())
-						.replaceAll("ORG_NAME", company.getName())
-						.replaceAll("ORG_ADDRESS", company.getAddress());
-				
-				for (String ph: phones) {
+						.replace("EMAIL_BODY", mail.getBody()).replace("ORG_WEBSITE", company.getWebsite())
+						.replaceAll("ORG_NAME", company.getName()).replaceAll("ORG_ADDRESS", company.getAddress());
+
+				for (String ph : phones) {
 					sendMessage(mail, ph, message);
 				}
-				
-				//save mail
-				if(!inserted) {
+
+				// save mail
+				if (!inserted) {
 					genericService.save(mail);
 				}
 			}
-			
-			
+
 		} catch (Exception ex) {
 			return ServiceConstants.RESPONSE_FAILURE;
 
@@ -267,7 +271,6 @@ public class UserServiceImpl extends GenericServiceImpl implements UserService, 
 		return ServiceConstants.RESPONSE_SUCCESS;
 	}
 
-	
 	private String sendMessage(Mail mail, String phone, String message) {
 
 		try {
@@ -305,5 +308,72 @@ public class UserServiceImpl extends GenericServiceImpl implements UserService, 
 		return "SUCCESS";
 
 	}
-	
+
+	public BaseEntity getUserWithProjects(Long employeeId) {
+		Employee employee = (Employee) this.genericService.find(Employee.class, employeeId);
+
+		// Get the user assigned projects
+		if (employee.getUser().getCompany() != null) {
+			List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+			paramTupleList.add(Quartet.with("pu.status = ", "status", "0", "Integer"));
+			paramTupleList.add(Quartet.with("pu.user.id = ", "userId", employee.getUser().getId() + "", "Long"));
+			List<ProjectUser> assProjects = (List) getByCriteria("SELECT pu FROM ProjectUser pu WHERE 1 = 1",
+					paramTupleList, " ORDER BY pu.project.title ");
+
+			paramTupleList.clear();
+			paramTupleList.add(Quartet.with("p.status = ", "status", "0", "Integer"));
+
+			paramTupleList.add(
+					Quartet.with("p.company.id = ", "companyId", employee.getUser().getCompany().getId() + "", "Long"));
+
+			List<Project> unAssProjects = (List) getByCriteria("SELECT p FROM Project p WHERE 1 = 1 ", paramTupleList,
+					" ORDER BY p.title ");
+
+			for (ProjectUser pu : assProjects) {
+				unAssProjects.remove(pu.getProject());
+			}
+
+			employee.setUnAssignedProjects(unAssProjects);
+			employee.setAssignedProjects(assProjects);
+		}
+		return employee;
+	}
+
+	public BaseEntity getEmployeeByUserWithProjects(Long userId) {
+
+		Employee employee = null;
+
+		List<Quartet<String, String, String, String>> paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+		paramTupleList.add(Quartet.with("e.user.id = ", "userId", userId + "", "Long"));
+		List<Employee> employees = (List) getByCriteria("SELECT e FROM Employee e WHERE 1 = 1", paramTupleList, " ");
+
+		if (employees.size() > 0) {
+
+			employee = employees.get(0);
+
+			// Get the user assigned projects
+			paramTupleList.clear();
+			paramTupleList = new ArrayList<Quartet<String, String, String, String>>();
+			paramTupleList.add(Quartet.with("pu.status = ", "status", "0", "Integer"));
+			paramTupleList.add(Quartet.with("pu.user.id = ", "userId", employee.getUser().getId() + "", "Long"));
+			List<ProjectUser> assProjects = (List) getByCriteria("SELECT pu FROM ProjectUser pu WHERE 1 = 1",
+					paramTupleList, " ORDER BY pu.project.title ");
+
+			paramTupleList.clear();
+			paramTupleList.add(Quartet.with("p.status = ", "status", "0", "Integer"));
+			paramTupleList.add(
+					Quartet.with("p.company.id = ", "companyId", employee.getUser().getCompany().getId() + "", "Long"));
+			List<Project> unAssProjects = (List) getByCriteria("SELECT p FROM Project p WHERE 1 = 1 ", paramTupleList,
+					" ORDER BY p.title ");
+
+			for (ProjectUser pu : assProjects) {
+				unAssProjects.remove(pu.getProject());
+			}
+
+			employee.setUnAssignedProjects(unAssProjects);
+			employee.setAssignedProjects(assProjects);
+		}
+
+		return employee;
+	}
 }

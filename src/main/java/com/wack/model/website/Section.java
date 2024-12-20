@@ -26,6 +26,8 @@ public class Section extends BaseEntity {
 	
 	private String description;
 	
+	private String summary;
+	
 	@Column(name ="PICTURE")
 	private String picture;
 	
@@ -82,6 +84,14 @@ public class Section extends BaseEntity {
 		this.title = title;
 	}
 
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -89,8 +99,6 @@ public class Section extends BaseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
- 
 
 	public String getPicture() {
 		return picture;

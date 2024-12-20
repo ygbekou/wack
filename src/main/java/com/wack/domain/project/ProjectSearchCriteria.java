@@ -6,6 +6,7 @@ public class ProjectSearchCriteria {
 	private Long projectId;
 	private String language;
 	private Integer status;
+	private Integer managing;
 	
 	
 	public Long getProjectId() {
@@ -25,6 +26,12 @@ public class ProjectSearchCriteria {
 	}
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	public Integer getManaging() {
+		return managing;
+	}
+	public void setManaging(Integer managing) {
+		this.managing = managing;
 	}
 	
 	

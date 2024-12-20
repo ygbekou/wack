@@ -10,11 +10,11 @@ import javax.persistence.Table;
 import com.wack.model.BaseEntity;
 
 @Entity
-@Table(name="PAYMENT_TYPE")
-public class PaymentType extends BaseEntity {
+@Table(name="EXPENSE_TYPE")
+public class ExpenseType extends BaseEntity {
 	
 	@Id
-	@Column(name ="PAYMENT_TYPE_ID")
+	@Column(name ="EXPENSE_TYPE_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	

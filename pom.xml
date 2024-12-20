@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>wack</name>
 	<description>Web Site Management</description>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
 		<jdk.version>1.8</jdk.version>
@@ -133,7 +133,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>bsc</finalName>
+		<finalName>epiccare</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

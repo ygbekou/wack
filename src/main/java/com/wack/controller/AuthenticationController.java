@@ -49,7 +49,7 @@ public class AuthenticationController {
 
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	public ResponseEntity<?> authenticate(@RequestBody LoginUser loginUser) throws AuthenticationException {
-		System.out.println("Authenticating user :"+loginUser);
+		System.out.println("Authenticating user :" + loginUser);
 		try {
 			final Authentication authentication = authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginUser.getUserName(), loginUser.getPassword()));
@@ -63,12 +63,13 @@ public class AuthenticationController {
 			return ResponseEntity.ok(new AuthToken(token, loginUser.getUserName(), loginUser.getPassword(),
 					user.getFirstName(), user.getLastName(), user.getUserGroup().getName(), user.getPicture(),
 					user.getFirstTimeLogin(), Arrays.asList(new Long[] { user.getUserGroup().getId() }),
-					resources.getValue0(), resources.getValue1(),user.getId(), userService.getHomePage(user)));
-			
+					resources.getValue0(), resources.getValue1(), user.getId(), userService.getHomePage(user),
+					user.getRestrictions(), user.getCompany() != null ? user.getCompany().getId(): null, user.getUserType()));
+
 		} catch (Exception b) {
 			b.printStackTrace();
-			return ResponseEntity.ok(new AuthToken("", loginUser.getUserName(), loginUser.getPassword(),
-					null, null, null, null,null, null,null, null,null,null));
+			return ResponseEntity.ok(new AuthToken("", loginUser.getUserName(), loginUser.getPassword(), null, null,
+					null, null, null, null, null, null, null, null));
 		}
 
 	}

@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
 import com.wack.model.Employee;
+import com.wack.model.Project;
 import com.wack.model.User;
 
 
@@ -26,8 +27,16 @@ public class Payment extends BaseEntity {
 	private Long id;
 	
 	@ManyToOne
+	@JoinColumn(name = "PROJECT_ID")
+	private Project project;
+	
+	@ManyToOne
 	@JoinColumn(name = "PAYMENT_TYPE_ID")
 	private PaymentType paymentType;
+	
+	@ManyToOne
+	@JoinColumn(name = "EXPENSE_TYPE_ID")
+	private ExpenseType expenseType;
 	
 	@ManyToOne
 	@JoinColumn(name = "RECEIVER_ID")
@@ -69,12 +78,28 @@ public class Payment extends BaseEntity {
 		this.id = id;
 	}
 
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
 	public PaymentType getPaymentType() {
 		return paymentType;
 	}
 
 	public void setPaymentType(PaymentType paymentType) {
 		this.paymentType = paymentType;
+	}
+
+	public ExpenseType getExpenseType() {
+		return expenseType;
+	}
+
+	public void setExpenseType(ExpenseType expenseType) {
+		this.expenseType = expenseType;
 	}
 
 	public Employee getReceiver() {
@@ -127,6 +152,10 @@ public class Payment extends BaseEntity {
 	
 	public String getPaymentTypeName() {
 		return this.getPaymentType() != null ? this.getPaymentType().getName() : "";
+	}
+	
+	public String getExpenseTypeName() {
+		return this.getExpenseType() != null ? this.getExpenseType().getName() : "";
 	}
 	
 	public String getPayerName() {

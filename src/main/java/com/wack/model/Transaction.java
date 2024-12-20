@@ -1,6 +1,8 @@
 package com.wack.model;
 import java.util.Date;
-import javax.persistence.*; 
+import javax.persistence.*;
+
+import org.apache.commons.lang3.StringUtils; 
 
 @Entity
 @Table(name = "TRANSACTION")
@@ -49,6 +51,10 @@ public class Transaction extends BaseEntity {
 	@JoinColumn(name = "PROJECT_ID")
 	private Project project; 
 	
+	@ManyToOne
+	@JoinColumn(name = "CURRENCY_ID")
+	private Currency currency;
+	
 	@Column(name = "REF_NBR")
 	private String ref_nbr;
 	
@@ -64,10 +70,16 @@ public class Transaction extends BaseEntity {
 	@Column(name = "FAILURE_REASON")
 	private String failureReason;
 	
+	@Column(name = "CONTRIBUTOR_NAME")
+	private String contributorName;
+	
 	private int status;
 	
 	@Transient
 	private String paygateGlobalPaymentUrl;
+	
+	@Transient
+	private String projectTitle;
 	
 
 	public Date getTranDate() {
@@ -141,6 +153,14 @@ public class Transaction extends BaseEntity {
 		this.user = user;
 	}
 
+	public Currency getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
+	}
+
 	@Override
 	public Long getId() {
 		return id;
@@ -175,12 +195,15 @@ public class Transaction extends BaseEntity {
 	}
 
 	public String getMemberName() {
-		return this.user != null ? this.user.getName() : "";
+		if (this.user != null) {
+			return this.user.getName();
+		} else if (StringUtils.isNotBlank(contributorName)) {
+			return contributorName;
+		} else {
+			return "";
+		}
 	}
 	
-	public String getProjectTitle() {
-		return this.project != null ? this.project.getTitle() : "";
-	}
 
 	public String getPhone() {
 		return phone;
@@ -204,6 +227,22 @@ public class Transaction extends BaseEntity {
 
 	public void setPaygateGlobalPaymentUrl(String paygateGlobalPaymentUrl) {
 		this.paygateGlobalPaymentUrl = paygateGlobalPaymentUrl;
+	}
+
+	public String getProjectTitle() {
+		return projectTitle;
+	}
+
+	public void setProjectTitle(String projectTitle) {
+		this.projectTitle = projectTitle;
+	}
+
+	public String getContributorName() {
+		return contributorName;
+	}
+
+	public void setContributorName(String contributorName) {
+		this.contributorName = contributorName;
 	}
 
 	public int getStatus() {

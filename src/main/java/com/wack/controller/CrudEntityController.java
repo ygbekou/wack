@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile; 
 import com.wack.model.BaseEntity;
+import com.wack.model.stock.PrdCategory;
+import com.wack.model.stock.PrdCategoryDesc;
 import com.wack.service.GenericService;
 import com.wack.util.Constants; 
 
@@ -33,6 +35,12 @@ public class CrudEntityController extends BaseController {
 	public BaseEntity save(@PathVariable("entity") String entity, @RequestBody BaseEntity be) {
 		genericService.save(be);
 		genericService.cascadingEntities(be, null);
+		if ("PrdCategory".equals(be.getClass().getSimpleName())) {
+			PrdCategory prdCat = (PrdCategory) be;
+			for (PrdCategoryDesc prdCatDesc : prdCat.getPrdCategoryDescs()) {
+				prdCatDesc.setPrdCategory(null);
+			}
+		}
 		return be;
 	}
 

@@ -8,6 +8,7 @@ public class DataSet {
 	private String backgroundColor;
     private String borderColor;
     private List<Double> data;
+    private Double total = 0d;
     
     public DataSet() {
     	
@@ -44,10 +45,19 @@ public class DataSet {
 		this.data = data;
 	}
 	
+	public Double getTotal() {
+		return total;
+	}
+
+	public void setTotal(Double total) {
+		this.total = total;
+	}
+
 	public void addDataItem(Double dataItem) {
 		if (data == null) {
 			this.data = new ArrayList<Double>();
 		}
 		this.data.add(dataItem);
+		this.total += dataItem;
 	}
 }

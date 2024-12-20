@@ -13,6 +13,7 @@ import javax.persistence.Table;
 
 import com.wack.model.BaseEntity;
 import com.wack.model.Employee;
+import com.wack.model.Project;
 import com.wack.model.User;
 
 
@@ -24,6 +25,10 @@ public class ContractLabor extends BaseEntity {
 	@Column(name ="CONTRACT_LABOR_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@ManyToOne
+	@JoinColumn(name = "PROJECT_ID")
+	private Project project;
 	
 	@ManyToOne
 	@JoinColumn(name = "CONTRACTOR_ID")
@@ -68,6 +73,14 @@ public class ContractLabor extends BaseEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public Employee getContractor() {

@@ -3,7 +3,14 @@ DEPLOYMENT STEPS:
 1.	Install Java
 	a.	Download JAVA and copy to /home/ec2-user/apps/ - jdk-8u191-linux-x64.tar.gz
 	b.	Unzip the JAVA jar to /home/ec2-user/apps/ - tar zxvf jdk-8u191-linux-x64.tar.gz
-
+	
+	-- Only in case of external tomcat
+	c.	Setup JAVA_HOME
+		Add this to ec2-user's .bashrc
+		export JAVA_HOME="/home/ec2-user/apps/jdk1.8.0_241"
+		PATH=$JAVA_HOME/bin:$PATH
+		
+		Run source .bashrc
 	
 2.	Install MySQL
 
@@ -14,6 +21,8 @@ DEPLOYMENT STEPS:
 	d.	Change password  		--  /usr/bin/mysqladmin -u root password 'admin'
 								--	/usr/bin/mysqladmin -u root -h ip-172-31-94-187.ec2.internal password 'admin'
 	
+	
+	mysqldump -u root –p admin arbamo > epiccare.sql
 	
 3.	Run the create_table.sql and seed_data.sql
 	a.	Connect to mysql        --  mysql -uroot -padmin
@@ -27,9 +36,55 @@ DEPLOYMENT STEPS:
 	b.	Check if any java process running --	ps -ef | grep java
 	c.	See how communication is going between server and UI	--	tail -f nohoup.out
 	
+5. Install Tomcat
+	1.	Find the url for the tomcat distribution.
+	2.	Get the tomcat file 	--  sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.64/bin/apache-tomcat-9.0.64.tar.gz
+	3.	Extract TAR file   --   Go /usr/local or /usr/shared and then extract the TAR file you downloaded in previous step.
+		tar -xvf /root/apache-tomcat-9.0.41.tar.gz
+	4.	Rename the Tomcat 	--	mv apache-tomcat-9.0.41 tomcat9
+	5.	Add User for Tomcat		--		useradd -r tomcat
+	6.	Give User permission	--		chown -R tomcat:tomcat /usr/local/tomcat9
+	7.	Create Toncat Service	--   	Copy below script for your Tomcat service
 	
-	
+				sudo tee /etc/systemd/system/tomcat.service<<EOF
+				[Unit]
+				Description=Tomcat Server
+				After=syslog.target network.target
 
+				[Service]
+				Type=forking
+				User=tomcat
+				Group=tomcat
+
+				Environment=CATALINA_HOME=/usr/local/tomcat9
+				Environment=CATALINA_BASE=/usr/local/tomcat9
+				Environment=CATALINA_PID=/usr/local/tomcat9/temp/tomcat.pid
+
+				ExecStart=/usr/local/tomcat9/bin/catalina.sh start
+				ExecStop=/usr/local/tomcat9/bin/catalina.sh stop
+
+				RestartSec=12
+				Restart=always
+
+				[Install]
+				WantedBy=multi-user.target
+				EOF
+				
+	8.	Enable and start tomcat service
+				
+				#Reload tomcat service
+				sudo systemctl daemon-reload
+
+				#Restart/Start tomcat service
+				sudo systemctl start tomcat
+
+				#Check tomcat service status
+				systemctl status tomcat.service
+				
+	9.	Check Tomcat Service and Host-Manager(GUI)
+				
+				http://[AWS EC2 Public IP]:8080
+	
 	
 	Tomcat Application Steps:
 	
@@ -64,6 +119,7 @@ DEPLOYMENT STEPS:
 **********     UI APP BUILD AND INSTALLATION PROCESS       ************************
 npm run ng build --prod
 
+sudo mkdir /var/www/
 sudo mkdir /var/www/html
 
 sudo chmod -R 777 /var/www
@@ -76,4 +132,43 @@ Start Apache   --   sudo service httpd start
 
 
 From FileZilla copy all dist contents to /var/www/html
+
+When building a jar from after updating a property from application.properties
+"C:\Program Files\Java\jdk1.8.0_202\bin\jar.exe" cmvf0 META-INF/MANIFEST.MF wack-0.0.1-SNAPSHOT.jar *
+
+How to setup gmail 2 way verification:
+Login into your gmail account
+Select Security
+Select Apps Password
+Generate Apps Password with "For Select Apps:    Other (Custom Name)" and "Select Device:     WP Mail SMTP"
+
+softenzainc@gmail.com 
+Passw0rd1
+
+6Js?3*Me
+
+
+
+
+
+
+
+
+
+* Download and Install Java  *
+curl -fL -o corretto.rpm https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.rpm
+yum localinstall -y corretto.rpm
+export JAVA_HOME=/usr/lib/jvm/java-21-amazon-corretto
+
+* Download and install Tomcat  *
+sudo wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.21/bin/apache-tomcat-9.0.21.tar.gz
+sudo tar -xvzf apache-tomcat-9.0.21.tar.gz
+ 
+
+Redirect port 80 traffic to 8080
+sudo yum install iptables
+sudo /sbin/iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+
+* Build angular project for prod  *
+ng build --prod --base-href .
 
