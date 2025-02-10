@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -108,7 +109,7 @@ public class User extends BaseEntity {
 	@Column(name="USE_COMPANY_CONTACT")
 	private boolean useCompanyContact;
 	
-	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
 	@Fetch(value = FetchMode.SUBSELECT)
 	List<UserDesc> userDescs;
 	
