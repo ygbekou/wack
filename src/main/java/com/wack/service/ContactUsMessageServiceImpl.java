@@ -43,9 +43,9 @@ public class ContactUsMessageServiceImpl  implements ContactUsMessageService {
 			to.add(a);
 		} 
 		
-		ProjectDesc projectDesc = projectDao.getProjectDesc(contactUsMessage.getProject().getId(), contactUsMessage.getLang());
 		
 		if(contactUsMessage.getProject()!=null) {
+			ProjectDesc projectDesc = projectDao.getProjectDesc(contactUsMessage.getProject().getId(), contactUsMessage.getLang());
 			subject = "Feedback sur le projet "
 					+projectDesc.getTitle()
 					+" depuis le site de "+company.getName();
