@@ -66,6 +66,8 @@ public class Transaction extends BaseEntity {
 	@Column(name = "PAYMENT_METHOD")
 	private String paymentMethod;
 	
+	@Column(name = "PAYMENT_INTENT_ID")
+	private String paymentIntentId;
 
 	@Column(name = "FAILURE_REASON")
 	private String failureReason;
@@ -80,6 +82,12 @@ public class Transaction extends BaseEntity {
 	
 	@Transient
 	private String projectTitle;
+	
+	@Transient
+	private String stripePaymentMethodId;
+	
+	@Transient
+	private Integer currencyDecimalPlace;
 	
 
 	public Date getTranDate() {
@@ -260,6 +268,32 @@ public class Transaction extends BaseEntity {
 	public void setFailureReason(String failureReason) {
 		this.failureReason = failureReason;
 	}
+
+	public String getStripePaymentMethodId() {
+		return stripePaymentMethodId;
+	}
+
+	public void setStripePaymentMethodId(String stripePaymentMethodId) {
+		this.stripePaymentMethodId = stripePaymentMethodId;
+	}
+
+	public Integer getNoNullCurrencyDecimalPlace() {
+		return currencyDecimalPlace == null ? 2 : currencyDecimalPlace;
+	}
 	
-	
+	public Integer getCurrencyDecimalPlace() {
+		return currencyDecimalPlace;
+	}
+
+	public void setCurrencyDecimalPlace(Integer currencyDecimalPlace) {
+		this.currencyDecimalPlace = currencyDecimalPlace;
+	}
+
+	public String getPaymentIntentId() {
+		return paymentIntentId;
+	}
+
+	public void setPaymentIntentId(String paymentIntentId) {
+		this.paymentIntentId = paymentIntentId;
+	}
 }

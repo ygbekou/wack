@@ -36,6 +36,10 @@ public class PaymentServiceImpl implements PaymentService {
 	PaymentProcessingService paygateGlobalService;
 	
 	@Autowired
+	@Qualifier("stripeService")
+	PaymentProcessingService stripeService;
+	
+	@Autowired
 	private EntityManager entityManager;
 	
 	private static String query = "SELECT EXP_YEAR, EXP_MONTH, SUM(AMOUNT), SUM(FUND) FROM (\r\n"
@@ -267,6 +271,8 @@ public class PaymentServiceImpl implements PaymentService {
 		if (isNew) {
 			if ("FLOOZ".equals(trans.getPaymentMethod()) || "TMONEY".equals(trans.getPaymentMethod())) {
 				paygateGlobalService.processPayment(transaction);
+			} else {
+				stripeService.processPayment(transaction);
 			}
 		}
 

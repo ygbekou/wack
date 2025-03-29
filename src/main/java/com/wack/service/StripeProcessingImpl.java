@@ -2,10 +2,12 @@ package com.wack.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,8 +79,45 @@ public class StripeProcessingImpl implements PaymentProcessingService {
 
 	@Override
 	public void processPayment(Transaction transaction) throws InterruptedException {
-		// TODO Auto-generated method stub
 		
+		try {
+			String stripePaymentMethodId = transaction.getStripePaymentMethodId();
+			PaymentIntent intent = null;
+			Double amount = transaction.getAmount();
+			
+
+			if (StringUtils.isNotBlank(stripePaymentMethodId)) {
+				if (amount != null && amount > 0) {
+					LOGGER.info("Amount = " + transaction.getAmount() + ", submitted to Stripe = "
+							+ Long.valueOf(String.valueOf(amount).replace(".", "")));
+					PaymentIntentCreateParams.Builder createParamsBuilder = new PaymentIntentCreateParams.Builder()
+							.setCurrency(transaction.getCurrencyCode())
+							.setAmount(Long.valueOf(String.valueOf(
+									(new BigDecimal(amount)).setScale((transaction.getNoNullCurrencyDecimalPlace()), RoundingMode.FLOOR))
+									.replace(".", "")))
+							.setPaymentMethod(stripePaymentMethodId)
+							.setReceiptEmail(transaction.getUser().getEmail())
+							.setConfirmationMethod(PaymentIntentCreateParams.ConfirmationMethod.AUTOMATIC)
+							.setOffSession(true).setConfirm(true);
+					PaymentIntentCreateParams createParams = createParamsBuilder.build();
+					intent = PaymentIntent.create(createParams);
+					// After create, if the PaymentIntent's status is succeeded, fulfill the order.
+	
+					if (intent.getStatus().equals("succeeded")) {
+						transaction.setPaymentIntentId(intent.getId());
+					} else {
+						transaction.setFailureReason(intent.getStatus());
+						transaction.setErrors(Arrays.asList("STRIPE " + intent.getStatus()));
+						LOGGER.error(intent.getStatus());
+					}
+				}
+			}
+
+		} catch (Exception ex) {
+			transaction.setFailureReason(ex.getMessage());
+			transaction.setErrors(Arrays.asList("STRIPE EXCEPTION"));
+			LOGGER.error(ex);
+		}
 	}
 
 	@Override
