@@ -22,6 +22,7 @@ public class Company extends BaseEntity {
 	@Column(name = "META_DESCRIPTION")
 	private String metaDescription;
 	private String address;
+	private String address1;
 	@Column(name = "EMAIL")
 	private String email;
 	@Column(name = "PHONE")
@@ -366,6 +367,14 @@ public class Company extends BaseEntity {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getAddress1() {
+		return address1;
+	}
+
+	public void setAddress1(String address1) {
+		this.address1 = address1;
 	}
 
 	public String getEmail() {
